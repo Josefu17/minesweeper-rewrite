@@ -1,11 +1,15 @@
-import { Component, signal } from '@angular/core';
+import {Component, signal} from '@angular/core';
+import {GameBoardComponent} from './game-board/game-board';
 
 @Component({
   selector: 'app-root',
-  imports: [],
+  standalone: true,
+  imports: [
+    GameBoardComponent
+  ],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
 export class App {
-  protected readonly title = signal('frontend');
+  protected readonly title = signal('Minesweeper');
 }

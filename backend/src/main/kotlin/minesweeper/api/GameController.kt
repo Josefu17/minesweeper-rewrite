@@ -3,6 +3,8 @@ package minesweeper.api
 import minesweeper.api.dto.CoordinateRequest
 import minesweeper.api.dto.GameStateDto
 import minesweeper.api.dto.NewGameRequest
+import minesweeper.core.MinesweeperGame
+import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -17,12 +19,18 @@ class GameController(
     private val gameService: GameService
 ) {
 
+    // TODO remove if unused, yb
+//    private val logger = LoggerFactory.getLogger(MinesweeperGame::class.java)
+
+
     @GetMapping("/ping")
     fun ping(): Map<String, String> =
         mapOf("status" to "ok", "message" to "Minesweeper backend is alive")
 
     @PostMapping
-    fun createGame(@RequestBody request: NewGameRequest): GameStateDto = gameService.createGame(request)
+    fun createGame(@RequestBody request: NewGameRequest): GameStateDto {
+        return gameService.createGame(request)
+    }
 
     @GetMapping("/{id}")
     fun getGame(@PathVariable id: String): ResponseEntity<GameStateDto> {

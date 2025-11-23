@@ -1,1 +1,67 @@
-<p>game-board works!</p>
+<div class="container">
+
+  <mat-card class="control-panel">
+    <mat-card-header>
+      <mat-card-title>Minesweeper</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="createGame()" class="game-form">
+
+        <mat-form-field appearance="outline">
+          <mat-label>Rows</mat-label>
+          <input matInput type="number" formControlName="rows" min="5" max="30">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Columns</mat-label>
+          <input matInput type="number" formControlName="columns" min="5" max="30">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Difficulty</mat-label>
+          <mat-select formControlName="difficulty">
+            <mat-option value="MEDIUM">Medium</mat-option>
+            <mat-option value="HARD">Hard</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" type="submit" [disabled]="loading || form.invalid">
+          {{ loading ? 'Creating...' : 'New Game' }}
+        </button>
+      </form>
+
+      @if (error) {
+        <div class="error-msg">{{ error }}</div>
+      }
+    </mat-card-content>
+  </mat-card>
+
+  @if (game) {
+    <mat-card class="game-area">
+      <div class="stats-bar">
+        <span class="stat-item">Status: <strong>{{ game.status }}</strong></span>
+        <span class="stat-item">Lives: <strong>{{ game.livesLeft }}</strong></span>
+        <span class="stat-item">Mines: <strong>{{ game.mineCount }}</strong></span>
+        <span class="stat-item">Flags: <strong>{{ game.marksLeft }}</strong></span>
+      </div>
+
+      <div class="board"
+           [style.grid-template-columns]="'repeat(' + game.columns + ', 1fr)'"
+           (contextmenu)="$event.preventDefault()"> @for (row of game.grid; track $index) {
+        @for (cell of row; track $index) {
+          <div
+            class="cell"
+            [ngClass]="getCellClass(cell)"
+            (click)="onCellLeftClick(cell.x, cell.y)"
+            (contextmenu)="onCellRightClick($event, cell.x, cell.y)">
+
+            {{ cellDisplay(cell.state, cell.adjacentMines) }}
+
+          </div>
+        }
+      }
+      </div>
+    </mat-card>
+  }
+</div>
