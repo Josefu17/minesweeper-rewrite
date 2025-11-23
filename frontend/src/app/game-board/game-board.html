@@ -2,7 +2,7 @@
   <mat-card class="control-panel">
     <mat-card-header>
       <mat-card-title>
-        <mat-icon class="title-icon">videogame_asset</mat-icon>
+        <mat-icon svgIcon="controller" class="title-icon"></mat-icon>
         Minesweeper
       </mat-card-title>
     </mat-card-header>
@@ -16,11 +16,11 @@
 
           <div class="controls">
             <button (click)="adjustValue('rows', -1)" type="button" mat-icon-button>
-              <mat-icon>remove</mat-icon>
+              <mat-icon svgIcon="remove"></mat-icon>
             </button>
             <span class="value-display">{{ form.controls.rows.value }}</span>
             <button (click)="adjustValue('rows', 1)" type="button" mat-icon-button>
-              <mat-icon>add</mat-icon>
+              <mat-icon svgIcon="add"></mat-icon>
             </button>
           </div>
         </div>
@@ -30,12 +30,12 @@
           <label>Columns</label>
 
           <div class="controls">
-            <button type="button" mat-icon-button (click)="adjustValue('columns', -1)">
-              <mat-icon>remove</mat-icon>
+            <button (click)="adjustValue('columns', -1)" type="button" mat-icon-button>
+              <mat-icon svgIcon="remove"></mat-icon>
             </button>
             <span class="value-display">{{ form.controls.columns.value }}</span>
             <button type="button" mat-icon-button (click)="adjustValue('columns', 1)">
-              <mat-icon>add</mat-icon>
+              <mat-icon svgIcon="add"></mat-icon>
             </button>
           </div>
         </div>
@@ -64,19 +64,19 @@
     <mat-card class="game-area">
       <div class="stats-bar">
         <div class="stat-item">
-          <mat-icon>info</mat-icon>
+          <mat-icon svgIcon="info"></mat-icon>
           {{ game.status }}
         </div>
         <div class="stat-item">
-          <mat-icon>favorite</mat-icon>
+          <mat-icon svgIcon="lives"></mat-icon>
           {{ game.livesLeft }}
         </div>
         <div class="stat-item">
-          <mat-icon>bomb</mat-icon>
+          <mat-icon svgIcon="bomb"></mat-icon>
           {{ game.mineCount }}
         </div>
         <div class="stat-item">
-          <mat-icon>flag</mat-icon>
+          <mat-icon svgIcon="flag"></mat-icon>
           {{ game.marksLeft }}
         </div>
       </div>
@@ -94,9 +94,9 @@
                  (contextmenu)="onRightClick($event, cell)">
 
               @if (cell.state === 'MARKED') {
-                <mat-icon svgIcon='flag_2' class="cell-icon flag"></mat-icon>
+                <mat-icon class="cell-icon flag" svgIcon="flag"></mat-icon>
               } @else if (cell.state === 'MINE') {
-                <mat-icon class="cell-icon mine">local_fire_department</mat-icon>
+                <mat-icon class="cell-icon mine" svgIcon="mine"></mat-icon>
               } @else if ((cell.state === 'DISCOVERED' || cell.state === 'BLANK') && (cell.adjacentMines ?? 0) > 0) {
                 <span class="adj-count" [attr.data-count]="cell.adjacentMines">
                   {{ cell.adjacentMines }}
