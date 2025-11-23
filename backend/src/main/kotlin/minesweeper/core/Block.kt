@@ -46,13 +46,13 @@ class Block(
         this.adjacentMines = adjacentMines
     }
 
+    fun getBlockType(): BlockType = blockType
+
+    fun getOriginalType(): BlockType = originalType
+
     /**
      * Character representation (for debugging / CLI).
      * Frontend UI would usually ignore this and use blockType + adjacentMines.
      */
     fun displayChar(): Char = blockType.toChar(adjacentMines)
-
-    fun getBlockType(): BlockType = blockType
-
-    fun getOriginalType(): BlockType = originalType
 }

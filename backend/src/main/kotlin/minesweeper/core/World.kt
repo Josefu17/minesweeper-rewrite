@@ -1,5 +1,8 @@
 package minesweeper.core
 
+import minesweeper.core.BlockType.BLANK
+import minesweeper.core.BlockType.MARKED
+import minesweeper.core.BlockType.UNKNOWN
 import org.slf4j.LoggerFactory
 import kotlin.math.abs
 import kotlin.random.Random
@@ -29,7 +32,7 @@ class World(
         // Initialize grid with BLANK original type, UNKNOWN visible state
         grid = Array(rows) { r ->
             Array(columns) { c ->
-                Block(r, c, BlockType.BLANK)
+                Block(r, c, BLANK)
             }
         }
 
@@ -43,6 +46,11 @@ class World(
             rows, columns, totalBlocks, mineCount, difficulty
         )
     }
+
+    /**
+     * Public accessor so API layer can map the grid to DTOs.
+     */
+    fun getBlock(row: Int, column: Int): Block = grid[row][column]
 
     /**
      * Plants mines EXCEPT around the starting coordinate to ensure a safe start.
@@ -71,6 +79,24 @@ class World(
         abs(center.x - target.x) <= 1 && abs(center.y - target.y) <= 1
 
     /**
+     * Helper: all valid neighbors of a cell (8-directional).
+     */
+    private fun neighborsOf(center: Coordinate): List<Coordinate> =
+        buildList {
+            for (dx in -1..1) {
+                for (dy in -1..1) {
+                    if (dx == 0 && dy == 0) continue
+
+                    val nx = center.x + dx
+                    val ny = center.y + dy
+                    if (isInBounds(nx, ny)) {
+                        add(Coordinate(nx, ny))
+                    }
+                }
+            }
+        }
+
+    /**
      * the game is won if all non-mine blocks have been uncovered.
      */
     fun won(): Boolean = hiddenSafeBlocks == 0
@@ -97,9 +123,6 @@ class World(
 
         return sb.toString()
     }
-
-
-    fun getState(x: Int, y: Int): BlockType = grid[x][y].blockType
 
     fun getState(coordinate: Coordinate): BlockType = grid[coordinate.x][coordinate.y].blockType
 
@@ -135,24 +158,8 @@ class World(
     /**
      * Returns the number of adjacent mines to the given coordinate.
      */
-    fun getAdjacentMinesCount(coordinate: Coordinate): Int {
-        var mines = 0
-
-        for (dx in -1..1) {
-            for (dy in -1..1) {
-                if (dx == 0 && dy == 0) continue
-
-                val checkX = coordinate.x + dx
-                val checkY = coordinate.y + dy
-
-                if (isInBounds(checkX, checkY) && isMine(checkX, checkY)) {
-                    mines++
-                }
-            }
-        }
-
-        return mines
-    }
+    fun getAdjacentMinesCount(coordinate: Coordinate): Int =
+        neighborsOf(coordinate).count { neighbor -> isMine(neighbor) }
 
     /**
      * Recursively reveals safe areas (Flood Fill).
@@ -165,31 +172,20 @@ class World(
         val adjacentMines = getAdjacentMinesCount(coordinate)
         decrementHiddenSafeBlocks()
         if (adjacentMines == 0) {
-            modifyBlock(coordinate, BlockType.BLANK)
+            modifyBlock(coordinate, BLANK)
             expand(coordinate)
         } else {
             modifyBlock(coordinate, BlockType.DISCOVERED)
         }
     }
 
-    fun revealSafeBlocks(x: Int, y: Int) = revealSafeBlocks(Coordinate(x, y))
-
     /**
      * Triggers checks on all valid neighbors.
      */
     fun expand(coordinate: Coordinate) {
-        for (dx in -1..1) {
-            for (dy in -1..1) {
-                if (dx == 0 && dy == 0) continue
-
-                val nx = coordinate.x + dx
-                val ny = coordinate.y + dy
-
-                if (isInBounds(nx, ny) && getState(nx, ny) == BlockType.UNKNOWN) {
-                    revealSafeBlocks(nx, ny)
-                }
-            }
-        }
+        neighborsOf(coordinate)
+            .filter { neighbor -> getState(neighbor) == UNKNOWN }
+            .forEach { neighbor -> revealSafeBlocks(neighbor) }
     }
 
     /**
@@ -208,7 +204,8 @@ class World(
      * @return number of hit mines, or -1 if invalid expand
      */
     fun forceExpand(coordinate: Coordinate, previousState: BlockType): Int {
-        val isInvalidExpand = getNumberOfAdjacentFlags(coordinate) != getAdjacentMinesCount(coordinate)
+        val isInvalidExpand =
+            getNumberOfAdjacentFlags(coordinate) != getAdjacentMinesCount(coordinate)
 
         if (previousState != BlockType.DISCOVERED || isInvalidExpand) {
             // revert state
@@ -218,28 +215,18 @@ class World(
 
         var hitMines = 0
 
-        for (dx in -1..1) {
-            for (dy in -1..1) {
-                if (dx == 0 && dy == 0) continue
+        neighborsOf(coordinate).forEach { neighbor ->
+            val state = getState(neighbor)
 
-                val nx = coordinate.x + dx
-                val ny = coordinate.y + dy
-
-                if (isInBounds(nx, ny)) {
-                    val state = getState(nx, ny)
-
-                    if (state == BlockType.UNKNOWN) {
-                        if (peekAndModifyIfMine(nx, ny)) {
-                            hitMines++
-                        } else {
-                            revealSafeBlocks(nx, ny)
-                        }
-
-                    } else if (state == BlockType.MARKED && grid[nx][ny].originalType == BlockType.BLANK) {
-                        // safe spot incorrectly marked by the player
-                        modifyBlock(Coordinate(nx, ny), BlockType.UNKNOWN)
-                    }
+            if (state == UNKNOWN) {
+                if (peekAndModifyIfMine(neighbor.x, neighbor.y)) {
+                    hitMines++
+                } else {
+                    revealSafeBlocks(neighbor)
                 }
+            } else if (state == MARKED && grid[neighbor.x][neighbor.y].originalType == BLANK) {
+                // safe spot incorrectly marked by the player
+                modifyBlock(neighbor, UNKNOWN)
             }
         }
 
@@ -252,24 +239,10 @@ class World(
         return hitMines
     }
 
-    private fun getNumberOfAdjacentFlags(coordinate: Coordinate): Int {
-        var flags = 0
-
-        for (dx in -1..1) {
-            for (dy in -1..1) {
-                if (dx == 0 && dy == 0) continue
-
-                val nx = coordinate.x + dx
-                val ny = coordinate.y + dy
-
-                if (isInBounds(nx, ny) && getState(nx, ny) == BlockType.MARKED) {
-                    flags++
-                }
-            }
+    private fun getNumberOfAdjacentFlags(coordinate: Coordinate): Int =
+        neighborsOf(coordinate).count { neighbor ->
+            getState(neighbor) == MARKED
         }
-
-        return flags
-    }
 
     fun decrementMarksLeft() {
         marksLeft--
