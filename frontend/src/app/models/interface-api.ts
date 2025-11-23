@@ -1,4 +1,4 @@
-import {Difficulty} from './difficulty';
+import {Difficulty} from './types';
 
 export interface NewGameRequest {
   rows: number;

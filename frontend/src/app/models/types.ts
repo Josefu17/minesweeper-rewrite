@@ -2,6 +2,17 @@ export type Difficulty = 'MEDIUM' | 'HARD';
 
 export type GameStatus = 'RUNNING' | 'WON' | 'LOST';
 
+export interface GameState {
+  id: string;
+  status: GameStatus;
+  livesLeft: number;
+  rows: number;
+  columns: number;
+  mineCount: number;
+  marksLeft: number;
+  grid: Cell[][];
+}
+
 export interface Cell {
   x: number;
   y: number;
@@ -17,13 +28,4 @@ export type BlockType =
   | 'DISCOVERED'
   | 'IN_PROGRESS';
 
-export interface GameState {
-  id: string;
-  status: GameStatus;
-  livesLeft: number;
-  rows: number;
-  columns: number;
-  mineCount: number;
-  marksLeft: number;
-  grid: Cell[][];
-}
+

@@ -1,37 +1,29 @@
-// src/app/services/game.service.ts
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs';
-import {CoordinateRequest, NewGameRequest,} from '../models/interface';
-import {GameState} from '../models/difficulty';
+import {CoordinateRequest, NewGameRequest} from '../models/interface-api';
+import {GameState} from '../models/types';
+import {BaseApiService} from './base-api.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class GameService {
-  private readonly baseUrl = environment.apiUrl;
-
-  constructor(private http: HttpClient) {
-  }
+@Injectable({providedIn: 'root'})
+export class GameService extends BaseApiService {
 
   createGame(req: NewGameRequest): Observable<GameState> {
-    return this.http.post<GameState>(this.baseUrl, req);
+    return this.post('', req);
   }
 
-  getGame(id: string): Observable<GameState> {
-    return this.http.get<GameState>(`${this.baseUrl}/${id}`);
+  getGame(gameId: string): Observable<GameState> {
+    return this.get(`/${gameId}`);
   }
 
-  reveal(id: string, coord: CoordinateRequest): Observable<GameState> {
-    return this.http.post<GameState>(`${this.baseUrl}/${id}/reveal`, coord);
+  reveal(gameId: string, coord: CoordinateRequest): Observable<GameState> {
+    return this.post(`/${gameId}/reveal`, coord);
   }
 
-  toggleMark(id: string, coord: CoordinateRequest): Observable<GameState> {
-    return this.http.post<GameState>(`${this.baseUrl}/${id}/toggle-mark`, coord);
+  toggleMark(gameId: string, coord: CoordinateRequest): Observable<GameState> {
+    return this.post(`/${gameId}/toggle-mark`, coord);
   }
 
-  autoExpand(id: string, coord: CoordinateRequest): Observable<GameState> {
-    return this.http.post<GameState>(`${this.baseUrl}/${id}/auto-expand`, coord);
+  autoExpand(gameId: string, coord: CoordinateRequest): Observable<GameState> {
+    return this.post(`/${gameId}/auto-expand`, coord);
   }
 }

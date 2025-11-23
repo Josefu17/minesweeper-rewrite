@@ -1,8 +1,8 @@
-import {Component, inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, inject, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {GameService} from '../services/game.service';
-import {BlockType, Difficulty, GameState} from '../models/difficulty';
+import {Cell, Difficulty, GameState} from '../models/types';
 
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
@@ -10,6 +10,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-game-board',
@@ -25,76 +26,100 @@ import {MatIconModule} from '@angular/material/icon';
     MatIconModule
   ],
   templateUrl: './game-board.html',
-  styleUrls: ['./game-board.scss']
+  styleUrls: ['./game-board.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameBoard {
   private readonly fb = inject(FormBuilder);
   private readonly gameService = inject(GameService);
 
-  game?: GameState;
-  loading = false;
-  error?: string;
+  gameState = signal<GameState | undefined>(undefined);
+  loading = signal<boolean>(false);
+  errorMessage = signal<string | undefined>(undefined);
 
   form = this.fb.nonNullable.group({
-    // Added validators so the UI can react to bad input
-    rows: [10, [Validators.required, Validators.min(5), Validators.max(30)]],
-    columns: [10, [Validators.required, Validators.min(5), Validators.max(30)]],
+    rows: [10, [Validators.required, Validators.min(3), Validators.max(30)]],
+    columns: [10, [Validators.required, Validators.min(3), Validators.max(30)]],
     difficulty: ['MEDIUM' as Difficulty, Validators.required]
   });
+
+  onLeftClick(cell: Cell): void {
+    if (!this.isRunning()) return;
+
+    const currentGame = this.gameState()!
+
+
+    if (cell.state === 'MARKED') return; // Do not explode if clicking a flag
+    if (cell.state === 'BLANK') return; // do nothing
+
+    if (cell.state === 'DISCOVERED') {
+      // Auto-Expand (Chord) if clicking a revealed number
+      this.handleAction(this.gameService.autoExpand(currentGame.id, {x: cell.x, y: cell.y}));
+    } else {
+      // Normal Reveal
+      this.handleAction(this.gameService.reveal(currentGame.id, {x: cell.x, y: cell.y}));
+    }
+  }
+
+  isRunning = computed(() => this.gameState()?.status === 'RUNNING');
 
   createGame(): void {
     if (this.form.invalid) return;
 
-    this.loading = true;
-    this.error = undefined;
-    const {rows, columns, difficulty} = this.form.getRawValue();
+    this.loading.set(true);
+    this.errorMessage.set(undefined);
 
-    this.gameService.createGame({rows, columns, difficulty}).subscribe({
+
+    const req = this.form.getRawValue();
+    this.gameService.createGame(req).subscribe({
       next: (state) => {
-        this.game = state;
-        this.loading = false;
+        this.gameState.set(state);
+        this.loading.set(false);
       },
       error: (err) => {
         console.error(err);
-        this.error = 'Failed to create game';
-        this.loading = false;
+        this.errorMessage.set('Failed to create game');
+        this.loading.set(false);
       }
     });
   }
 
-  onCellLeftClick(x: number, y: number): void {
-    if (!this.game || this.game.status !== 'RUNNING') return;
-    // Add logic: if cell is already discovered, do nothing to save API calls
-
-    this.gameService.reveal(this.game.id, {x, y}).subscribe({
-      next: (state) => (this.game = state),
-      error: () => (this.error = 'Reveal failed')
-    });
-  }
-
-  onCellRightClick(event: MouseEvent, x: number, y: number): void {
+  onRightClick(event: MouseEvent, cell: Cell): void {
     event.preventDefault();
-    if (!this.game || this.game.status !== 'RUNNING') return;
 
-    this.gameService.toggleMark(this.game.id, {x, y}).subscribe({
-      next: (state) => (this.game = state),
-      error: () => (this.error = 'Toggle mark failed')
+    if (!this.isRunning()) return;
+    const currentGame = this.gameState()!;
+
+    // Prevent marking revealed cells
+    if (cell.state === 'DISCOVERED' || cell.state === 'BLANK') return;
+
+    this.handleAction(this.gameService.toggleMark(currentGame.id, {x: cell.x, y: cell.y}));
+  }
+
+  // Generic subscription helper
+  private handleAction(obs: Observable<GameState>): void {
+    obs.subscribe({
+      next: (state) => this.gameState.set(state),
+      error: () => this.errorMessage.set('Action failed')
     });
   }
 
-  // Helper for CSS classes based on cell state
-  getCellClass(cell: any): string {
+  getCellClass(cell: Cell): string {
+    if (cell.state === 'BLANK') return 'cell-blank';
     if (cell.state === 'DISCOVERED') return 'cell-discovered';
     if (cell.state === 'MARKED') return 'cell-marked';
     if (cell.state === 'MINE') return 'cell-mine';
-    return 'cell-hidden';
+    return 'cell-unknown';
   }
 
-  cellDisplay(state: BlockType, adjacentMines?: number): string {
-    // You can keep your current logic or use MatIcons in the HTML
-    if (state === 'MARKED') return '🚩';
-    if (state === 'MINE') return '💣';
-    if (state === 'DISCOVERED' && adjacentMines && adjacentMines > 0) return String(adjacentMines);
-    return '';
+  adjustValue(controlName: 'rows' | 'columns', delta: number): void {
+    const control = this.form.get(controlName) as FormControl<number>;
+    const current = control.value;
+    const newValue = current + delta;
+
+    // Respect validators manually for UX
+    if (newValue >= 5 && newValue <= 30) {
+      control.setValue(newValue);
+    }
   }
 }
