@@ -25,6 +25,9 @@ class World(
     fun getBlock(row: Int, column: Int): Block = grid[row][column]
     fun getState(c: Coordinate): BlockType = grid[c.x][c.y].state
     fun hasMine(c: Coordinate): Boolean = grid[c.x][c.y].hasMine
+    fun decrementMarksLeft() {
+        marksLeft--
+    }
 
     // --- SETUP LOGIC ---
     fun plantMines(safeZone: Coordinate) {

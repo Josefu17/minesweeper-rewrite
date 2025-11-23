@@ -12,5 +12,6 @@ export interface Cell {
   x: number;
   y: number;
   state: BlockType;
-  adjacentMines?: number; // 0 if "Blank", 1-8 if Numbered
+
+  adjacentMines?: number; // set for REVEALED
 }

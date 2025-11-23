@@ -60,13 +60,14 @@ class MinesweeperGame(rows: Int, columns: Int, difficulty: Difficulty) {
             // If expand was valid and safe, check win
             checkWin()
         }
-        // if -1, invalid expand, do nothing // TODO add log, yb
+        // if -1, invalid expand, do nothing
     }
 
     private fun checkWin() {
         if (world.won()) {
             status = GameStatus.WON
             logger.info("Game WON!")
+            autoFlagRemainingMines()
         }
     }
 
@@ -78,9 +79,20 @@ class MinesweeperGame(rows: Int, columns: Int, difficulty: Difficulty) {
             livesLeft = 0
             // Logic: You hit a mine, but survived.
             // The mine is now visible (EXPLODED state), but game is RUNNING.
-            // We usually decrement the mark counter to indicate a "flag" was technically used/lost here?
-            // Or just leave it as is.
+            world.decrementMarksLeft()
             logger.info("Extra life used!")
+        }
+    }
+
+    private fun autoFlagRemainingMines() {
+        for (r in 0 until world.rows) {
+            for (c in 0 until world.columns) {
+                val coord = Coordinate(r, c)
+
+                if (world.getState(coord) == BlockType.HIDDEN) {
+                    world.mark(coord)
+                }
+            }
         }
     }
 }

@@ -1,6 +1,5 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import {Component} from '@angular/core';
 import {GameBoard} from './game-board/game-board';
-import {IconRegistryService} from './services/icon-registry.service';
 
 @Component({
   selector: 'app-root',
@@ -11,12 +10,5 @@ import {IconRegistryService} from './services/icon-registry.service';
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
-export class App implements OnInit {
-  private readonly iconRegistry = inject(IconRegistryService)
-
-  protected readonly title = signal('Minesweeper');
-
-  ngOnInit() {
-    this.iconRegistry.registerIcons()
-  }
+export class App {
 }
