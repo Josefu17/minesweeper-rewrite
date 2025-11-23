@@ -6,15 +6,13 @@ import kotlin.random.Random
 class World(
     val rows: Int,
     val columns: Int,
-    difficulty: Difficulty
+    val mineCount: Int
 ) {
     private val grid: Array<Array<Block>> = Array(rows) { r ->
         Array(columns) { c -> Block(r, c) } // Default: hasMine=false, state=HIDDEN
     }
 
     // Game State Counters
-    val mineCount: Int = (rows * columns * difficulty.mineRatio).toInt()
-
     var marksLeft: Int = mineCount
         private set
 

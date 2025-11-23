@@ -2,11 +2,17 @@ package minesweeper.core
 
 import org.slf4j.LoggerFactory
 
-class MinesweeperGame(rows: Int, columns: Int, difficulty: Difficulty) {
+class MinesweeperGame(
+    rows: Int,
+    columns: Int,
+    mineCount: Int,
+    lives: Int
+) {
     private val logger = LoggerFactory.getLogger(MinesweeperGame::class.java)
-    val world = World(rows, columns, difficulty)
 
-    var livesLeft: Int = difficulty.lives
+    val world = World(rows, columns, mineCount)
+
+    var livesLeft: Int = lives
         private set
     var status: GameStatus = GameStatus.RUNNING
         private set

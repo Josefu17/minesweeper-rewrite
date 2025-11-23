@@ -3,11 +3,11 @@ package minesweeper.api.dto
 import minesweeper.core.Difficulty
 
 data class NewGameRequest(
-    val rows: Int,
-    val columns: Int,
-    val difficulty: Difficulty, // If CUSTOM, look at custom attributes
+    val difficulty: Difficulty,
 
-    // ignored for non-custom
+    // Used only if difficulty == CUSTOM
+    val rows: Int = 0,
+    val columns: Int = 0,
     val customMines: Int? = null,
     val customLives: Int? = null
 )

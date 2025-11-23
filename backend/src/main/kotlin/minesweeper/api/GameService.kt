@@ -4,6 +4,7 @@ import minesweeper.api.dto.CellDto
 import minesweeper.api.dto.GameStateDto
 import minesweeper.api.dto.NewGameRequest
 import minesweeper.core.Coordinate
+import minesweeper.core.Difficulty
 import minesweeper.core.MinesweeperGame
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -15,9 +16,17 @@ class GameService {
     private val games = mutableMapOf<String, MinesweeperGame>()
 
     fun createGame(request: NewGameRequest): GameStateDto {
+        val config = resolveConfig(request)
+
         val id = UUID.randomUUID().toString()
 
-        val game = MinesweeperGame(request.rows, request.columns, request.difficulty)
+        val game = MinesweeperGame(
+            rows = config.rows,
+            columns = config.columns,
+            mineCount = config.mines,
+            lives = config.lives
+        )
+
         games[id] = game
         logger.info("Created game: $id")
         return toGameStateDto(id, game)
@@ -82,5 +91,29 @@ class GameService {
             marksLeft = world.marksLeft,
             grid = grid
         )
+    }
+
+    private data class GameConfig(val rows: Int, val columns: Int, val mines: Int, val lives: Int)
+
+    private fun resolveConfig(req: NewGameRequest): GameConfig {
+        return when (req.difficulty) {
+            Difficulty.EASY -> GameConfig(rows = 9, columns = 9, mines = 10, lives = 1)
+            Difficulty.MEDIUM -> GameConfig(rows = 16, columns = 16, mines = 40, lives = 1)
+            Difficulty.HARD -> GameConfig(rows = 16, columns = 30, mines = 99, lives = 0)
+            Difficulty.CUSTOM -> {
+                // Validation for Custom Mode
+                val r = (req.rows).coerceIn(5, 30)
+                val c = (req.columns).coerceIn(5, 30)
+
+                // Ensure we don't have more mines than cells (leave at least 9 for start area)
+                val maxMines = (r * c) - 9
+                val m = (req.customMines ?: 10).coerceIn(1, maxMines)
+
+                val l = (req.customLives ?: 1).coerceIn(0, 3)
+
+                GameConfig(r, c, m, l)
+            }
+        }
+
     }
 }
