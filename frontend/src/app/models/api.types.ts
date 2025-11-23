@@ -1,13 +1,13 @@
 import {Cell, Difficulty, GameStatus} from './game.types';
 
 export interface NewGameRequest {
-  rows: number;
-  columns: number;
   difficulty: Difficulty;
 
   // For custom diff
-  mines?: number;
-  lives?: number;
+  rows: number;
+  columns: number;
+  customMines?: number;
+  customLives?: number;
 }
 export interface CoordinateRequest {
   x: number;

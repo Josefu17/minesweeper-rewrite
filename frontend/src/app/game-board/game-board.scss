@@ -2,20 +2,61 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  gap: 1.5rem;
   padding: 2rem;
   background-color: #f0f2f5;
   min-height: 100vh;
 }
 
-.control-panel {
+// 1. Header Card (Title + New Game Button)
+.header-card {
   width: 100%;
   max-width: 900px;
 
   .title-icon { vertical-align: middle; margin-right: 8px; color: #333; }
 
-  .game-form {
-    display: flex; gap: 2rem; align-items: center; flex-wrap: wrap; padding-top: 1rem;
+  mat-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+}
+
+// 2. Setup Panel (Tabs)
+.setup-panel {
+  width: 100%;
+  max-width: 900px;
+  min-height: 250px; // Prevent jumping when switching tabs
+
+  .tab-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    gap: 1.5rem;
+
+    .mode-desc {
+      font-size: 1.1rem;
+      color: #666;
+      font-weight: 500;
+    }
+  }
+
+  // Custom Form Styling
+  .custom-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+
+    .inputs-row {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
 
     .spinner-input {
       display: flex; flex-direction: column; align-items: center;
@@ -31,15 +72,13 @@
           &:hover { color: #000; background-color: #e0e0e0; }
         }
 
-        .value-display { font-weight: bold; font-size: 1.1rem; min-width: 30px; text-align: center; color: #333; }
+        .value { font-weight: bold; font-size: 1.1rem; min-width: 35px; text-align: center; color: #333; }
       }
     }
-
-    .diff-select { width: 150px; margin-bottom: -1.25em; }
   }
 }
 
-.error-msg { color: #f44336; margin-top: 0.5rem; }
+.error-msg { color: #f44336; margin-top: 1rem; text-align: center; }
 
 .game-area {
   padding: 2rem;
@@ -77,9 +116,6 @@
     &.mine { color: #d32f2f; transform: scale(1.2); }
   }
 
-  // --- SEMANTIC STATES ---
-
-  // 1. HIDDEN & FLAGGED (3D Button Look)
   &.cell-hidden, &.cell-flagged {
     background-color: #c0c0c0;
     border-top: 3px solid #ffffff;
@@ -88,25 +124,19 @@
     border-bottom: 3px solid #808080;
 
     &:active { border: 1px solid #808080; }
-
-    // Press effect
   }
 
-  // 2. REVEALED (Flat / Pressed Look)
-  // This covers both "Blank" and "Numbered" cells
   &.cell-revealed {
     background-color: #bdbdbd;
     border: 1px solid #999;
     cursor: default;
   }
 
-  // 3. EXPLODED (Mine)
   &.cell-mine {
     background-color: #ef9a9a;
     border: 1px solid #d32f2f;
   }
 
-  // --- NUMBERS ---
   .adj-count {
     font-family: 'Courier New', monospace; font-size: 20px;
 

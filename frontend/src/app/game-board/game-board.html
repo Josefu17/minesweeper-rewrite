@@ -1,81 +1,154 @@
 <div class="container">
-  <mat-card class="control-panel">
+
+  <mat-card class="header-card">
     <mat-card-header>
       <mat-card-title>
         <mat-icon svgIcon="controller" class="title-icon"></mat-icon>
         Minesweeper
       </mat-card-title>
-    </mat-card-header>
 
-    <mat-card-content>
-      <form [formGroup]="form" (ngSubmit)="createGame()" class="game-form">
-
-        <!-- Row Picker -->
-        <div class="spinner-input">
-          <label>Rows</label>
-
-          <div class="controls">
-            <button (click)="adjustValue('rows', -1)" type="button" mat-icon-button>
-              <mat-icon svgIcon="remove"></mat-icon>
-            </button>
-            <span class="value-display">{{ form.controls.rows.value }}</span>
-            <button (click)="adjustValue('rows', 1)" type="button" mat-icon-button>
-              <mat-icon svgIcon="add"></mat-icon>
-            </button>
-          </div>
-        </div>
-
-        <!-- Column Picker -->
-        <div class="spinner-input">
-          <label>Columns</label>
-
-          <div class="controls">
-            <button (click)="adjustValue('columns', -1)" type="button" mat-icon-button>
-              <mat-icon svgIcon="remove"></mat-icon>
-            </button>
-            <span class="value-display">{{ form.controls.columns.value }}</span>
-            <button type="button" mat-icon-button (click)="adjustValue('columns', 1)">
-              <mat-icon svgIcon="add"></mat-icon>
-            </button>
-          </div>
-        </div>
-
-        <mat-form-field appearance="outline" class="diff-select">
-          <mat-label>Difficulty</mat-label>
-          <mat-select formControlName="difficulty">
-            <mat-option value="MEDIUM">Medium</mat-option>
-            <mat-option value="HARD">Hard</mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <button mat-flat-button color="primary" type="submit" [disabled]="loading() || form.invalid">
-          {{ loading() ? 'Loading...' : 'New Game' }}
+      @if (gameState()) {
+        <button
+          (click)="resetGame()"
+          style="margin-left: auto;"
+          mat-stroked-button
+          color="warn"
+        >
+          New Game
         </button>
-      </form>
+      }
+    </mat-card-header>
+  </mat-card>
+
+  <!-- Diff Selector -->
+  @if (!gameState()) {
+    <mat-card class="setup-panel">
+      <mat-tab-group
+        (selectedIndexChange)="onTabChange($event)"
+        [selectedIndex]="1"
+        animationDuration="0ms"
+      >
+        <mat-tab label="Easy">
+          <div class="tab-content">
+
+            <p class="mode-desc">9x9 Grid • 10 Mines • 1 Life</p>
+
+            <button mat-flat-button color="primary" (click)="createGame()" [disabled]="loading()">
+              {{ loading() ? 'Starting...' : 'Start Easy Game' }}
+            </button>
+          </div>
+        </mat-tab>
+
+        <mat-tab label="Medium">
+          <div class="tab-content">
+
+            <p class="mode-desc">16x16 Grid • 40 Mines • 1 Life</p>
+
+            <button mat-flat-button color="primary" (click)="createGame()" [disabled]="loading()">
+              {{ loading() ? 'Starting...' : 'Start Medium Game' }}
+            </button>
+          </div>
+        </mat-tab>
+
+        <mat-tab label="Hard">
+          <div class="tab-content">
+            <p class="mode-desc">30x16 Grid • 99 Mines • No Lives</p>
+            <button mat-flat-button color="primary" (click)="createGame()" [disabled]="loading()">
+              {{ loading() ? 'Starting...' : 'Start Hard Game' }}
+            </button>
+          </div>
+        </mat-tab>
+
+        <!-- Custom Diff and Form -->
+        <mat-tab label="Custom">
+          <div class="tab-content">
+            <form
+              [formGroup]="customForm"
+              (ngSubmit)="createGame()"
+              class="custom-form"
+            >
+
+              <!-- Row Picker -->
+              <div class="inputs-row">
+                <div class="spinner-input">
+                  <label>Rows</label>
+                  <div class="controls">
+                    <button type="button" mat-icon-button (click)="adjustCustom('rows', -1)">
+                      <mat-icon svgIcon="remove"></mat-icon>
+                    </button>
+                    <span class="value">{{ customForm.controls.rows.value }}</span>
+                    <button type="button" mat-icon-button (click)="adjustCustom('rows', 1)">
+                      <mat-icon svgIcon="add"></mat-icon>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Column Picker -->
+                <div class="spinner-input">
+                  <label>Cols</label>
+                  <div class="controls">
+                    <button type="button" mat-icon-button (click)="adjustCustom('columns', -1)">
+                      <mat-icon svgIcon="remove"></mat-icon>
+                    </button>
+                    <span class="value">{{ customForm.controls.columns.value }}</span>
+                    <button type="button" mat-icon-button (click)="adjustCustom('columns', 1)">
+                      <mat-icon svgIcon="add"></mat-icon>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="spinner-input">
+                  <label>Mines</label>
+                  <div class="controls">
+                    <button type="button" mat-icon-button (click)="adjustCustom('mines', -5)">
+                      <mat-icon svgIcon="remove"></mat-icon>
+                    </button>
+                    <span class="value">{{ customForm.controls.mines.value }}</span>
+                    <button type="button" mat-icon-button (click)="adjustCustom('mines', 5)">
+                      <mat-icon svgIcon="add"></mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="options-row">
+                <mat-checkbox formControlName="enableLives" color="primary">
+                  Enable Second Chance
+                </mat-checkbox>
+              </div>
+
+              <button mat-flat-button color="primary" type="submit"
+                      [disabled]="loading() || customForm.invalid">
+                Start Custom Game
+              </button>
+            </form>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
 
       @if (errorMessage()) {
         <div class="error-msg">{{ errorMessage() }}</div>
       }
-    </mat-card-content>
-  </mat-card>
+    </mat-card>
+  }
 
   <!-- Stats Bar -->
   @if (gameState(); as game) {
     <mat-card class="game-area">
       <div class="stats-bar">
-        <div class="stat-item">
+        <div class="stat-item" title="Game Status">
           <mat-icon svgIcon="info"></mat-icon>
           {{ game.status }}
         </div>
-        <div class="stat-item">
+        <div class="stat-item" title="Lives Remaining">
           <mat-icon svgIcon="lives"></mat-icon>
           {{ game.livesLeft }}
         </div>
-        <div class="stat-item">
+        <div class="stat-item" title="Mines Total">
           <mat-icon svgIcon="bomb"></mat-icon>
           {{ game.mineCount }}
         </div>
-        <div class="stat-item">
+        <div class="stat-item" title="Flags Remaining">
           <mat-icon svgIcon="flag"></mat-icon>
           {{ game.marksLeft }}
         </div>
@@ -83,8 +156,7 @@
 
       <div class="board"
            [style.grid-template-columns]="'repeat(' + game.columns + ', 1fr)'"
-           (contextmenu)="$event.preventDefault()"
-      >
+           (contextmenu)="$event.preventDefault()">
 
         @for (row of game.grid; track $index) {
           @for (cell of row; track cell.x + '-' + cell.y) {
