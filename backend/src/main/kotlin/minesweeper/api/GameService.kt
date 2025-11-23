@@ -9,6 +9,8 @@ import minesweeper.core.MinesweeperGame
 import org.springframework.stereotype.Service
 import java.util.UUID
 
+// TODO configure map not null globally in json, yb
+
 @Service
 class GameService {
 
