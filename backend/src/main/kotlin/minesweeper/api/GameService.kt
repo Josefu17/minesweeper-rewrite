@@ -3,7 +3,7 @@ package minesweeper.api
 import minesweeper.api.dto.CellDto
 import minesweeper.api.dto.GameStateDto
 import minesweeper.api.dto.NewGameRequest
-import minesweeper.core.BlockType.DISCOVERED
+import minesweeper.core.BlockType.REVEALED
 import minesweeper.core.Coordinate
 import minesweeper.core.MinesweeperGame
 import org.springframework.stereotype.Service
@@ -59,7 +59,7 @@ class GameService {
                         x = block.coordinate.x,
                         y = block.coordinate.y,
                         state = block.blockType,
-                        adjacentMines = if (block.blockType == DISCOVERED) block.adjacentMines else null
+                        adjacentMines = if (block.blockType == REVEALED) block.adjacentMines else null
                     )
                 }
             }

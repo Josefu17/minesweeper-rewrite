@@ -93,11 +93,11 @@
                  (click)="onLeftClick(cell)"
                  (contextmenu)="onRightClick($event, cell)">
 
-              @if (cell.state === 'MARKED') {
+              @if (this.isMarked(cell)) {
                 <mat-icon class="cell-icon flag" svgIcon="flag"></mat-icon>
-              } @else if (cell.state === 'MINE') {
+              } @else if (this.isMine(cell)) {
                 <mat-icon class="cell-icon mine" svgIcon="mine"></mat-icon>
-              } @else if ((cell.state === 'DISCOVERED' || cell.state === 'BLANK') && (cell.adjacentMines ?? 0) > 0) {
+              } @else if (this.isRevealed(cell)) {
                 <span class="adj-count" [attr.data-count]="cell.adjacentMines">
                   {{ cell.adjacentMines }}
                 </span>

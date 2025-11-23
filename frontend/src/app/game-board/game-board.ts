@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, computed, inject, signal} from '@ang
 import {CommonModule} from '@angular/common';
 import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {GameService} from '../services/game.service';
-import {Cell, Difficulty, GameState} from '../models/types';
+import {Cell, Difficulty} from '../models/game.types';
 
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
@@ -11,6 +11,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
 import {Observable} from 'rxjs';
+import {GameState} from '../models/api.types';
 
 @Component({
   selector: 'app-game-board',
@@ -52,7 +53,7 @@ export class GameBoard {
     if (cell.state === 'MARKED') return; // Do not explode if clicking a flag
     if (cell.state === 'BLANK') return; // do nothing
 
-    if (cell.state === 'DISCOVERED') {
+    if (cell.state === 'REVEALED') {
       // Auto-Expand (Chord) if clicking a revealed number
       this.handleAction(this.gameService.autoExpand(currentGame.id, {x: cell.x, y: cell.y}));
     } else {
@@ -91,7 +92,7 @@ export class GameBoard {
     const currentGame = this.gameState()!;
 
     // Prevent marking revealed cells
-    if (cell.state === 'DISCOVERED' || cell.state === 'BLANK') return;
+    if (cell.state === 'REVEALED' || cell.state === 'BLANK') return;
 
     this.handleAction(this.gameService.toggleMark(currentGame.id, {x: cell.x, y: cell.y}));
   }
@@ -106,7 +107,7 @@ export class GameBoard {
 
   getCellClass(cell: Cell): string {
     if (cell.state === 'BLANK') return 'cell-blank';
-    if (cell.state === 'DISCOVERED') return 'cell-discovered';
+    if (cell.state === 'REVEALED') return 'cell-revealed';
     if (cell.state === 'MARKED') return 'cell-marked';
     if (cell.state === 'MINE') return 'cell-mine';
     return 'cell-unknown';
@@ -121,5 +122,21 @@ export class GameBoard {
     if (newValue >= 5 && newValue <= 30) {
       control.setValue(newValue);
     }
+  }
+
+  isRevealed(cell: Cell): boolean {
+    return cell.state === 'REVEALED'
+  }
+
+  isMine(cell: Cell): boolean {
+    return cell.state === 'MINE'
+  }
+
+  isMarked(cell: Cell): boolean {
+    return cell.state === 'MARKED'
+  }
+
+  isBlank(cell: Cell): boolean {
+    return cell.state === 'BLANK';
   }
 }

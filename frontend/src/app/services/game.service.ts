@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import {CoordinateRequest, NewGameRequest} from '../models/interface-api';
-import {GameState} from '../models/types';
+import {CoordinateRequest, GameState, NewGameRequest} from '../models/api.types';
 import {BaseApiService} from './base-api.service';
 
 @Injectable({providedIn: 'root'})

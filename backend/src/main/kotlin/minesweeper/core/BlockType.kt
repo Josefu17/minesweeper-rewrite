@@ -10,7 +10,7 @@ enum class BlockType(
     MINE('*'),       // Represents a block containing a mine.
     MARKED('?'),     // Indicates a flagged or marked block by the player.
     BLANK(' '),      // Represents an empty block with no adjacent mines.
-    DISCOVERED(null); // Revealed; symbol depends on adjacent mines
+    REVEALED(null); // Revealed; symbol depends on adjacent mines
 //    IN_PROGRESS('X');// Block currently being investigated (legacy, mainly for CLI) // TODO remove if not needed at the end, yb
 
     /**
@@ -18,7 +18,7 @@ enum class BlockType(
      */
     fun toChar(adjacentMines: Int = 0): Char =
         when (this) {
-            DISCOVERED -> '0' + adjacentMines       // same as (char)(i + 48)
+            REVEALED -> '0' + adjacentMines       // same as (char)(i + 48)
             else -> baseSymbol!!
         }
 }

@@ -132,7 +132,7 @@ class World(
 
     /**
      * Modify visible state of a block.
-     * For DISCOVERED we compute the adjacent mine count.
+     * For REVEALED we compute the adjacent mine count.
      */
     fun modifyBlock(coordinate: Coordinate, blockType: BlockType) {
         if (isOutOfBounds(coordinate)) {
@@ -143,9 +143,9 @@ class World(
         val (x, y) = coordinate
         val block = grid[x][y]
 
-        if (blockType == BlockType.DISCOVERED) {
+        if (blockType == BlockType.REVEALED) {
             val adjacentMinesCount = getAdjacentMinesCount(coordinate)
-            block.modifyDiscovered(adjacentMinesCount)
+            block.modifyRevealed(adjacentMinesCount)
         } else {
             block.modify(blockType)
         }
@@ -165,7 +165,7 @@ class World(
      * Recursively reveals safe areas (Flood Fill).
      */
     fun revealSafeBlocks(coordinate: Coordinate) {
-        if (isMine(coordinate) || getState(coordinate) == BlockType.DISCOVERED) {
+        if (isMine(coordinate) || getState(coordinate) == BlockType.REVEALED) {
             return
         }
 
@@ -175,7 +175,7 @@ class World(
             modifyBlock(coordinate, BLANK)
             expand(coordinate)
         } else {
-            modifyBlock(coordinate, BlockType.DISCOVERED)
+            modifyBlock(coordinate, BlockType.REVEALED)
         }
     }
 
@@ -207,7 +207,7 @@ class World(
         val isInvalidExpand =
             getNumberOfAdjacentFlags(coordinate) != getAdjacentMinesCount(coordinate)
 
-        if (previousState != BlockType.DISCOVERED || isInvalidExpand) {
+        if (previousState != BlockType.REVEALED || isInvalidExpand) {
             // revert state
             modifyBlock(coordinate, previousState)
             return -1
@@ -230,7 +230,7 @@ class World(
             }
         }
 
-        modifyBlock(coordinate, BlockType.DISCOVERED)
+        modifyBlock(coordinate, BlockType.REVEALED)
 
         if (hitMines > 0) {
             logger.info("forceExpand hit {} mines at {}", hitMines, coordinate)

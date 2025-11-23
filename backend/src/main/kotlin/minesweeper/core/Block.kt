@@ -23,26 +23,26 @@ class Block(
         private set
 
     /**
-     * Number of adjacent mines; only meaningful if blockType == DISCOVERED.
+     * Number of adjacent mines; only meaningful if blockType == REVEALED.
      */
     var adjacentMines: Int = 0
         private set
 
     /**
-     * Modify only the visible state (no number, for non-DISCOVERED).
+     * Modify only the visible state (no number, for non-REVEALED).
      */
     fun modify(blockType: BlockType) {
         this.blockType = blockType
-        if (blockType != BlockType.DISCOVERED) {
+        if (blockType != BlockType.REVEALED) {
             adjacentMines = 0
         }
     }
 
     /**
-     * Modify the block to DISCOVERED with given adjacent mine count.
+     * Modify the block to REVEALED with given adjacent mine count.
      */
-    fun modifyDiscovered(adjacentMines: Int) {
-        this.blockType = BlockType.DISCOVERED
+    fun modifyRevealed(adjacentMines: Int) {
+        this.blockType = BlockType.REVEALED
         this.adjacentMines = adjacentMines
     }
 

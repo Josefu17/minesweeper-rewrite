@@ -18,5 +18,5 @@ data class CellDto(
     val x: Int,
     val y: Int,
     val state: BlockType,
-    val adjacentMines: Int? // only non-null if state == DISCOVERED
+    val adjacentMines: Int? // only non-null if state == REVEALED
 )

@@ -30,7 +30,6 @@ export class IconRegistryService {
 
     icons.forEach(config => {
       const alias = config.name ?? config.iconName;
-
       const url = `assets/icons/${config.iconName}_24dp.svg`;
 
       this.registry.addSvgIcon(
