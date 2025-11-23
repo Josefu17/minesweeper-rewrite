@@ -1,9 +1,5 @@
 package minesweeper.core
 
-import minesweeper.core.BlockType.BLANK
-import minesweeper.core.BlockType.MARKED
-import minesweeper.core.BlockType.UNKNOWN
-import org.slf4j.LoggerFactory
 import kotlin.math.abs
 import kotlin.random.Random
 
@@ -12,247 +8,150 @@ class World(
     val columns: Int,
     difficulty: Difficulty
 ) {
-    private val logger = LoggerFactory.getLogger(World::class.java)
-    private val grid: Array<Array<Block>>
-
-    var mineCount: Int
-        private set
-
-    var marksLeft: Int
-        private set
-
-    var hiddenSafeBlocks: Int
-        private set
-
-    init {
-        if (rows !in 1..30 || columns !in 1..30) {
-            throw IndexOutOfBoundsException("Dimensions might be 30x30 at max. Current: $rows x $columns")
-        }
-
-        // Initialize grid with BLANK original type, UNKNOWN visible state
-        grid = Array(rows) { r ->
-            Array(columns) { c ->
-                Block(r, c, BLANK)
-            }
-        }
-
-        val totalBlocks = rows * columns
-        mineCount = (totalBlocks * difficulty.mineRatio).toInt()
-        hiddenSafeBlocks = totalBlocks - mineCount
-        marksLeft = mineCount
-
-        logger.debug(
-            "World initialized: {}x{}, totalBlocks={}, mines={}, difficulty={}",
-            rows, columns, totalBlocks, mineCount, difficulty
-        )
+    private val grid: Array<Array<Block>> = Array(rows) { r ->
+        Array(columns) { c -> Block(r, c) } // Default: hasMine=false, state=HIDDEN
     }
 
-    /**
-     * Public accessor so API layer can map the grid to DTOs.
-     */
-    fun getBlock(row: Int, column: Int): Block = grid[row][column]
+    // Game State Counters
+    val mineCount: Int = (rows * columns * difficulty.mineRatio).toInt()
 
-    /**
-     * Plants mines EXCEPT around the starting coordinate to ensure a safe start.
-     */
+    var marksLeft: Int = mineCount
+        private set
+
+    var hiddenSafeBlocks: Int = (rows * columns) - mineCount
+        private set
+
+    // --- PUBLIC ACCESSORS ---
+    fun getBlock(row: Int, column: Int): Block = grid[row][column]
+    fun getState(c: Coordinate): BlockType = grid[c.x][c.y].state
+    fun hasMine(c: Coordinate): Boolean = grid[c.x][c.y].hasMine
+
+    // --- SETUP LOGIC ---
     fun plantMines(safeZone: Coordinate) {
         var minesToPlant = mineCount
 
         while (minesToPlant > 0) {
             val r = Random.nextInt(rows)
             val c = Random.nextInt(columns)
-            val candidate = Coordinate(r, c)
 
-            // 1. Don't put a mine where there is already one
-            // 2. Don't put a mine on the safeZone or its neighbors
-            val block = grid[r][c]
-            if (block.originalType != BlockType.MINE && !isNeighborOrSelf(safeZone, candidate)) {
-                grid[r][c] = Block(r, c, BlockType.MINE)
+            // Check collision with existing mine OR safe zone
+            if (!grid[r][c].hasMine && !isNeighborOrSelf(safeZone, Coordinate(r, c))) {
+                grid[r][c].hasMine = true
                 minesToPlant--
             }
         }
 
-        logger.debug("Mines planted, safeZone={}", safeZone)
+        // Pre-calculate numbers once mines are planted
+        calculateNumbers()
+    }
+
+    private fun calculateNumbers() {
+        for (r in 0 until rows) {
+            for (c in 0 until columns) {
+                if (!grid[r][c].hasMine) {
+                    grid[r][c].adjacentMines = countNeighborMines(Coordinate(r, c))
+                }
+            }
+        }
+    }
+
+    // --- GAMEPLAY ACTIONS ---
+
+    /**
+     * The main recursive reveal function (Flood Fill)
+     */
+    fun reveal(c: Coordinate) {
+        val block = grid[c.x][c.y]
+
+        // Base cases to stop recursion
+        if (block.state == BlockType.REVEALED || block.state == BlockType.FLAGGED) return
+        if (block.hasMine) return // Should be handled by Game class, but safety check
+
+        // REVEAL IT
+        block.state = BlockType.REVEALED
+        hiddenSafeBlocks--
+
+        // If it's a "Blank" (0 neighbors), expand to neighbors
+        if (block.adjacentMines == 0) {
+            neighborsOf(c).forEach { reveal(it) }
+        }
+    }
+
+    fun mark(c: Coordinate) {
+        if (marksLeft > 0) {
+            grid[c.x][c.y].state = BlockType.FLAGGED
+            marksLeft--
+        }
+    }
+
+    fun unmark(c: Coordinate) {
+        grid[c.x][c.y].state = BlockType.HIDDEN
+        marksLeft++
+    }
+
+    fun setExploded(c: Coordinate) {
+        grid[c.x][c.y].state = BlockType.MINE
+    }
+
+    /**
+     * CHORDING: Returns count of mines triggered (usually 0, hopefully)
+     */
+    fun forceExpand(c: Coordinate): Int {
+        val block = grid[c.x][c.y]
+
+        // Validation: Must be REVEALED and have matching flags (and revealed mines) around it
+        if (block.state != BlockType.REVEALED) return -1
+
+        val neighbors = neighborsOf(c)
+        val adjacentFlags = neighbors.count { getState(it) == BlockType.FLAGGED }
+        val adjacentRevealedMines = neighbors.count { getState(it) == BlockType.MINE }
+
+        if (adjacentFlags + adjacentRevealedMines != block.adjacentMines) return -1
+
+        var minesTriggered = 0
+
+        neighbors.forEach { neighbor ->
+            val neighborBlock = grid[neighbor.x][neighbor.y]
+
+            // Process only HIDDEN neighbors (ignore flags/revealed)
+            if (neighborBlock.state == BlockType.HIDDEN) {
+                if (neighborBlock.hasMine) {
+                    // Oops, player flagged wrong and chorded into a mine
+                    neighborBlock.state = BlockType.MINE
+                    minesTriggered++
+                } else {
+                    reveal(neighbor)
+                }
+            }
+        }
+        return minesTriggered
+    }
+
+    // --- HELPERS ---
+
+    fun won(): Boolean = hiddenSafeBlocks == 0
+
+    fun isOutOfBounds(c: Coordinate): Boolean =
+        c.x !in 0 until rows || c.y !in 0 until columns
+
+    private fun countNeighborMines(c: Coordinate): Int = neighborsOf(c).count { grid[it.x][it.y].hasMine }
+
+    private fun neighborsOf(center: Coordinate): List<Coordinate> {
+        val list = ArrayList<Coordinate>(8)
+        for (dx in -1..1) {
+            for (dy in -1..1) {
+                if (dx == 0 && dy == 0) continue // self
+
+                val nx = center.x + dx
+                val ny = center.y + dy
+                if (nx in 0 until rows && ny in 0 until columns) {
+                    list.add(Coordinate(nx, ny))
+                }
+            }
+        }
+        return list
     }
 
     private fun isNeighborOrSelf(center: Coordinate, target: Coordinate): Boolean =
         abs(center.x - target.x) <= 1 && abs(center.y - target.y) <= 1
-
-    /**
-     * Helper: all valid neighbors of a cell (8-directional).
-     */
-    private fun neighborsOf(center: Coordinate): List<Coordinate> =
-        buildList {
-            for (dx in -1..1) {
-                for (dy in -1..1) {
-                    if (dx == 0 && dy == 0) continue
-
-                    val nx = center.x + dx
-                    val ny = center.y + dy
-                    if (isInBounds(nx, ny)) {
-                        add(Coordinate(nx, ny))
-                    }
-                }
-            }
-        }
-
-    /**
-     * the game is won if all non-mine blocks have been uncovered.
-     */
-    fun won(): Boolean = hiddenSafeBlocks == 0
-
-    /**
-     * String representation of the current board state (for logging / debugging).
-     */
-    override fun toString(): String {
-        val sb = StringBuilder()
-
-        // Column headers
-        sb.append("  ")
-        for (c in 0 until columns) {
-            sb.append(c).append(' ')
-        }
-
-        // Rows
-        for (r in 0 until rows) {
-            sb.append("\n").append(r).append(' ')
-            for (c in 0 until columns) {
-                sb.append(grid[r][c].displayChar()).append(' ')
-            }
-        }
-
-        return sb.toString()
-    }
-
-    fun getState(coordinate: Coordinate): BlockType = grid[coordinate.x][coordinate.y].blockType
-
-    fun isMine(x: Int, y: Int): Boolean = grid[x][y].originalType == BlockType.MINE
-
-    fun isMine(coordinate: Coordinate): Boolean = isMine(coordinate.x, coordinate.y)
-
-    /**
-     * Modify visible state of a block.
-     * For REVEALED we compute the adjacent mine count.
-     */
-    fun modifyBlock(coordinate: Coordinate, blockType: BlockType) {
-        if (isOutOfBounds(coordinate)) {
-            logger.warn("Ignoring modifyBlock for out-of-bounds coordinate: {}", coordinate)
-            return
-        }
-
-        val (x, y) = coordinate
-        val block = grid[x][y]
-
-        if (blockType == BlockType.REVEALED) {
-            val adjacentMinesCount = getAdjacentMinesCount(coordinate)
-            block.modifyRevealed(adjacentMinesCount)
-        } else {
-            block.modify(blockType)
-        }
-    }
-
-    fun isOutOfBounds(coordinate: Coordinate): Boolean = !isInBounds(coordinate.x, coordinate.y)
-
-    private fun isInBounds(x: Int, y: Int): Boolean = x in 0 until rows && y in 0 until columns
-
-    /**
-     * Returns the number of adjacent mines to the given coordinate.
-     */
-    fun getAdjacentMinesCount(coordinate: Coordinate): Int =
-        neighborsOf(coordinate).count { neighbor -> isMine(neighbor) }
-
-    /**
-     * Recursively reveals safe areas (Flood Fill).
-     */
-    fun revealSafeBlocks(coordinate: Coordinate) {
-        if (isMine(coordinate) || getState(coordinate) == BlockType.REVEALED) {
-            return
-        }
-
-        val adjacentMines = getAdjacentMinesCount(coordinate)
-        decrementHiddenSafeBlocks()
-        if (adjacentMines == 0) {
-            modifyBlock(coordinate, BLANK)
-            expand(coordinate)
-        } else {
-            modifyBlock(coordinate, BlockType.REVEALED)
-        }
-    }
-
-    /**
-     * Triggers checks on all valid neighbors.
-     */
-    fun expand(coordinate: Coordinate) {
-        neighborsOf(coordinate)
-            .filter { neighbor -> getState(neighbor) == UNKNOWN }
-            .forEach { neighbor -> revealSafeBlocks(neighbor) }
-    }
-
-    /**
-     * Helper to peek at a block and reveal it if it's a mine.
-     */
-    fun peekAndModifyIfMine(x: Int, y: Int): Boolean {
-        if (grid[x][y].originalType == BlockType.MINE) {
-            modifyBlock(Coordinate(x, y), BlockType.MINE)
-            return true
-        }
-        return false
-    }
-
-    /**
-     * Auto-expands neighbors if the number of flags matches adjacent mines (Chord).
-     * @return number of hit mines, or -1 if invalid expand
-     */
-    fun forceExpand(coordinate: Coordinate, previousState: BlockType): Int {
-        val isInvalidExpand =
-            getNumberOfAdjacentFlags(coordinate) != getAdjacentMinesCount(coordinate)
-
-        if (previousState != BlockType.REVEALED || isInvalidExpand) {
-            // revert state
-            modifyBlock(coordinate, previousState)
-            return -1
-        }
-
-        var hitMines = 0
-
-        neighborsOf(coordinate).forEach { neighbor ->
-            val state = getState(neighbor)
-
-            if (state == UNKNOWN) {
-                if (peekAndModifyIfMine(neighbor.x, neighbor.y)) {
-                    hitMines++
-                } else {
-                    revealSafeBlocks(neighbor)
-                }
-            } else if (state == MARKED && grid[neighbor.x][neighbor.y].originalType == BLANK) {
-                // safe spot incorrectly marked by the player
-                modifyBlock(neighbor, UNKNOWN)
-            }
-        }
-
-        modifyBlock(coordinate, BlockType.REVEALED)
-
-        if (hitMines > 0) {
-            logger.info("forceExpand hit {} mines at {}", hitMines, coordinate)
-        }
-
-        return hitMines
-    }
-
-    private fun getNumberOfAdjacentFlags(coordinate: Coordinate): Int =
-        neighborsOf(coordinate).count { neighbor ->
-            getState(neighbor) == MARKED
-        }
-
-    fun decrementMarksLeft() {
-        marksLeft--
-    }
-
-    fun incrementMarksLeft() {
-        marksLeft++
-    }
-
-    fun decrementHiddenSafeBlocks() {
-        hiddenSafeBlocks--
-    }
 }

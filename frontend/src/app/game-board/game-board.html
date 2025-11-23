@@ -93,7 +93,7 @@
                  (click)="onLeftClick(cell)"
                  (contextmenu)="onRightClick($event, cell)">
 
-              @if (this.isMarked(cell)) {
+              @if (this.isFlagged(cell)) {
                 <mat-icon class="cell-icon flag" svgIcon="flag"></mat-icon>
               } @else if (this.isMine(cell)) {
                 <mat-icon class="cell-icon mine" svgIcon="mine"></mat-icon>

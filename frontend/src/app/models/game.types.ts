@@ -1,19 +1,16 @@
+// The Clean Standard
 export type Difficulty = 'MEDIUM' | 'HARD';
-
 export type GameStatus = 'RUNNING' | 'WON' | 'LOST';
 
 export type BlockType =
-  | 'UNKNOWN'
-  | 'MINE'
-  | 'MARKED'
-  | 'BLANK'
+  | 'HIDDEN'
+  | 'FLAGGED'
   | 'REVEALED'
-  | 'IN_PROGRESS';
+  | 'MINE';
 
 export interface Cell {
   x: number;
   y: number;
   state: BlockType;
-
-  adjacentMines?: number; // only set for REVEALED
+  adjacentMines?: number; // 0 if "Blank", 1-8 if Numbered
 }

@@ -58,8 +58,8 @@ class GameService {
                     CellDto(
                         x = block.coordinate.x,
                         y = block.coordinate.y,
-                        state = block.blockType,
-                        adjacentMines = if (block.blockType == REVEALED) block.adjacentMines else null
+                        state = block.state,
+                        adjacentMines = if (block.state == REVEALED) block.adjacentMines else null
                     )
                 }
             }

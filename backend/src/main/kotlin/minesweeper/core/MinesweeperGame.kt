@@ -2,140 +2,85 @@ package minesweeper.core
 
 import org.slf4j.LoggerFactory
 
-class MinesweeperGame(
-    rows: Int,
-    columns: Int,
-    difficulty: Difficulty
-) {
+class MinesweeperGame(rows: Int, columns: Int, difficulty: Difficulty) {
     private val logger = LoggerFactory.getLogger(MinesweeperGame::class.java)
-
-    val world: World = World(rows, columns, difficulty)
+    val world = World(rows, columns, difficulty)
 
     var livesLeft: Int = difficulty.lives
         private set
-
     var status: GameStatus = GameStatus.RUNNING
         private set
-
     private var isFirstMove: Boolean = true
 
-
-    /**
-     * Reveal/check a block at the given coordinate.
-     * Handles first-move mine placement and win/lose logic.
-     */
-    fun reveal(coordinate: Coordinate) {
+    fun reveal(c: Coordinate) {
         if (status != GameStatus.RUNNING) return
-
-        if (world.isOutOfBounds(coordinate)) {
-            logger.debug("Reveal ignored for out-of-bounds coordinate: {}", coordinate)
+        if (world.isOutOfBounds(c)) {
+            logger.info("Reveal called for out of bounds coordinate: ${c.x}x${c.y}. Ignoring.")
             return
         }
 
-        val currentState = world.getState(coordinate)
-        // Already cleared / revealed
-        if (currentState == BlockType.MINE || currentState == BlockType.BLANK) {
-            return
-        }
+        // Guard: Don't reveal flags or already revealed
+        val currentState = world.getState(c)
+        if (currentState != BlockType.HIDDEN) return
 
-        // First move = plant mines, guaranteeing safe starting zone
         if (isFirstMove) {
-            world.plantMines(coordinate)
+            world.plantMines(c)
             isFirstMove = false
         }
 
-        if (world.isMine(coordinate)) {
-            world.modifyBlock(coordinate, BlockType.MINE)
-            handleMineHit(hitMines = 1, at = coordinate)
+        if (world.hasMine(c)) {
+            world.setExploded(c)
+            handleMineHit(1, c)
         } else {
-            world.revealSafeBlocks(coordinate)
-            if (world.hiddenSafeBlocks == 0) {
-                status = GameStatus.WON
-                logger.info("Game won (all safe blocks revealed)")
-            }
+            world.reveal(c)
+            checkWin()
         }
     }
 
-
-    /**
-     * Toggle mark/unmark on a given coordinate.
-     */
-    fun toggleMark(coordinate: Coordinate) {
+    fun toggleMark(c: Coordinate) {
         if (status != GameStatus.RUNNING) return
+        if (world.isOutOfBounds(c)) return
 
-        if (world.isOutOfBounds(coordinate)) {
-            logger.debug("Toggle mark ignored for out-of-bounds coordinate: {}", coordinate)
-            return
-        }
-
-        when (val state = world.getState(coordinate)) {
-            BlockType.MARKED -> unmark(coordinate)
-            BlockType.UNKNOWN -> mark(coordinate)
-            else -> logger.debug("Cannot mark coordinate {} in state {}", coordinate, state)
+        when (world.getState(c)) {
+            BlockType.HIDDEN -> world.mark(c)
+            BlockType.FLAGGED -> world.unmark(c)
+            else -> {} // Do nothing for REVEALED or MINE
         }
     }
 
-    /**
-     * Auto-expands neighbors if the number of flags matches adjacent mines (Chord).
-     */
-    fun autoExpand(coordinate: Coordinate) {
+    fun autoExpand(c: Coordinate) {
         if (status != GameStatus.RUNNING) return
+        if (world.isOutOfBounds(c)) return
 
-        if (world.isOutOfBounds(coordinate)) {
-            logger.debug("Auto-expand ignored for out-of-bounds coordinate: {}", coordinate)
-            return
-        }
-
-        val previousState = world.getState(coordinate)
-        val minesHit = world.forceExpand(coordinate, previousState)
-
-        if (minesHit == -1) {
-            // Invalid expand: nothing else to do
-            return
-        }
+        val minesHit = world.forceExpand(c)
 
         if (minesHit > 0) {
-            handleMineHit(hitMines = minesHit, at = coordinate)
+            handleMineHit(minesHit, c)
+        } else if (minesHit == 0) {
+            // If expand was valid and safe, check win
+            checkWin()
         }
+        // if -1, invalid expand, do nothing // TODO add log, yb
+    }
 
+    private fun checkWin() {
         if (world.won()) {
             status = GameStatus.WON
-            logger.info("Game won (after auto-expand)")
+            logger.info("Game WON!")
         }
     }
 
-    private fun mark(coordinate: Coordinate) {
-        if (world.marksLeft <= 0) {
-            logger.debug("No flags left; cannot mark {}", coordinate)
-            return
-        }
-        world.decrementMarksLeft()
-        world.modifyBlock(coordinate, BlockType.MARKED)
-    }
-
-    private fun unmark(coordinate: Coordinate) {
-        world.incrementMarksLeft()
-        world.modifyBlock(coordinate, BlockType.UNKNOWN)
-    }
-
-    /**
-     * Handles the "second chance" mechanic.
-     * - If no livesLeft -> game over.
-     * - If livesLeft > 0 -> consume extra life, game continues.
-     */
     private fun handleMineHit(hitMines: Int, at: Coordinate) {
-        logger.info("Mine hit at {} (hitMines={}, livesLeft={})", at, hitMines, livesLeft)
-
-        // If we don't have enough lives to absorb the hit -> lost
         if (hitMines > livesLeft || livesLeft == 0) {
             status = GameStatus.LOST
-            logger.info("Game lost after mine hit at {}", at)
-            return
+            logger.info("Game LOST at $at")
+        } else {
+            livesLeft = 0
+            // Logic: You hit a mine, but survived.
+            // The mine is now visible (EXPLODED state), but game is RUNNING.
+            // We usually decrement the mark counter to indicate a "flag" was technically used/lost here?
+            // Or just leave it as is.
+            logger.info("Extra life used!")
         }
-
-        // "Mighty touch" mechanic: consume lives, but keep playing
-        livesLeft = 0
-        world.decrementMarksLeft()
-        logger.info("Extra life used; game continues, livesLeft={}", livesLeft)
     }
 }

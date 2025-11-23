@@ -1,17 +1,15 @@
 import {ChangeDetectionStrategy, Component, computed, inject, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
-import {GameService} from '../services/game.service';
-import {Cell, Difficulty} from '../models/game.types';
-
 import {MatButtonModule} from '@angular/material/button';
-import {MatInputModule} from '@angular/material/input';
+import {MatIconModule} from '@angular/material/icon';
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatCardModule} from '@angular/material/card';
-import {MatIconModule} from '@angular/material/icon';
 import {Observable} from 'rxjs';
+import {GameService} from '../services/game.service';
 import {GameState} from '../models/api.types';
+import {Cell, Difficulty} from '../models/game.types';
 
 @Component({
   selector: 'app-game-board',
@@ -20,11 +18,10 @@ import {GameState} from '../models/api.types';
     CommonModule,
     ReactiveFormsModule,
     MatButtonModule,
-    MatInputModule,
+    MatIconModule,
     MatSelectModule,
     MatFormFieldModule,
-    MatCardModule,
-    MatIconModule
+    MatCardModule
   ],
   templateUrl: './game-board.html',
   styleUrls: ['./game-board.scss'],
@@ -39,40 +36,19 @@ export class GameBoard {
   errorMessage = signal<string | undefined>(undefined);
 
   form = this.fb.nonNullable.group({
-    rows: [10, [Validators.required, Validators.min(3), Validators.max(30)]],
-    columns: [10, [Validators.required, Validators.min(3), Validators.max(30)]],
+    rows: [10, [Validators.required, Validators.min(5), Validators.max(30)]],
+    columns: [10, [Validators.required, Validators.min(5), Validators.max(30)]],
     difficulty: ['MEDIUM' as Difficulty, Validators.required]
   });
-
-  onLeftClick(cell: Cell): void {
-    if (!this.isRunning()) return;
-
-    const currentGame = this.gameState()!
-
-
-    if (cell.state === 'MARKED') return; // Do not explode if clicking a flag
-    if (cell.state === 'BLANK') return; // do nothing
-
-    if (cell.state === 'REVEALED') {
-      // Auto-Expand (Chord) if clicking a revealed number
-      this.handleAction(this.gameService.autoExpand(currentGame.id, {x: cell.x, y: cell.y}));
-    } else {
-      // Normal Reveal
-      this.handleAction(this.gameService.reveal(currentGame.id, {x: cell.x, y: cell.y}));
-    }
-  }
 
   isRunning = computed(() => this.gameState()?.status === 'RUNNING');
 
   createGame(): void {
     if (this.form.invalid) return;
-
     this.loading.set(true);
     this.errorMessage.set(undefined);
 
-
-    const req = this.form.getRawValue();
-    this.gameService.createGame(req).subscribe({
+    this.gameService.createGame(this.form.getRawValue()).subscribe({
       next: (state) => {
         this.gameState.set(state);
         this.loading.set(false);
@@ -85,16 +61,57 @@ export class GameBoard {
     });
   }
 
-  onRightClick(event: MouseEvent, cell: Cell): void {
-    event.preventDefault();
-
+  onLeftClick(cell: Cell): void {
     if (!this.isRunning()) return;
     const currentGame = this.gameState()!;
 
-    // Prevent marking revealed cells
-    if (cell.state === 'REVEALED' || cell.state === 'BLANK') return;
+    if (this.isMine(cell) || this.isFlagged(cell)) return;
+
+    else if (this.isRevealed(cell)) {
+      this.handleAction(this.gameService.autoExpand(currentGame.id, {x: cell.x, y: cell.y}));
+    } else if (this.isHidden(cell)) {
+      this.handleAction(this.gameService.reveal(currentGame.id, {x: cell.x, y: cell.y}));
+    }
+  }
+
+  onRightClick(event: MouseEvent, cell: Cell): void {
+    event.preventDefault();
+    if (!this.isRunning()) return;
+    const currentGame = this.gameState()!;
+
+    // Cannot flag something that is already revealed
+    if (this.isRevealed(cell)) return;
 
     this.handleAction(this.gameService.toggleMark(currentGame.id, {x: cell.x, y: cell.y}));
+  }
+
+  // --- Helpers for HTML ---
+  getCellClass(cell: Cell): string {
+    if (this.isRevealed(cell)) return 'cell-revealed';
+    if (this.isFlagged(cell)) return 'cell-flagged';
+    if (this.isMine(cell)) return 'cell-mine';
+    return 'cell-hidden'; // Default
+  }
+
+  isFlagged(cell: Cell): boolean {
+    return cell.state === 'FLAGGED';
+  }
+
+  isMine(cell: Cell): boolean {
+    return cell.state === 'MINE';
+  }
+
+  isRevealed(cell: Cell): boolean {
+    return cell.state === 'REVEALED';
+  }
+
+  isHidden(cell: Cell): boolean {
+    return cell.state === 'HIDDEN';
+  }
+
+  // A cell is "Numbered" if it's Revealed AND has adjacent mines > 0
+  showNumber(cell: Cell): boolean {
+    return this.isRevealed(cell) && (cell.adjacentMines || 0) > 0;
   }
 
   // Generic subscription helper
@@ -105,38 +122,10 @@ export class GameBoard {
     });
   }
 
-  getCellClass(cell: Cell): string {
-    if (cell.state === 'BLANK') return 'cell-blank';
-    if (cell.state === 'REVEALED') return 'cell-revealed';
-    if (cell.state === 'MARKED') return 'cell-marked';
-    if (cell.state === 'MINE') return 'cell-mine';
-    return 'cell-unknown';
-  }
-
   adjustValue(controlName: 'rows' | 'columns', delta: number): void {
     const control = this.form.get(controlName) as FormControl<number>;
     const current = control.value;
     const newValue = current + delta;
-
-    // Respect validators manually for UX
-    if (newValue >= 5 && newValue <= 30) {
-      control.setValue(newValue);
-    }
-  }
-
-  isRevealed(cell: Cell): boolean {
-    return cell.state === 'REVEALED'
-  }
-
-  isMine(cell: Cell): boolean {
-    return cell.state === 'MINE'
-  }
-
-  isMarked(cell: Cell): boolean {
-    return cell.state === 'MARKED'
-  }
-
-  isBlank(cell: Cell): boolean {
-    return cell.state === 'BLANK';
+    if (newValue >= 5 && newValue <= 30) control.setValue(newValue);
   }
 }
