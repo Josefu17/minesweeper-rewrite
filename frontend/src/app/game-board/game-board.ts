@@ -27,7 +27,7 @@ import {MatIconModule} from '@angular/material/icon';
   templateUrl: './game-board.html',
   styleUrls: ['./game-board.scss']
 })
-export class GameBoardComponent {
+export class GameBoard {
   private readonly fb = inject(FormBuilder);
   private readonly gameService = inject(GameService);
 

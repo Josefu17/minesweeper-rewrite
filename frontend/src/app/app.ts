@@ -1,11 +1,11 @@
 import {Component, signal} from '@angular/core';
-import {GameBoardComponent} from './game-board/game-board';
+import {GameBoard} from './game-board/game-board';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
-    GameBoardComponent
+    GameBoard
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss'

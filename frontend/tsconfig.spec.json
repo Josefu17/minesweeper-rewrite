@@ -5,11 +5,16 @@
   "compilerOptions": {
     "outDir": "./out-tsc/spec",
     "types": [
-      "vitest/globals"
+      "vitest/globals",
+      "node"
     ]
   },
   "include": [
     "src/**/*.d.ts",
-    "src/**/*.spec.ts"
+    "src/**/*.spec.ts",
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }
