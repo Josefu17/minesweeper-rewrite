@@ -4,7 +4,7 @@ import {DomSanitizer} from '@angular/platform-browser';
 
 interface IconConfig {
   iconName: string; // The filename part (e.g., 'videogame_asset')
-  name?: string;    // The optional alias (e.g., 'controller')
+  alias?: string;    // The optional alias (e.g., 'controller')
 }
 
 @Injectable({
@@ -17,19 +17,24 @@ export class IconRegistryService {
   public registerIcons() {
     const icons: IconConfig[] = [
       {iconName: 'add'},
+      {iconName: 'close'},
       {iconName: 'flag'},
       {iconName: 'flag_2'},
       {iconName: 'remove'},
       {iconName: 'info'},
 
-      {iconName: 'videogame_asset', name: 'controller'},
-      {iconName: 'explosion', name: 'mine'},
-      {iconName: 'favorite', name: 'lives'},
-      {iconName: 'bomb', name: 'bomb'},
+      {iconName: 'bomb', alias: 'bomb'},
+      {iconName: 'explosion', alias: 'mine'},
+      {iconName: 'favorite', alias: 'lives'},
+      {iconName: 'sentiment_calm', alias: 'diff-easy'},
+      {iconName: 'sentiment_neutral', alias: 'diff-medium'},
+      {iconName: 'sentiment_very_dissatisfied', alias: 'diff-hard'},
+      {iconName: 'tune', alias: 'diff-custom'},
+      {iconName: 'videogame_asset', alias: 'controller'},
     ]
 
     icons.forEach(config => {
-      const alias = config.name ?? config.iconName;
+      const alias = config.alias ?? config.iconName;
       const url = `assets/icons/${config.iconName}_24dp.svg`;
 
       this.registry.addSvgIcon(

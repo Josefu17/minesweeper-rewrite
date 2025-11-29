@@ -1,89 +1,45 @@
 import {ChangeDetectionStrategy, Component, computed, inject, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
 
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatCardModule} from '@angular/material/card';
-import {MatTabsModule} from '@angular/material/tabs';
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+
 import {GameService} from '../services/game.service';
 import {GameState, NewGameRequest} from '../models/api.types';
-import {Cell, Difficulty} from '../models/game.types';
+import {Cell} from '../models/game.types';
+import {DifficultySelector} from '../difficulty-selector/difficulty-selector'
 
 @Component({
   selector: 'app-game-board',
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule,
     MatButtonModule,
     MatIconModule,
     MatCardModule,
-    MatTabsModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatCheckboxModule
+    MatProgressSpinnerModule,
+    DifficultySelector,
   ],
   templateUrl: './game-board.html',
   styleUrls: ['./game-board.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameBoard {
-  private readonly fb = inject(FormBuilder);
   private readonly gameService = inject(GameService);
-
-  readonly DIFF_MODES: Difficulty[] = ['EASY', 'MEDIUM', 'HARD', 'CUSTOM'];
 
   // State Signals
   gameState = signal<GameState | undefined>(undefined);
   loading = signal<boolean>(false);
   errorMessage = signal<string | undefined>(undefined);
 
-  // Computed State
   isRunning = computed(() => this.gameState()?.status === 'RUNNING');
 
-  // last selected tab index
-  selectedTabIndex = computed(() => {
-    return this.DIFF_MODES.indexOf(this.selectedDiff());
-  });
-
-  // Tracks which tab is active (0=Easy, 1=Medium, 2=Hard, 3=Custom)
-  selectedDiff = signal<Difficulty>('MEDIUM');
-
-  // Form for CUSTOM inputs only
-  customForm = this.fb.nonNullable.group({
-    rows: [20, [Validators.required, Validators.min(5), Validators.max(30)]],
-    columns: [20, [Validators.required, Validators.min(5), Validators.max(30)]],
-    mines: [50, [Validators.required, Validators.min(1)]],
-    enableLives: [false] // Checkbox for "Second Chance"
-  });
-
-  // --- Actions ---
-
-  // Triggered when clicking a Tab
-  onTabChange(index: number): void {
-    this.selectedDiff.set(this.DIFF_MODES[index]);
-  }
-
-  createGame(): void {
-    if (this.selectedDiff() === 'CUSTOM' && this.customForm.invalid) return;
-
+  createGame(req: NewGameRequest): void {
     this.loading.set(true);
     this.errorMessage.set(undefined);
-
-    const diff = this.selectedDiff();
-
-    const req: NewGameRequest = {
-      difficulty: diff,
-      rows: diff === 'CUSTOM' ? this.customForm.controls.rows.value : 0,
-      columns: diff === 'CUSTOM' ? this.customForm.controls.columns.value : 0,
-      customMines: diff === 'CUSTOM' ? this.customForm.controls.mines.value : 0,
-      customLives: diff === 'CUSTOM' && this.customForm.controls.enableLives.value ? 1 : 0
-    };
 
     this.gameService.createGame(req).subscribe({
       next: (state) => {
@@ -102,20 +58,12 @@ export class GameBoard {
     this.gameState.set(undefined);
   }
 
-  // --- Custom Input Adjuster ---
-  adjustCustom(controlName: 'rows' | 'columns' | 'mines', delta: number): void {
-    const control = this.customForm.get(controlName) as FormControl<number>;
-    if (!control) return;
-    const val = control.value + delta;
-    if (val > 0) control.setValue(val);
-  }
-
-  // --- Gameplay Interactions (Same as before) ---
+  // --- Gameplay Interactions ---
   onLeftClick(cell: Cell): void {
     if (!this.isRunning()) return;
     if (this.isFlagged(cell) || this.isMine(cell)) return;
 
-    const gameState = this.gameState()!
+    const gameState = this.gameState()!;
 
     if (this.isRevealed(cell)) {
       this.handleAction(this.gameService.autoExpand(gameState.id, {x: cell.x, y: cell.y}));
