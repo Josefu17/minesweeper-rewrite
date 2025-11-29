@@ -12,14 +12,48 @@
 .header-card {
   width: 100%;
   max-width: 900px;
-
-  .title-icon { vertical-align: middle; margin-right: 8px; color: #333; }
+  overflow: hidden;
 
   mat-card-header {
+    position: relative;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    width: 100%;
+    padding: 1.5rem 1rem;
+
+    ::ng-deep .mat-mdc-card-header-text {
+      margin: 0;
+      width: auto;
+    }
+  }
+
+  mat-card-title {
+    display: flex;
+    align-items: center;
+    font-size: 2rem;
+    margin-bottom: 0;
+
+    .title-icon {
+      margin-right: 12px;
+      transform: scale(1.2);
+      color: #333;
+    }
+  }
+
+  // The container for the button
+  .header-actions {
+    position: absolute;
+    right: 24px; // Pin to the right
+    top: 50%;
+    transform: translateY(-50%); // Perfect vertical center
+    display: flex;
+    align-items: center;
+
+    // Ensure the button looks good
+    button {
+      border-width: 2px; // Make the stroke a bit bolder
+      font-weight: 600;
+    }
   }
 }
 

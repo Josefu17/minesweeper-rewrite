@@ -1,0 +1,43 @@
+<h2 mat-dialog-title>Custom Game Setup</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="custom-form">
+
+    <div class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Rows</mat-label>
+        <input matInput type="number" formControlName="rows" min="5" max="30">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Columns</mat-label>
+        <input matInput type="number" formControlName="columns" min="5" max="30">
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Mines (Max: {{ maxMines() }})</mat-label>
+        <input matInput type="number" formControlName="mines" min="1" [max]="maxMines()">
+        @if (form.controls.mines.hasError('max')) {
+          <mat-error>Too many mines for this grid size</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="row-checkbox">
+      <mat-checkbox formControlName="enableLives" color="primary">
+        Enable Second Chance (1 Life)
+      </mat-checkbox>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-flat-button color="primary"
+          [disabled]="form.invalid"
+          (click)="submit()">
+    Start Game
+  </button>
+</mat-dialog-actions>

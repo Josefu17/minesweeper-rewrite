@@ -8,14 +8,15 @@
       </mat-card-title>
 
       @if (gameState()) {
-        <button
-          (click)="resetGame()"
-          style="margin-left: auto;"
-          mat-stroked-button
-          color="warn"
-        >
-          New Game
-        </button>
+        <div class="header-actions">
+          <button
+            (click)="resetGame()"
+            mat-stroked-button
+            color="warn"
+          >
+            New Game
+          </button>
+        </div>
       }
     </mat-card-header>
   </mat-card>
@@ -25,14 +26,12 @@
     <mat-card class="setup-panel">
       <mat-tab-group
         (selectedIndexChange)="onTabChange($event)"
-        [selectedIndex]="1"
+        [selectedIndex]="selectedTabIndex()"
         animationDuration="0ms"
       >
         <mat-tab label="Easy">
           <div class="tab-content">
-
             <p class="mode-desc">9x9 Grid • 10 Mines • 1 Life</p>
-
             <button mat-flat-button color="primary" (click)="createGame()" [disabled]="loading()">
               {{ loading() ? 'Starting...' : 'Start Easy Game' }}
             </button>
@@ -41,9 +40,7 @@
 
         <mat-tab label="Medium">
           <div class="tab-content">
-
             <p class="mode-desc">16x16 Grid • 40 Mines • 1 Life</p>
-
             <button mat-flat-button color="primary" (click)="createGame()" [disabled]="loading()">
               {{ loading() ? 'Starting...' : 'Start Medium Game' }}
             </button>

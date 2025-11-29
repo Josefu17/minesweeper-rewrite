@@ -1,18 +1,17 @@
-
-import { GameBoard } from './game-board';
 import {ComponentFixture, TestBed} from '@angular/core/testing'
+import {CustomGameDialog} from './custom-game-dialog'
 
-describe('GameBoard', () => {
-  let component: GameBoard;
-  let fixture: ComponentFixture<GameBoard>;
+describe('CustomGameDialog', () => {
+  let component: CustomGameDialog;
+  let fixture: ComponentFixture<CustomGameDialog>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GameBoard]
+      imports: [CustomGameDialog]
     })
-    .compileComponents();
+      .compileComponents();
 
-    fixture = TestBed.createComponent(GameBoard);
+    fixture = TestBed.createComponent(CustomGameDialog);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

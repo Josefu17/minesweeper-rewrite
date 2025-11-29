@@ -6,13 +6,13 @@ import {Observable} from 'rxjs';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatCardModule} from '@angular/material/card';
-import {MatTabsModule} from '@angular/material/tabs'; // New Import
+import {MatTabsModule} from '@angular/material/tabs';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {GameService} from '../services/game.service';
 import {GameState, NewGameRequest} from '../models/api.types';
-import {Cell, Difficulty} from '../models/game.types'; // For "Lives" check
+import {Cell, Difficulty} from '../models/game.types';
 
 @Component({
   selector: 'app-game-board',
@@ -36,6 +36,8 @@ export class GameBoard {
   private readonly fb = inject(FormBuilder);
   private readonly gameService = inject(GameService);
 
+  readonly DIFF_MODES: Difficulty[] = ['EASY', 'MEDIUM', 'HARD', 'CUSTOM'];
+
   // State Signals
   gameState = signal<GameState | undefined>(undefined);
   loading = signal<boolean>(false);
@@ -43,6 +45,11 @@ export class GameBoard {
 
   // Computed State
   isRunning = computed(() => this.gameState()?.status === 'RUNNING');
+
+  // last selected tab index
+  selectedTabIndex = computed(() => {
+    return this.DIFF_MODES.indexOf(this.selectedDiff());
+  });
 
   // Tracks which tab is active (0=Easy, 1=Medium, 2=Hard, 3=Custom)
   selectedDiff = signal<Difficulty>('MEDIUM');
@@ -59,8 +66,7 @@ export class GameBoard {
 
   // Triggered when clicking a Tab
   onTabChange(index: number): void {
-    const modes: Difficulty[] = ['EASY', 'MEDIUM', 'HARD', 'CUSTOM'];
-    this.selectedDiff.set(modes[index]);
+    this.selectedDiff.set(this.DIFF_MODES[index]);
   }
 
   createGame(): void {
