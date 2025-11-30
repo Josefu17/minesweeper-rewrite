@@ -1,4 +1,4 @@
-package minesweeper.api.dto
+package minesweeper.api.response
 
 import minesweeper.core.BlockType
 import minesweeper.core.GameStatus

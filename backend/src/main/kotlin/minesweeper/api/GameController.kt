@@ -1,8 +1,8 @@
 package minesweeper.api
 
-import minesweeper.api.dto.CoordinateRequest
-import minesweeper.api.dto.GameStateDto
-import minesweeper.api.dto.NewGameRequest
+import minesweeper.api.request.CoordinateRequest
+import minesweeper.api.response.GameStateDto
+import minesweeper.api.request.NewGameRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable

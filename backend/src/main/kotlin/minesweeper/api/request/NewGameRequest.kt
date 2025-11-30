@@ -1,4 +1,4 @@
-package minesweeper.api.dto
+package minesweeper.api.request
 
 import minesweeper.core.Difficulty
 

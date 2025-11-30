@@ -1,8 +1,8 @@
 package minesweeper.api
 
-import minesweeper.api.dto.CellDto
-import minesweeper.api.dto.GameStateDto
-import minesweeper.api.dto.NewGameRequest
+import minesweeper.api.response.CellDto
+import minesweeper.api.response.GameStateDto
+import minesweeper.api.request.NewGameRequest
 import minesweeper.core.Coordinate
 import minesweeper.core.Difficulty
 import minesweeper.core.MinesweeperGame

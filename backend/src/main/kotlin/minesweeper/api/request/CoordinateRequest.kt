@@ -1,4 +1,4 @@
-package minesweeper.api.dto
+package minesweeper.api.request
 
 data class CoordinateRequest(
     val x: Int,
