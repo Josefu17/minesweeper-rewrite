@@ -12,14 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/games")
+@RequestMapping("/api")
 class GameController(
     private val gameService: GameService
 ) {
-
-    // TODO remove if unused, yb
-//    private val logger = LoggerFactory.getLogger(MinesweeperGame::class.java)
-
 
     @GetMapping("/ping")
     fun ping(): Map<String, String> =

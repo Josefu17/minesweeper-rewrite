@@ -1,0 +1,24 @@
+services:
+  backend:
+    build: ./backend
+    container_name: minesweeper-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SERVER_PORT=8080
+    networks:
+      - minesweeper-net
+
+  frontend:
+    build: ./frontend
+    container_name: minesweeper-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - minesweeper-net
+
+networks:
+  minesweeper-net:
+    driver: bridge

@@ -1,6 +1,11 @@
-import {ApplicationConfig, inject, provideAppInitializer, provideBrowserGlobalErrorListeners} from '@angular/core';
-import {provideHttpClient} from '@angular/common/http';
-import {IconRegistryService} from './services/icon-registry.service';
+import {
+  ApplicationConfig,
+  inject,
+  provideAppInitializer,
+  provideBrowserGlobalErrorListeners,
+} from '@angular/core'
+import { provideHttpClient } from '@angular/common/http'
+import { IconRegistryService } from './services/icon-registry.service'
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -9,6 +14,6 @@ export const appConfig: ApplicationConfig = {
     provideAppInitializer(() => {
       const registry = inject(IconRegistryService)
       registry.registerIcons()
-    })
-  ]
-};
+    }),
+  ],
+}

@@ -1,5 +1,4 @@
 <div class="container">
-
   <mat-card class="header-card">
     <mat-card-header>
       <mat-card-title>
@@ -9,9 +8,7 @@
 
       @if (gameState()) {
         <div class="header-actions">
-          <button (click)="resetGame()" mat-stroked-button color="warn">
-            New Game
-          </button>
+          <button (click)="resetGame()" mat-stroked-button color="warn">New Game</button>
         </div>
       }
     </mat-card-header>
@@ -24,8 +21,7 @@
     </div>
   } @else if (!gameState()) {
     <div class="selection-area">
-      <app-difficulty-selector (gameRequest)="createGame($event)">
-      </app-difficulty-selector>
+      <app-difficulty-selector (gameRequest)="createGame($event)"> </app-difficulty-selector>
 
       @if (errorMessage()) {
         <div class="error-msg">{{ errorMessage() }}</div>
@@ -52,17 +48,19 @@
         </div>
       </div>
 
-      <div class="board"
-           [style.grid-template-columns]="'repeat(' + game.columns + ', 1fr)'"
-           (contextmenu)="$event.preventDefault()">
-
+      <div
+        class="board"
+        [style.grid-template-columns]="'repeat(' + game.columns + ', 1fr)'"
+        (contextmenu)="$event.preventDefault()"
+      >
         @for (row of game.grid; track $index) {
           @for (cell of row; track cell.x + '-' + cell.y) {
-            <div class="cell"
-                 [ngClass]="getCellClass(cell)"
-                 (click)="onLeftClick(cell)"
-                 (contextmenu)="onRightClick($event, cell)">
-
+            <div
+              class="cell"
+              [ngClass]="getCellClass(cell)"
+              (click)="onLeftClick(cell)"
+              (contextmenu)="onRightClick($event, cell)"
+            >
               @if (isFlagged(cell)) {
                 <mat-icon class="cell-icon flag" svgIcon="flag"></mat-icon>
               } @else if (isMine(cell)) {

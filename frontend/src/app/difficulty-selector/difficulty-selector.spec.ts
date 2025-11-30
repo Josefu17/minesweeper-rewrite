@@ -1,23 +1,22 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import {DifficultySelector} from './difficulty-selector';
+import { DifficultySelector } from './difficulty-selector'
 
 describe('DifficultySelector', () => {
-  let component: DifficultySelector;
-  let fixture: ComponentFixture<DifficultySelector>;
+  let component: DifficultySelector
+  let fixture: ComponentFixture<DifficultySelector>
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DifficultySelector]
-    })
-      .compileComponents();
+      imports: [DifficultySelector],
+    }).compileComponents()
 
-    fixture = TestBed.createComponent(DifficultySelector);
-    component = fixture.componentInstance;
-    await fixture.whenStable();
-  });
+    fixture = TestBed.createComponent(DifficultySelector)
+    component = fixture.componentInstance
+    await fixture.whenStable()
+  })
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

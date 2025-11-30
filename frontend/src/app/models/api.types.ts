@@ -1,26 +1,26 @@
-import {Cell, Difficulty, GameStatus} from './game.types';
+import { Cell, Difficulty, GameStatus } from './game.types'
 
 export interface NewGameRequest {
-  difficulty: Difficulty;
+  difficulty: Difficulty
 
   // For custom diff
-  rows: number;
-  columns: number;
-  customMines?: number;
-  customLives?: number;
+  rows: number
+  columns: number
+  customMines?: number
+  customLives?: number
 }
 export interface CoordinateRequest {
-  x: number;
-  y: number;
+  x: number
+  y: number
 }
 
 export interface GameState {
-  id: string;
-  status: GameStatus;
-  livesLeft: number;
-  rows: number;
-  columns: number;
-  mineCount: number;
-  marksLeft: number;
-  grid: Cell[][];
+  id: string
+  status: GameStatus
+  livesLeft: number
+  rows: number
+  columns: number
+  mineCount: number
+  marksLeft: number
+  grid: Cell[][]
 }

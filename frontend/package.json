@@ -6,11 +6,16 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "format": "prettier --write \"src/**/*.{html,ts,js,scss,json}\""
   },
   "prettier": {
     "printWidth": 100,
     "singleQuote": true,
+    "semi": false,
+    "tabWidth": 2,
+    "useTabs": false,
+    "trailingComma": "es5",
     "overrides": [
       {
         "files": "*.html",
@@ -41,6 +46,7 @@
     "@angular/compiler-cli": "^21.0.0",
     "@types/node": "^20.17.19",
     "jsdom": "^27.1.0",
+    "prettier": "^3.7.3",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8"
   }

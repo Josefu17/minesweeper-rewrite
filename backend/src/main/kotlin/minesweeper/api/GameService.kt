@@ -105,7 +105,7 @@ class GameService {
                 val r = (req.rows).coerceIn(5, 30)
                 val c = (req.columns).coerceIn(5, 30)
 
-                // Ensure we don't have more mines than cells (leave at least 9 for start area)
+                // Ensure we don't have more mines than cells (leave at least 9 for the start area)
                 val maxMines = (r * c) - 9
                 val m = (req.customMines ?: 10).coerceIn(1, maxMines)
 

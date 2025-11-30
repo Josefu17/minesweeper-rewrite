@@ -1,12 +1,6 @@
-- 6 adjacents has white color
-
 game icon link: https://www.pngegg.com/en/png-idbew
 
-- backend validation for the request with jakarta?
-- frontend linter: possibly among others: remove ';' from EOL
 - backend test
-- diff selector isn't working properly.
-- containerize the app for easy start
 - improve post game handling (use pop up or dialog or sth)
 
 Nice-to-have:

@@ -1,14 +1,11 @@
-import {Component} from '@angular/core';
-import {GameBoard} from './game-board/game-board';
+import { Component } from '@angular/core'
+import { GameBoard } from './game-board/game-board'
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [
-    GameBoard
-  ],
+  imports: [GameBoard],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrl: './app.scss',
 })
-export class App {
-}
+export class App {}
