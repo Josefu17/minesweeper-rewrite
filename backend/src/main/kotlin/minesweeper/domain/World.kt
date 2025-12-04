@@ -130,6 +130,13 @@ class World(
                 }
             }
         }
+
+        // reset adjacent flags since at least 1 was wrong
+        if (minesTriggered > 0) {
+            neighbors
+                .filter { grid[it.x][it.y].state == BlockType.FLAGGED }
+                .forEach { unmark(it) }
+        }
         return minesTriggered
     }
 
