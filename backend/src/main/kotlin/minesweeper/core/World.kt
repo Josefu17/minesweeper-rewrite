@@ -155,4 +155,57 @@ class World(
 
     private fun isNeighborOrSelf(center: Coordinate, target: Coordinate): Boolean =
         abs(center.x - target.x) <= 1 && abs(center.y - target.y) <= 1
+
+
+    // --- TEST HELPERS (Internal only) ---
+
+    /**
+     * Clears existing mines and forces specific locations.
+     * Re-calculates numbers immediately.
+     * Has package-internal access and shouldn't be used outside tests
+     */
+    internal fun debugSetMines(locations: List<Coordinate>) {
+        // 1. Reset the grid
+        for (r in 0 until rows) {
+            for (c in 0 until columns) {
+                grid[r][c].hasMine = false
+                grid[r][c].adjacentMines = 0
+            }
+        }
+
+        // 2. Place new mines
+        locations.forEach {
+            if (!isOutOfBounds(it)) {
+                grid[it.x][it.y].hasMine = true
+            }
+        }
+
+        // 3. Recalculate
+        calculateNumbers()
+    }
+
+    /*
+    * Print the world state for debugging.
+    */
+    internal fun printDebug() {
+        println("   " + (0 until columns).joinToString(" ") { "$it" })
+        println("  " + "--".repeat(columns))
+        for (r in 0 until rows) {
+            print("$r |")
+            for (c in 0 until columns) {
+                val block = getBlock(r, c)
+                val symbol = when (block.state) {
+                    BlockType.FLAGGED -> "F"
+                    BlockType.MINE -> "*" // Exploded
+                    BlockType.HIDDEN if block.hasMine -> "M" // Cheating: Hidden Mine
+                    BlockType.HIDDEN -> "."
+                    BlockType.REVEALED if block.hasMine -> "X" // Should not happen usually
+                    BlockType.REVEALED -> if (block.adjacentMines == 0) " " else block.adjacentMines.toString()
+                }
+                print(" $symbol")
+            }
+            println()
+        }
+        println("\nStats: Mines: $mineCount | Marks Left: $marksLeft | Hidden Safe: $hiddenSafeBlocks")
+    }
 }

@@ -101,4 +101,9 @@ class MinesweeperGame(
             }
         }
     }
+
+    // --- TEST HELPERS ---
+    internal fun debugSetFirstMove(isFirst: Boolean) {
+        this.isFirstMove = isFirst
+    }
 }
