@@ -1,9 +1,9 @@
 game icon link: https://www.pngegg.com/en/png-idbew
 
 - improve post game handling (use pop up or dialog or sth)
+- add proper readme
 
 Nice-to-have:
 - Timer
-- leaderboard
 - local persistence (currently in-memory map)
-- users(?) -> Alternatively accept a guest name in the leaderboard, probably better. User + JWT would be nice display of skills but a bit of an overkill
+- leaderboard (not registered users, simply save a name and the duration)

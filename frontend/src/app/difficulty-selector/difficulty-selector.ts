@@ -27,7 +27,8 @@ export class DifficultySelector {
 
   openCustom() {
     const ref = this.dialog.open(CustomGameDialog, {
-      width: '400px',
+      height: '550px',
+      width: '550px',
       autoFocus: false,
     })
 
