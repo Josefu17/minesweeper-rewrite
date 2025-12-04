@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core'
-import { Observable } from 'rxjs'
-import { CoordinateRequest, GameState, NewGameRequest } from '../models/api.types'
-import { BaseApiService } from './base-api.service'
+import {Injectable} from '@angular/core'
+import {Observable} from 'rxjs'
+import {CoordinateRequest, GameState, NewGameRequest} from '../models/api.types'
+import {BaseApiService} from './base-api.service'
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class GameService extends BaseApiService {
   createGame(req: NewGameRequest): Observable<GameState> {
     return this.post('', req)
@@ -23,5 +23,9 @@ export class GameService extends BaseApiService {
 
   autoExpand(gameId: string, coord: CoordinateRequest): Observable<GameState> {
     return this.post(`/${gameId}/auto-expand`, coord)
+  }
+
+  submitScore(gameId: string, playerName: string): Observable<GameState> {
+    return this.post(`/${gameId}/score`, {playerName: playerName})
   }
 }

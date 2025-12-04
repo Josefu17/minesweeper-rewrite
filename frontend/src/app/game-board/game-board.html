@@ -21,7 +21,7 @@
     </div>
   } @else if (!gameState()) {
     <div class="selection-area">
-      <app-difficulty-selector (gameRequest)="createGame($event)"> </app-difficulty-selector>
+      <app-difficulty-selector (gameRequest)="createGame($event)"></app-difficulty-selector>
 
       @if (errorMessage()) {
         <div class="error-msg">{{ errorMessage() }}</div>
@@ -30,18 +30,25 @@
   } @else if (gameState(); as game) {
     <mat-card class="game-area">
       <div class="stats-bar">
-        <div class="stat-item" title="Game Status">
-          <mat-icon svgIcon="info"></mat-icon>
-          {{ game.status }}
+        <!-- Timer -->
+        <div class="stat-item" title="Time Elapsed">
+          <mat-icon svgIcon="timer"></mat-icon>
+          {{ formattedTime() }}
         </div>
+
+        <!-- Lives -->
         <div class="stat-item" title="Lives Remaining">
           <mat-icon svgIcon="lives"></mat-icon>
           {{ game.livesLeft }}
         </div>
+
+        <!-- Total Mines -->
         <div class="stat-item" title="Mines Total">
           <mat-icon svgIcon="bomb"></mat-icon>
           {{ game.mineCount }}
         </div>
+
+        <!-- Marks Left -->
         <div class="stat-item" title="Flags Remaining">
           <mat-icon svgIcon="flag"></mat-icon>
           {{ game.marksLeft }}
@@ -63,7 +70,7 @@
             >
               @if (isFlagged(cell)) {
                 <mat-icon class="cell-icon flag" svgIcon="flag"></mat-icon>
-              } @else if (isMine(cell)) {
+              } @else if (showMineIcon(cell)) {
                 <mat-icon class="cell-icon mine" svgIcon="mine"></mat-icon>
               } @else if (showNumber(cell)) {
                 <span class="adj-count" [attr.data-count]="cell.adjacentMines">

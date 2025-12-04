@@ -1,7 +1,7 @@
 export type Difficulty = 'EASY' | 'MEDIUM' | 'HARD' | 'CUSTOM'
 export type GameStatus = 'RUNNING' | 'WON' | 'LOST'
 
-export type BlockType = 'HIDDEN' | 'FLAGGED' | 'REVEALED' | 'MINE'
+export type BlockType = 'HIDDEN' | 'FLAGGED' | 'REVEALED' | 'MINE' | 'REVEALED_MINE'
 
 export interface Cell {
   x: number

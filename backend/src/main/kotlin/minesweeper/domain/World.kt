@@ -94,6 +94,11 @@ class World(
         grid[c.x][c.y].state = BlockType.MINE
     }
 
+    // reveal a mine passively (after a loss)
+    fun revealMine(c: Coordinate) {
+        grid[c.x][c.y].state = BlockType.REVEALED_MINE
+    }
+
     /**
      * CHORDING: Returns count of mines triggered (usually 0, hopefully)
      */
@@ -196,7 +201,7 @@ class World(
                 val block = getBlock(r, c)
                 val symbol = when (block.state) {
                     BlockType.FLAGGED -> "F"
-                    BlockType.MINE -> "*" // Exploded
+                    BlockType.MINE, BlockType.REVEALED_MINE -> "*" // Exploded or revealed after lost game
                     BlockType.HIDDEN if block.hasMine -> "M" // Cheating: Hidden Mine
                     BlockType.HIDDEN -> "."
                     BlockType.REVEALED if block.hasMine -> "X" // Should not happen usually

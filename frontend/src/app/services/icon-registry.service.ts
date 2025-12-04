@@ -20,8 +20,10 @@ export class IconRegistryService {
       { iconName: 'close' },
       { iconName: 'flag' },
       { iconName: 'flag_2' },
-      { iconName: 'remove' },
       { iconName: 'info' },
+      { iconName: 'remove' },
+      { iconName: 'timer' },
+      { iconName: 'trophy' },
 
       { iconName: 'bomb', alias: 'bomb' },
       { iconName: 'explosion', alias: 'mine' },

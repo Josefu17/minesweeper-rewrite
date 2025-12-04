@@ -81,15 +81,12 @@ class MinesweeperGame(
     private fun checkWin() {
         if (world.won()) {
             finishGame(GameStatus.WON)
-            logger.info("Game WON!")
-            autoFlagRemainingMines()
         }
     }
 
     private fun handleMineHit(hitMines: Int, at: Coordinate) {
         if (hitMines > livesLeft || livesLeft == 0) {
-            finishGame(GameStatus.LOST)
-            logger.info("Game LOST at $at")
+            finishGame(GameStatus.LOST, losingCoordinate = at)
         } else {
             livesLeft = 0
             // Logic: You hit a mine, but survived.
@@ -111,9 +108,29 @@ class MinesweeperGame(
         }
     }
 
-    private fun finishGame(endStatus: GameStatus) {
+    private fun autoRevealRemainingMines() {
+        for (r in 0 until world.rows) {
+            for (c in 0 until world.columns) {
+                val coord = Coordinate(r, c)
+
+                if (world.hasMine(coord) && world.getState(coord) == BlockType.HIDDEN) {
+                    world.revealMine(coord)
+                }
+            }
+        }
+    }
+
+    private fun finishGame(endStatus: GameStatus, losingCoordinate: Coordinate? = null) {
         status = endStatus
         finishedAt = Instant.now()
+
+        if (endStatus == GameStatus.WON) {
+            logger.info("Game WON!")
+            autoFlagRemainingMines()
+        } else if (endStatus == GameStatus.LOST) {
+            logger.info("Game LOST at ${losingCoordinate!!}")
+            autoRevealRemainingMines()
+        }
     }
 
     // --- TEST HELPERS ---

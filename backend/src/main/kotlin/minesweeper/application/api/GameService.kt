@@ -1,4 +1,4 @@
-package minesweeper.api
+package minesweeper.application.api
 
 import minesweeper.application.api.request.NewGameRequest
 import minesweeper.application.api.response.CellDto

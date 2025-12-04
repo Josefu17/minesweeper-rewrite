@@ -1,7 +1,6 @@
 package minesweeper.application.api
 
 import jakarta.validation.Valid
-import minesweeper.api.GameService
 import minesweeper.application.api.request.CoordinateRequest
 import minesweeper.application.api.request.NewGameRequest
 import minesweeper.application.api.request.SubmitScoreRequest
