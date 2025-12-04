@@ -102,4 +102,55 @@ class MinesweeperGameTest {
         assertEquals(0, game.livesLeft)
         assertEquals(BlockType.MINE, game.world.getState(mineLoc))
     }
+
+    @Test
+    fun `toggleMark respects mine count limit`() {
+        // Arrange
+        // Setup: 2x2, 2 Mines. (So we only have 2 flags available)
+        val game = MinesweeperGame(rows = 2, columns = 2, mineCount = 2, lives = 0)
+        game.debugSetFirstMove(false) // Skip first move logic
+
+        // Mark first mine
+        game.toggleMark(Coordinate(0, 0))
+        assertEquals(BlockType.FLAGGED, game.world.getState(Coordinate(0, 0)))
+        assertEquals(1, game.world.marksLeft)
+
+        // Mark second mine
+        game.toggleMark(Coordinate(0, 1))
+        assertEquals(BlockType.FLAGGED, game.world.getState(Coordinate(0, 1)))
+        assertEquals(0, game.world.marksLeft)
+
+        // Act
+        // Try to mark a 3rd spot (should fail because marksLeft is 0)
+        game.toggleMark(Coordinate(1, 0))
+        assertEquals(BlockType.HIDDEN, game.world.getState(Coordinate(1, 0)), "Should not allow flagging when marks ran out")
+        assertEquals(0, game.world.marksLeft)
+
+        // 4. Unmark one
+        game.toggleMark(Coordinate(0, 0))
+        assertEquals(BlockType.HIDDEN, game.world.getState(Coordinate(0, 0)))
+        assertEquals(1, game.world.marksLeft)
+    }
+
+    @Test
+    fun `Actions ignored after Game Lost`() {
+        // Setup: 4x4, 1 Mine
+        val game = MinesweeperGame(rows = 4, columns = 4, mineCount = 1, lives = 0)
+        val mineLoc = Coordinate(0, 0)
+        val safeLoc = Coordinate(1, 1)
+
+        game.world.debugSetMines(listOf(mineLoc))
+        game.debugSetFirstMove(false)
+
+        // 1. Lose the game
+        game.reveal(mineLoc)
+        assertEquals(GameStatus.LOST, game.status)
+
+        // 2. Try to reveal a safe spot
+        game.reveal(safeLoc)
+
+        // Assert: State should still be HIDDEN, game still LOST
+        assertEquals(BlockType.HIDDEN, game.world.getState(safeLoc), "Should not reveal after game over")
+        assertEquals(GameStatus.LOST, game.status)
+    }
 }

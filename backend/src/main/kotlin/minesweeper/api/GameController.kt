@@ -1,8 +1,9 @@
 package minesweeper.api
 
+import jakarta.validation.Valid
 import minesweeper.api.request.CoordinateRequest
-import minesweeper.api.response.GameStateDto
 import minesweeper.api.request.NewGameRequest
+import minesweeper.api.response.GameStateDto
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -22,7 +23,7 @@ class GameController(
         mapOf("status" to "ok", "message" to "Minesweeper backend is alive")
 
     @PostMapping
-    fun createGame(@RequestBody request: NewGameRequest): GameStateDto {
+    fun createGame(@RequestBody @Valid request: NewGameRequest): GameStateDto {
         return gameService.createGame(request)
     }
 

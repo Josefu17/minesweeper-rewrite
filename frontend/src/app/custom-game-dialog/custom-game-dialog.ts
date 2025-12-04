@@ -1,14 +1,14 @@
-import { Component, inject } from '@angular/core'
-import { CommonModule } from '@angular/common'
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms'
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog'
-import { MatButtonModule } from '@angular/material/button'
-import { MatFormFieldModule } from '@angular/material/form-field'
-import { MatInputModule } from '@angular/material/input'
-import { MatCheckboxModule } from '@angular/material/checkbox'
-import { toSignal } from '@angular/core/rxjs-interop'
-import { map, startWith } from 'rxjs/operators'
-import { NewGameRequest } from '../models/api.types'
+import {Component, inject} from '@angular/core'
+import {CommonModule} from '@angular/common'
+import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms'
+import {MatDialogModule, MatDialogRef} from '@angular/material/dialog'
+import {MatButtonModule} from '@angular/material/button'
+import {MatFormFieldModule} from '@angular/material/form-field'
+import {MatInputModule} from '@angular/material/input'
+import {MatCheckboxModule} from '@angular/material/checkbox'
+import {toSignal} from '@angular/core/rxjs-interop'
+import {map, startWith} from 'rxjs/operators'
+import {NewGameRequest} from '../models/api.types'
 
 @Component({
   selector: 'app-custom-game-dialog',
@@ -46,7 +46,7 @@ export class CustomGameDialog {
         return Math.max(0, r * c - 9)
       })
     ),
-    { initialValue: 391 }
+    {initialValue: 391}
   )
 
   submit() {
@@ -55,10 +55,12 @@ export class CustomGameDialog {
 
     const req: NewGameRequest = {
       difficulty: 'CUSTOM',
-      rows: val.rows,
-      columns: val.columns,
-      customMines: val.mines,
-      customLives: val.enableLives ? 1 : 0,
+      customConfig: {
+        rows: val.rows,
+        columns: val.columns,
+        customMines: val.mines,
+        customLives: val.enableLives ? 1 : 0,
+      }
     }
 
     this.dialogRef.close(req)

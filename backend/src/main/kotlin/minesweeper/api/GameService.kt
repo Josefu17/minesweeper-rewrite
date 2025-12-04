@@ -1,8 +1,8 @@
 package minesweeper.api
 
+import minesweeper.api.request.NewGameRequest
 import minesweeper.api.response.CellDto
 import minesweeper.api.response.GameStateDto
-import minesweeper.api.request.NewGameRequest
 import minesweeper.core.Coordinate
 import minesweeper.core.Difficulty
 import minesweeper.core.MinesweeperGame
@@ -101,15 +101,17 @@ class GameService {
             Difficulty.MEDIUM -> GameConfig(rows = 16, columns = 16, mines = 40, lives = 1)
             Difficulty.HARD -> GameConfig(rows = 16, columns = 30, mines = 99, lives = 0)
             Difficulty.CUSTOM -> {
-                // Validation for Custom Mode
-                val r = (req.rows).coerceIn(5, 30)
-                val c = (req.columns).coerceIn(5, 30)
+                val customConfig = req.customConfig
+                val r = customConfig!!.rows // validated by jakarta validation
+                val c = customConfig.columns
 
                 // Ensure we don't have more mines than cells (leave at least 9 for the start area)
                 val maxMines = (r * c) - 9
-                val m = (req.customMines ?: 10).coerceIn(1, maxMines)
+                val requestedMines = customConfig.customMines
 
-                val l = (req.customLives ?: 1).coerceIn(0, 3)
+
+                val m = requestedMines.coerceIn(1, maxMines)
+                val l = customConfig.customLives
 
                 GameConfig(r, c, m, l)
             }
