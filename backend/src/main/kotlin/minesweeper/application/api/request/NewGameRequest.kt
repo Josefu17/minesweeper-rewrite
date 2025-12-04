@@ -1,10 +1,10 @@
-package minesweeper.api.request
+package minesweeper.application.api.request
 
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import jakarta.validation.constraints.Max
 import jakarta.validation.constraints.Min
-import minesweeper.core.Difficulty
+import minesweeper.domain.Difficulty
 
 data class NewGameRequest(
     val difficulty: Difficulty,

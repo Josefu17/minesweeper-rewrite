@@ -1,6 +1,7 @@
-package minesweeper.core
+package minesweeper.domain
 
 import org.slf4j.LoggerFactory
+import java.time.Instant
 
 class MinesweeperGame(
     rows: Int,
@@ -16,6 +17,13 @@ class MinesweeperGame(
         private set
     var status: GameStatus = GameStatus.RUNNING
         private set
+
+    // Start-End Timestamps
+    var startedAt: Instant? = null
+        private set
+    var finishedAt: Instant? = null
+        private set
+
     private var isFirstMove: Boolean = true
 
     fun reveal(c: Coordinate) {
@@ -30,6 +38,7 @@ class MinesweeperGame(
         if (currentState != BlockType.HIDDEN) return
 
         if (isFirstMove) {
+            startedAt = Instant.now()
             world.plantMines(c)
             isFirstMove = false
         }
@@ -71,7 +80,7 @@ class MinesweeperGame(
 
     private fun checkWin() {
         if (world.won()) {
-            status = GameStatus.WON
+            finishGame(GameStatus.WON)
             logger.info("Game WON!")
             autoFlagRemainingMines()
         }
@@ -79,7 +88,7 @@ class MinesweeperGame(
 
     private fun handleMineHit(hitMines: Int, at: Coordinate) {
         if (hitMines > livesLeft || livesLeft == 0) {
-            status = GameStatus.LOST
+            finishGame(GameStatus.LOST)
             logger.info("Game LOST at $at")
         } else {
             livesLeft = 0
@@ -100,6 +109,11 @@ class MinesweeperGame(
                 }
             }
         }
+    }
+
+    private fun finishGame(endStatus: GameStatus) {
+        status = endStatus
+        finishedAt = Instant.now()
     }
 
     // --- TEST HELPERS ---

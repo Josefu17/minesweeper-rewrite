@@ -1,4 +1,4 @@
-package minesweeper.core
+package minesweeper.domain
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

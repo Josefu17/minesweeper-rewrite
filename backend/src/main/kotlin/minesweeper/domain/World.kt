@@ -1,4 +1,4 @@
-package minesweeper.core
+package minesweeper.domain
 
 import kotlin.math.abs
 import kotlin.random.Random

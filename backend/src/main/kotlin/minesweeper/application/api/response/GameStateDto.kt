@@ -1,7 +1,7 @@
-package minesweeper.api.response
+package minesweeper.application.api.response
 
-import minesweeper.core.BlockType
-import minesweeper.core.GameStatus
+import minesweeper.domain.BlockType
+import minesweeper.domain.GameStatus
 
 data class GameStateDto(
     val id: String,

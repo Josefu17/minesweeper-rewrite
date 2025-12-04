@@ -1,4 +1,4 @@
-package minesweeper.core
+package minesweeper.domain
 
 enum class BlockType {
     HIDDEN,     // User hasn't clicked it

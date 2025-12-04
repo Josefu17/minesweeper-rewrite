@@ -1,4 +1,4 @@
-package minesweeper.core
+package minesweeper.domain
 
 class Block(
     x: Int,

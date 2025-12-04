@@ -1,9 +1,12 @@
-package minesweeper.api
+package minesweeper.application.api
 
 import jakarta.validation.Valid
-import minesweeper.api.request.CoordinateRequest
-import minesweeper.api.request.NewGameRequest
-import minesweeper.api.response.GameStateDto
+import minesweeper.api.GameService
+import minesweeper.application.api.request.CoordinateRequest
+import minesweeper.application.api.request.NewGameRequest
+import minesweeper.application.api.request.SubmitScoreRequest
+import minesweeper.application.api.response.GameStateDto
+import minesweeper.infrastructure.model.Score
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -62,5 +65,15 @@ class GameController(
         val state = gameService.autoExpand(id, body.x, body.y)
             ?: return ResponseEntity.notFound().build()
         return ResponseEntity.ok(state)
+    }
+
+    @PostMapping("/{id}/score")
+    fun submitScore(
+        @PathVariable id: String,
+        @RequestBody body: SubmitScoreRequest
+    ): ResponseEntity<Score> {
+        val score = gameService.submitScore(id, body.playerName)
+            ?: return ResponseEntity.badRequest().build()
+        return ResponseEntity.ok(score)
     }
 }

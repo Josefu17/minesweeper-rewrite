@@ -1,10 +1,11 @@
-package minesweeper.api
+package minesweeper.application.api
 
-import minesweeper.api.request.CustomConfig
-import minesweeper.api.request.NewGameRequest
-import minesweeper.core.BlockType
-import minesweeper.core.Difficulty
-import minesweeper.core.GameStatus
+import minesweeper.application.api.GameService
+import minesweeper.application.api.request.CustomConfig
+import minesweeper.application.api.request.NewGameRequest
+import minesweeper.domain.BlockType
+import minesweeper.domain.Difficulty
+import minesweeper.domain.GameStatus
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull

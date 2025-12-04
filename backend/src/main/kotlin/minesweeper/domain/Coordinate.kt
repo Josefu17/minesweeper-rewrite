@@ -1,4 +1,4 @@
-package minesweeper.core
+package minesweeper.domain
 
 data class Coordinate(
     val x: Int,
