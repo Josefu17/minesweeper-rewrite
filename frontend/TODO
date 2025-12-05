@@ -1,6 +1,4 @@
 TODO:
-- improve post game handling (use pop up or dialog or sth) (WIP)
-
 Nice-to-have:
 - leaderboard (not registered users, simply save a name and the duration) (WIP)
 
@@ -11,6 +9,7 @@ Nice-to-have:
 
 
 DONE:
+- improve post game handling (use pop up or dialog or sth) (WIP)
 - define db and add migration setup using flyway
 - local persistence (currently in-memory map)
 - Timer

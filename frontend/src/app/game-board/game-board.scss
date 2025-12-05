@@ -11,7 +11,6 @@
 // Header Card
 .header-card {
   width: 100%;
-  max-width: 900px;
   overflow: visible;
 
   mat-card-header {
@@ -52,23 +51,6 @@
       }
     }
   }
-
-  .header-actions {
-    position: absolute;
-    right: 32px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    align-items: center;
-
-    button {
-      border-width: 2px;
-      font-weight: 600;
-      font-size: 1rem;
-      padding: 0 24px;
-      height: 44px;
-    }
-  }
 }
 
 // Rainbow Animation
@@ -83,26 +65,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.error-msg {
-  color: #f44336;
-  margin-top: 1rem;
-  text-align: center;
-  font-weight: 500;
-  background: #ffebee;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-}
-
-.loading-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 3rem;
-  color: #666;
-  font-weight: 500;
 }
 
 .start-screen-actions {
@@ -127,33 +89,74 @@
 
 // Game Area & Board
 .game-area {
-  padding: 2rem;
+  width: 100%;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   background: #333;
   color: white;
-  width: fit-content;
   max-width: 100%;
+  min-width: 700px;
 }
 
-.stats-bar {
+.game-header-bar {
   display: flex;
-  gap: 2rem;
+  align-items: center;
+  width: 100%;
   margin-bottom: 1.5rem;
-  flex-wrap: wrap;
-  justify-content: center;
+  padding: 0 8px;
+  box-sizing: border-box;
 
-  .stat-item {
+  .stats-group {
     display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 1.2rem;
-    font-weight: 500;
+    gap: 1.5rem;
 
-    // Default icon color for stats
-    mat-icon {
-      color: #ffab40;
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #fff;
+
+      mat-icon {
+        color: #ffab40;
+      }
+    }
+  }
+
+  .spacer {
+    flex: 1;
+  }
+
+  .actions-group {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+
+    .header-action-btn {
+      height: 40px;
+      border-radius: 20px;
+
+      mat-icon {
+        margin-right: 4px;
+        transform: scale(1.1);
+      }
+    }
+
+    button.mat-mdc-outlined-button {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.3);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: #ffab40;
+
+        mat-icon {
+          color: #ffab40;
+        }
+      }
     }
   }
 }
@@ -164,6 +167,26 @@
   border: 4px solid #808080;
   user-select: none;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 3rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.error-msg {
+  color: #f44336;
+  margin-top: 1rem;
+  text-align: center;
+  font-weight: 500;
+  background: #ffebee;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
 }
 
 .cell {

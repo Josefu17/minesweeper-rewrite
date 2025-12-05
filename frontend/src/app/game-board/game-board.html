@@ -24,6 +24,7 @@
         </button>
       </div>
 
+
       @if (errorMessage()) {
         <div class="error-msg">{{ errorMessage() }}</div>
       }
@@ -31,22 +32,42 @@
   } @else if (gameState(); as game) {
     <mat-card class="game-area">
 
-      <div class="stats-bar">
-        <div class="stat-item" title="Time Elapsed">
-          <mat-icon svgIcon="timer"></mat-icon>
-          {{ formattedTime() }}
+      <div class="game-header-bar">
+
+        <!-- Stats -->
+        <div class="stats-group">
+          <div class="stat-item" title="Time">
+            <mat-icon svgIcon="timer"></mat-icon>
+            {{ formattedTime() }}
+          </div>
+          <div class="stat-item" title="Lives">
+            <mat-icon svgIcon="lives"></mat-icon>
+            {{ game.livesLeft }}
+          </div>
+          <div class="stat-item" title="Mines">
+            <mat-icon svgIcon="bomb"></mat-icon>
+            {{ game.mineCount }}
+          </div>
+          <div class="stat-item" title="Flags">
+            <mat-icon svgIcon="flag"></mat-icon>
+            {{ game.marksLeft }}
+          </div>
         </div>
-        <div class="stat-item" title="Lives Remaining">
-          <mat-icon svgIcon="lives"></mat-icon>
-          {{ game.livesLeft }}
-        </div>
-        <div class="stat-item" title="Mines Total">
-          <mat-icon svgIcon="bomb"></mat-icon>
-          {{ game.mineCount }}
-        </div>
-        <div class="stat-item" title="Flags Remaining">
-          <mat-icon svgIcon="flag"></mat-icon>
-          {{ game.marksLeft }}
+
+        <!-- Spacer -->
+        <div class="spacer"></div>
+
+        <!-- Actions -->
+        <div class="actions-group">
+          <button (click)="openHighScores()" mat-stroked-button class="header-action-btn">
+            <mat-icon svgIcon="leaderboard"></mat-icon>
+            <span>Leaderboard</span>
+          </button>
+
+          <button (click)="resetGame()" mat-flat-button color="warn" class="header-action-btn">
+            <mat-icon svgIcon="refresh"></mat-icon>
+            <span>New Game</span>
+          </button>
         </div>
       </div>
 
@@ -69,20 +90,6 @@
             </div>
           }
         }
-      </div>
-
-      <div class="game-actions">
-        <button class="action-btn leaderboard-btn" (click)="openHighScores()" mat-button>
-          <mat-icon svgIcon="leaderboard" class="anim-icon"></mat-icon>
-          <span>Leaderboard</span>
-        </button>
-
-        <div class="divider"></div>
-
-        <button class="action-btn new-game-btn" (click)="resetGame()" mat-button color="warn">
-          <mat-icon>refresh</mat-icon>
-          <span>New Game</span>
-        </button>
       </div>
     </mat-card>
   }

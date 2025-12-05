@@ -12,7 +12,7 @@ import {GameService} from '../services/game.service'
 import {GameState, NewGameRequest} from '../models/api.types'
 import {Cell} from '../models/game.types'
 import {DifficultySelector} from '../difficulty-selector/difficulty-selector'
-import {WinDialog} from '../win-dialog/win-dialog'
+import {WinDialog, WinDialogData} from '../win-dialog/win-dialog'
 import {HighScoreDialog} from '../high-score-display/high-score-display';
 
 @Component({
@@ -144,25 +144,31 @@ export class GameBoard implements OnDestroy {
   }
 
   private handleWin(state: GameState) {
-    const ref = this.dialog.open(WinDialog, {
-      data: {
-        timeSeconds: this.timer(),
-        difficulty: state.difficulty
-      },
-      disableClose: true
+    this.gameService.getHighScores(state.difficulty).subscribe(scores => {
+      const ref = this.dialog.open<WinDialog, WinDialogData>(WinDialog, {
+        width: '500px',
+        data: {
+          timeSeconds: this.timer(),
+          difficulty: state.difficulty,
+          existingScores: scores
+        },
+        disableClose: true
+      })
+
+      ref.afterClosed().subscribe((playerName) => {
+        if (playerName) {
+          this.gameService.submitScore(state.id, playerName).subscribe({
+            next: () => {
+              console.log('Score saved!')
+              this.openHighScores()
+            },
+            error: (e) => console.error('Failed to save score', e)
+          })
+        }
+      })
     })
 
-    ref.afterClosed().subscribe((playerName) => {
-      if (playerName) {
-        this.gameService.submitScore(state.id, playerName).subscribe({
-          next: () => {
-            console.log('Score saved!')
-            this.openHighScores()
-          },
-          error: (e) => console.error('Failed to save score', e)
-        })
-      }
-    })
+
   }
 
   openHighScores() {
