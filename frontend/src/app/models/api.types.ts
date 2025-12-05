@@ -21,6 +21,7 @@ export interface CoordinateRequest {
 
 export interface GameState {
   id: string
+  difficulty: Difficulty
   status: GameStatus
   livesLeft: number
   rows: number

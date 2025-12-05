@@ -6,10 +6,12 @@ import { MatButtonModule } from '@angular/material/button'
 import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatInputModule } from '@angular/material/input'
 import { MatIconModule } from '@angular/material/icon'
+import {Score} from '../models/api.types';
 
 export interface WinDialogData {
   timeSeconds: number
-  difficulty: string
+  difficulty: string,
+  existingScores: Score[]
 }
 
 @Component({

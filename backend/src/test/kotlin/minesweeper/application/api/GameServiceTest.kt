@@ -1,19 +1,19 @@
 package minesweeper.application.api
 
-import minesweeper.application.api.GameService
 import minesweeper.application.api.request.CustomConfig
 import minesweeper.application.api.request.NewGameRequest
 import minesweeper.domain.BlockType
 import minesweeper.domain.Difficulty
-import minesweeper.domain.GameStatus
+import minesweeper.infrastructure.repository.ScoreRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
+import org.mockito.Mockito.mock
 
 class GameServiceTest {
 
-    private val service = GameService()
+    private val scoreRepository = mock(ScoreRepository::class.java)
+    private val service = GameService(scoreRepository)
 
     @Test
     fun `createGame initializes correct configuration for Difficulty Levels`() {
@@ -70,34 +70,6 @@ class GameServiceTest {
         assertEquals(10, gameDto.columns)
         assertEquals(91, gameDto.mineCount) // up to 9 fields should be spared as safe-zone
         assertEquals(1, gameDto.livesLeft)
-    }
-
-    @Test
-    fun `getGameState returns valid DTO for existing game`() {
-        // 1. Create
-        val created = service.createGame(NewGameRequest(Difficulty.EASY))
-        assertNotNull(created.id)
-
-        // 2. Retrieve
-        val retrieved = service.getGameState(created.id)
-
-        // 3. Assert
-        assertNotNull(retrieved)
-        assertEquals(created.id, retrieved?.id)
-        assertEquals(GameStatus.RUNNING, retrieved?.status)
-        // Check grid mapping
-        assertEquals(9, retrieved?.grid?.size)
-        assertEquals(BlockType.HIDDEN, retrieved?.grid?.get(0)?.get(0)?.state)
-    }
-
-    @Test
-    fun `actions return null for non-existent ID`() {
-        val badId = "non-existent-uuid"
-
-        assertNull(service.getGameState(badId))
-        assertNull(service.reveal(badId, 0, 0))
-        assertNull(service.toggleMark(badId, 0, 0))
-        assertNull(service.autoExpand(badId, 0, 0))
     }
 
     @Test

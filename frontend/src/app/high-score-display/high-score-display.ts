@@ -1,6 +1,6 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {MatDialogModule} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogModule} from '@angular/material/dialog';
 import {MatButtonModule} from '@angular/material/button';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatTableModule} from '@angular/material/table';
@@ -25,7 +25,7 @@ import {Score} from '../models/api.types';
   template: `
     <h2 mat-dialog-title>Hall of Fame</h2>
     <mat-dialog-content>
-      <mat-tab-group (selectedTabChange)="onTabChange($event)">
+      <mat-tab-group [selectedIndex]="initialTabIndex" (selectedTabChange)="onTabChange($event)">
         <mat-tab label="Easy">
           <ng-template matTabContent>
             <ng-container *ngTemplateOutlet="scoreTable; context: { $implicit: easyScores() }"></ng-container>
@@ -128,22 +128,30 @@ import {Score} from '../models/api.types';
       background: #eee;
       font-size: 0.8rem;
       font-weight: bold;
+      color: #666;
 
       &.top-3 {
-        background: #ffd700; /* Gold */
-        color: #333;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        color: #fff; /* Text is white for all top 3 */
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
       }
     }
 
-    /* Make 2nd and 3rd place slightly different if you want,
-       or keep gold for all top 3 */
-    tr:nth-child(2) .rank-badge.top-3 { background: #c0c0c0; }
+    /* Rank 1: Gold */
+    tr:nth-child(2) .rank-badge.top-3 {
+      background: linear-gradient(135deg, #ffd700, #ffb900);
+      transform: scale(1.1);
+    }
 
-    /* Silver */
-    tr:nth-child(3) .rank-badge.top-3 { background: #cd7f32; color: white; }
+    /* Rank 2: Silver */
+    tr:nth-child(3) .rank-badge.top-3 {
+      background: linear-gradient(135deg, #e0e0e0, #bdbdbd);
+    }
 
-    /* Bronze */
+    /* Rank 3: Bronze */
+    tr:nth-child(4) .rank-badge.top-3 {
+      background: linear-gradient(135deg, #cd7f32, #a0522d);
+    }
 
     .date-cell {
       color: #888;
@@ -153,6 +161,7 @@ import {Score} from '../models/api.types';
 })
 export class HighScoreDialog implements OnInit {
   private gameService = inject(GameService);
+  private data = inject(MAT_DIALOG_DATA);
 
   easyScores = signal<Score[]>([]);
   mediumScores = signal<Score[]>([]);
@@ -161,8 +170,14 @@ export class HighScoreDialog implements OnInit {
 
   displayedColumns = ['rank', 'name', 'time', 'date'];
 
+  initialTabIndex = 0;
+
   ngOnInit() {
-    this.loadScores('EASY');
+    const passedDiff = this.data?.difficulty || 'EASY';
+    if (passedDiff === 'MEDIUM') this.initialTabIndex = 1;
+    if (passedDiff === 'HARD') this.initialTabIndex = 2;
+
+    this.loadScores(passedDiff === 'CUSTOM' ? 'EASY' : passedDiff);
   }
 
   onTabChange(event: any) {

@@ -1,10 +1,13 @@
-game icon link: https://www.pngegg.com/en/png-idbew
-
-- improve post game handling (use pop up or dialog or sth)
-- add proper readme
+TODO:
+- improve post game handling (use pop up or dialog or sth) (WIP)
 
 Nice-to-have:
-- leaderboard (not registered users, simply save a name and the duration)
+- leaderboard (not registered users, simply save a name and the duration) (WIP)
+
+- add proper readme
+  * game icon link: https://www.pngegg.com/en/png-idbew
+  * mention the usage of material icons
+- go over remaining todos in code
 
 
 DONE:

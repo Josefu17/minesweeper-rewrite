@@ -5,6 +5,7 @@ import minesweeper.application.api.request.CoordinateRequest
 import minesweeper.application.api.request.NewGameRequest
 import minesweeper.application.api.request.SubmitScoreRequest
 import minesweeper.application.api.response.GameStateDto
+import minesweeper.domain.Difficulty
 import minesweeper.infrastructure.model.Score
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -27,13 +29,6 @@ class GameController(
     @PostMapping
     fun createGame(@RequestBody @Valid request: NewGameRequest): GameStateDto {
         return gameService.createGame(request)
-    }
-
-    @GetMapping("/{id}")
-    fun getGame(@PathVariable id: String): ResponseEntity<GameStateDto> {
-        val state = gameService.getGameState(id)
-            ?: return ResponseEntity.notFound().build()
-        return ResponseEntity.ok(state)
     }
 
     @PostMapping("/{id}/reveal")
@@ -74,5 +69,11 @@ class GameController(
         val score = gameService.submitScore(id, body.playerName)
             ?: return ResponseEntity.badRequest().build()
         return ResponseEntity.ok(score)
+    }
+
+    @GetMapping("/scores")
+    fun getHighScores(@RequestParam difficulty: Difficulty): ResponseEntity<List<Score>> {
+        val scores = gameService.getHighScores(difficulty)
+        return ResponseEntity.ok(scores)
     }
 }

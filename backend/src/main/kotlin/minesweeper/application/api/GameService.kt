@@ -10,6 +10,7 @@ import minesweeper.domain.MinesweeperGame
 import minesweeper.infrastructure.model.Score
 import minesweeper.infrastructure.repository.ScoreRepository
 import org.slf4j.LoggerFactory
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import java.time.Duration
 import java.util.UUID
@@ -36,18 +37,15 @@ class GameService(
 
         games[id] = GameContext(game, request.difficulty)
         logger.info("Created game: $id")
-        return toGameStateDto(id, game)
+        return toGameStateDto(id, game, request.difficulty)
     }
-
-    fun getGameState(id: String): GameStateDto? =
-        games[id]?.let { toGameStateDto(id, it.game) }
 
     fun reveal(id: String, x: Int, y: Int): GameStateDto? {
         val ctx = games[id] ?: return null
         if (isValidCoordinate(id, ctx.game, x, y, "Reveal")) {
             ctx.game.reveal(Coordinate(x, y))
         }
-        return toGameStateDto(id, ctx.game)
+        return toGameStateDto(id, ctx.game, ctx.difficulty)
     }
 
     fun toggleMark(id: String, x: Int, y: Int): GameStateDto? {
@@ -55,7 +53,7 @@ class GameService(
         if (isValidCoordinate(id, ctx.game, x, y, "Mark")) {
             ctx.game.toggleMark(Coordinate(x, y))
         }
-        return toGameStateDto(id, ctx.game)
+        return toGameStateDto(id, ctx.game, ctx.difficulty)
     }
 
     fun autoExpand(id: String, x: Int, y: Int): GameStateDto? {
@@ -63,7 +61,7 @@ class GameService(
         if (isValidCoordinate(id, ctx.game, x, y, "AutoExpand")) {
             ctx.game.autoExpand(Coordinate(x, y))
         }
-        return toGameStateDto(id, ctx.game)
+        return toGameStateDto(id, ctx.game, ctx.difficulty)
     }
 
     // --- SCORE SUBMISSION ---
@@ -95,6 +93,13 @@ class GameService(
         return scoreRepository.save(score)
     }
 
+    // --- HIGH SCORES ---
+    fun getHighScores(difficulty: Difficulty): List<Score> {
+        val limit = PageRequest.of(0, 10)
+
+        return scoreRepository.findTopScores(difficulty, limit)
+    }
+
     private fun isValidCoordinate(gameId: String, game: MinesweeperGame, x: Int, y: Int, action: String): Boolean {
         if (game.world.isOutOfBounds(Coordinate(x, y))) {
             logger.warn("For: $gameId: Invalid '$action' request: Coordinate $x,$y is out of bounds. Ignored.")
@@ -103,7 +108,7 @@ class GameService(
         return true
     }
 
-    private fun toGameStateDto(id: String, game: MinesweeperGame): GameStateDto {
+    private fun toGameStateDto(id: String, game: MinesweeperGame, difficulty: Difficulty): GameStateDto {
         val world = game.world
         val grid = (0 until world.rows).map { r ->
             (0 until world.columns).map { c ->
@@ -119,6 +124,7 @@ class GameService(
 
         return GameStateDto(
             id = id,
+            difficulty = difficulty,
             status = game.status,
             livesLeft = game.livesLeft,
             rows = world.rows,

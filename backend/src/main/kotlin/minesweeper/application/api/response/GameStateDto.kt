@@ -1,10 +1,12 @@
 package minesweeper.application.api.response
 
 import minesweeper.domain.BlockType
+import minesweeper.domain.Difficulty
 import minesweeper.domain.GameStatus
 
 data class GameStateDto(
     val id: String,
+    val difficulty: Difficulty,
     val status: GameStatus,
     val livesLeft: Int,
     val rows: Int,

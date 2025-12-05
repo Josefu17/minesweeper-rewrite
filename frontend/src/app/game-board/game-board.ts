@@ -145,25 +145,35 @@ export class GameBoard implements OnDestroy {
 
   private handleWin(state: GameState) {
     const ref = this.dialog.open(WinDialog, {
-      data: {timeSeconds: this.timer(), difficulty: 'Unknown'},
+      data: {
+        timeSeconds: this.timer(),
+        difficulty: state.difficulty
+      },
       disableClose: true
     })
 
     ref.afterClosed().subscribe((playerName) => {
       if (playerName) {
         this.gameService.submitScore(state.id, playerName).subscribe({
-          next: () => console.log('Score saved!'),
+          next: () => {
+            console.log('Score saved!')
+            this.openHighScores()
+          },
           error: (e) => console.error('Failed to save score', e)
         })
       }
     })
   }
 
-  openHighScores(): void {
+  openHighScores() {
+    const currentDiff = this.gameState()?.difficulty || 'EASY'
+
     this.dialog.open(HighScoreDialog, {
       width: '500px',
       autoFocus: false,
-      // TODO pass current difficulty setting, yb
+      data: {
+        difficulty: currentDiff
+      }
     });
   }
 

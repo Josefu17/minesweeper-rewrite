@@ -22,6 +22,7 @@ export class IconRegistryService {
       { iconName: 'flag_2' },
       { iconName: 'info' },
       { iconName: 'leaderboard' },
+      { iconName: 'refresh' },
       { iconName: 'remove' },
       { iconName: 'timer' },
       { iconName: 'trophy' },
