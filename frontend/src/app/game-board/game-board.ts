@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, computed, inject, OnDestroy, signal} from '@angular/core'
 import {CommonModule} from '@angular/common'
-import {Observable} from 'rxjs'
+import {filter, Observable} from 'rxjs'
 
 import {MatButtonModule} from '@angular/material/button'
 import {MatIconModule} from '@angular/material/icon'
@@ -14,6 +14,8 @@ import {Cell} from '../models/game.types'
 import {DifficultySelector} from '../difficulty-selector/difficulty-selector'
 import {WinDialog, WinDialogData} from '../win-dialog/win-dialog'
 import {HighScoreDialog} from '../high-score-display/high-score-display';
+import {ConfirmationDialog} from '../confirmation-dialog/confirmation-dialog';
+import {MatTooltip} from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-game-board',
@@ -25,6 +27,7 @@ import {HighScoreDialog} from '../high-score-display/high-score-display';
     MatCardModule,
     MatProgressSpinnerModule,
     DifficultySelector,
+    MatTooltip,
   ],
   templateUrl: './game-board.html',
   styleUrls: ['./game-board.scss'],
@@ -38,6 +41,9 @@ export class GameBoard implements OnDestroy {
   gameState = signal<GameState | undefined>(undefined)
   loading = signal<boolean>(false)
   errorMessage = signal<string | undefined>(undefined)
+
+  // Store the config to allow "Play Again"
+  private lastGameRequest?: NewGameRequest
 
   // Timer State
   timer = signal<number>(0)
@@ -59,6 +65,8 @@ export class GameBoard implements OnDestroy {
   }
 
   createGame(req: NewGameRequest): void {
+    this.lastGameRequest = req
+
     this.loading.set(true)
     this.errorMessage.set(undefined)
     this.resetTimer()
@@ -76,9 +84,34 @@ export class GameBoard implements OnDestroy {
     })
   }
 
-  resetGame(): void {
-    this.gameState.set(undefined)
-    this.resetTimer()
+  onChangeDifficulty(): void {
+    this.runWithConfirmation(() => {
+      this.gameState.set(undefined)
+      this.resetTimer()
+    })
+  }
+
+  onPlayAgain(): void {
+    if (!this.lastGameRequest) return
+
+    this.runWithConfirmation(() => {
+      this.createGame(this.lastGameRequest!)
+    })
+  }
+
+  private runWithConfirmation(action: () => void) {
+    const state = this.gameState()
+
+    // If game is actively running, ask for confirmation
+    if (state && state.status == 'RUNNING') {
+      this.dialog.open(ConfirmationDialog, {width: '300px'})
+        .afterClosed()
+        .pipe(filter(result => !!result))
+        .subscribe(() => action())
+    } else {
+      // Game Over or Not Started -> No confirmation needed
+      action()
+    }
   }
 
   // --- Timer Logic ---
@@ -104,7 +137,10 @@ export class GameBoard implements OnDestroy {
   // --- Gameplay Interactions ---
   onLeftClick(cell: Cell): void {
     const currentState = this.gameState()
-    if (!currentState || currentState.status !== 'RUNNING') return
+    if (!currentState) return
+
+    const status = currentState.status
+    if (status !== 'READY' && status !== 'RUNNING') return
     if (this.isFlagged(cell) || this.isMine(cell)) return
 
     // Start timer on first interaction if valid
@@ -120,7 +156,10 @@ export class GameBoard implements OnDestroy {
   onRightClick(event: MouseEvent, cell: Cell): void {
     event.preventDefault()
     const currentState = this.gameState()
-    if (!currentState || currentState.status !== 'RUNNING') return
+    if (!currentState) return
+
+    const status = currentState.status
+    if (status !== 'READY' && status !== 'RUNNING') return
     if (this.isRevealed(cell)) return
 
     this.startTimer()

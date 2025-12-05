@@ -15,7 +15,7 @@ class MinesweeperGame(
 
     var livesLeft: Int = lives
         private set
-    var status: GameStatus = GameStatus.RUNNING
+    var status: GameStatus = GameStatus.READY
         private set
 
     // Start-End Timestamps
@@ -27,7 +27,7 @@ class MinesweeperGame(
     private var isFirstMove: Boolean = true
 
     fun reveal(c: Coordinate) {
-        if (status != GameStatus.RUNNING) return
+        if (status !in listOf(GameStatus.READY, GameStatus.RUNNING)) return
         if (world.isOutOfBounds(c)) {
             logger.info("Reveal called for out of bounds coordinate: ${c.x}x${c.y}. Ignoring.")
             return
@@ -38,8 +38,9 @@ class MinesweeperGame(
         if (currentState != BlockType.HIDDEN) return
 
         if (isFirstMove) {
-            startedAt = Instant.now()
             world.plantMines(c)
+            startedAt = Instant.now()
+            status = GameStatus.RUNNING
             isFirstMove = false
         }
 
@@ -53,7 +54,7 @@ class MinesweeperGame(
     }
 
     fun toggleMark(c: Coordinate) {
-        if (status != GameStatus.RUNNING) return
+        if (status !in listOf(GameStatus.READY, GameStatus.RUNNING)) return
         if (world.isOutOfBounds(c)) return
 
         when (world.getState(c)) {
@@ -136,5 +137,9 @@ class MinesweeperGame(
     // --- TEST HELPERS ---
     internal fun debugSetFirstMove(isFirst: Boolean) {
         this.isFirstMove = isFirst
+    }
+
+    internal fun debugSetStatus(status: GameStatus) {
+        this.status = status
     }
 }

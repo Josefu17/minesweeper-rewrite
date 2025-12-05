@@ -28,6 +28,7 @@ export class IconRegistryService {
       { iconName: 'trophy' },
 
       { iconName: 'bomb', alias: 'bomb' },
+      { iconName: 'change_circle', alias: 'change' },
       { iconName: 'explosion', alias: 'mine' },
       { iconName: 'favorite', alias: 'lives' },
       { iconName: 'sentiment_calm', alias: 'diff-easy' },

@@ -11,7 +11,8 @@
       </div>
 
       <div class="stepper-group">
-        <button mat-icon-button type="button" (click)="updateValue('rows', -1)" [disabled]="form.controls.rows.value <= MIN_DIM">
+        <button mat-icon-button type="button" (click)="updateValue('rows', -1)"
+                [disabled]="form.controls.rows.value <= MIN_DIM">
           <mat-icon svgIcon="remove"></mat-icon>
         </button>
 
@@ -19,7 +20,8 @@
           <input matInput type="number" formControlName="rows" [min]="MIN_DIM" [max]="MAX_DIM">
         </mat-form-field>
 
-        <button mat-icon-button type="button" (click)="updateValue('rows', 1)" [disabled]="form.controls.rows.value >= MAX_DIM">
+        <button mat-icon-button type="button" (click)="updateValue('rows', 1)"
+                [disabled]="form.controls.rows.value >= MAX_DIM">
           <mat-icon svgIcon="add"></mat-icon>
         </button>
       </div>
@@ -33,7 +35,8 @@
       </div>
 
       <div class="stepper-group">
-        <button mat-icon-button type="button" (click)="updateValue('columns', -1)" [disabled]="form.controls.columns.value <= MIN_DIM">
+        <button mat-icon-button type="button" (click)="updateValue('columns', -1)"
+                [disabled]="form.controls.columns.value <= MIN_DIM">
           <mat-icon svgIcon="remove"></mat-icon>
         </button>
 
@@ -41,7 +44,8 @@
           <input matInput type="number" formControlName="columns" [min]="MIN_DIM" [max]="MAX_DIM">
         </mat-form-field>
 
-        <button mat-icon-button type="button" (click)="updateValue('columns', 1)" [disabled]="form.controls.columns.value >= MAX_DIM">
+        <button mat-icon-button type="button" (click)="updateValue('columns', 1)"
+                [disabled]="form.controls.columns.value >= MAX_DIM">
           <mat-icon svgIcon="add"></mat-icon>
         </button>
       </div>
@@ -57,7 +61,8 @@
       </div>
 
       <div class="stepper-group">
-        <button mat-icon-button type="button" (click)="updateValue('mines', -1)" [disabled]="form.controls.mines.value <= MIN_MINES">
+        <button mat-icon-button type="button" (click)="updateValue('mines', -1)"
+                [disabled]="form.controls.mines.value <= MIN_MINES">
           <mat-icon svgIcon="remove"></mat-icon>
         </button>
 
@@ -65,7 +70,8 @@
           <input matInput type="number" formControlName="mines" [min]="MIN_MINES" [max]="maxMines()">
         </mat-form-field>
 
-        <button mat-icon-button type="button" (click)="updateValue('mines', 1)" [disabled]="form.controls.mines.value >= maxMines()">
+        <button mat-icon-button type="button" (click)="updateValue('mines', 1)"
+                [disabled]="form.controls.mines.value >= maxMines()">
           <mat-icon svgIcon="add"></mat-icon>
         </button>
       </div>

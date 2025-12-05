@@ -59,14 +59,22 @@
 
         <!-- Actions -->
         <div class="actions-group">
-          <button (click)="openHighScores()" mat-stroked-button class="header-action-btn">
+          <button (click)="openHighScores()" mat-stroked-button class="header-action-btn"
+                  matTooltip="View high scores for all difficulties">
             <mat-icon svgIcon="leaderboard"></mat-icon>
-            <span>Leaderboard</span>
+            <span class="btn-label">Rankings</span>
           </button>
 
-          <button (click)="resetGame()" mat-flat-button color="warn" class="header-action-btn">
+          <button (click)="onPlayAgain()" mat-flat-button color="primary" class="header-action-btn"
+                  matTooltip="Restart game with the same difficulty">
             <mat-icon svgIcon="refresh"></mat-icon>
-            <span>New Game</span>
+            <span class="btn-label">Restart</span>
+          </button>
+
+          <button (click)="onChangeDifficulty()" mat-flat-button class="header-action-btn"
+                  matTooltip="Exit to main menu to change difficulty">
+            <mat-icon svgIcon="change"></mat-icon>
+            <span class="btn-label">Change Difficulty</span>
           </button>
         </div>
       </div>

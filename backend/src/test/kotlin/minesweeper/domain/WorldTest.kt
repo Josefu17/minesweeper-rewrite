@@ -98,7 +98,7 @@ class WorldTest {
         // [X, 1]
         // [?, 1]
         world.mark(Coordinate(1, 0)) // WRONG FLAG
-
+        world.reveal(Coordinate(0, 1)) // will be auto-expanded
         // User chords on (0,1).
         // [X, chord]
         // [?, 1]

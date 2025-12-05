@@ -1,15 +1,16 @@
 TODO:
-Nice-to-have:
-- leaderboard (not registered users, simply save a name and the duration) (WIP)
-
 - add proper readme
   * game icon link: https://www.pngegg.com/en/png-idbew
   * mention the usage of material icons
 - go over remaining todos in code
 
+Nice-to-have:
+- add german  and english language support
+- dark vs light mode?
 
 DONE:
-- improve post game handling (use pop up or dialog or sth) (WIP)
+- leaderboard (not registered users, simply save a name and the duration)
+- improve post game handling (use pop up or dialog or sth)
 - define db and add migration setup using flyway
 - local persistence (currently in-memory map)
 - Timer

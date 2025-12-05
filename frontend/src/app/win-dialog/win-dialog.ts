@@ -42,12 +42,14 @@ export interface WinDialogData {
           <div class="rank-row" [class.current-run]="item.isCurrent">
             <div class="rank-num">#{{ $index + 1 }}</div>
 
+            <!-- Existing Scores -->
             @if (!item.isCurrent) {
               <div class="player-info">
                 <span class="name">{{ item.score.playerName }}</span>
                 <span class="time">{{ formatTime(item.score.timeSeconds || 0) }}</span>
               </div>
             } @else {
+              <!-- Own Score -->
               <div class="current-input-container">
                 <mat-form-field appearance="outline" class="name-input">
                   <mat-label>Enter Your Name</mat-label>
@@ -56,7 +58,6 @@ export interface WinDialogData {
                          placeholder="Anonymous"
                          maxlength="32"
                          (keydown.enter)="submit()">
-                  <mat-icon matSuffix>edit</mat-icon>
                 </mat-form-field>
                 <div class="current-time">{{ formatTime(data.timeSeconds) }}</div>
               </div>
@@ -71,7 +72,8 @@ export interface WinDialogData {
       <button mat-button mat-dialog-close>Skip</button>
       <button mat-flat-button color="primary"
               [disabled]="nameControl.invalid"
-              (click)="submit()">
+              (click)="submit()"
+      >
         Submit Score
       </button>
     </mat-dialog-actions>

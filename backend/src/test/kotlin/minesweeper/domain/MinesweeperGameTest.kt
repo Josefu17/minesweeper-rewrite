@@ -90,6 +90,7 @@ class MinesweeperGameTest {
         val mineLoc = Coordinate(2, 2)
         game.world.debugSetMines(listOf(mineLoc))
         game.debugSetFirstMove(false)
+        game.debugSetStatus(GameStatus.RUNNING)
 
         // 2. Hit the mine
         game.reveal(mineLoc)
@@ -109,6 +110,7 @@ class MinesweeperGameTest {
         // Setup: 2x2, 2 Mines. (So we only have 2 flags available)
         val game = MinesweeperGame(rows = 2, columns = 2, mineCount = 2, lives = 0)
         game.debugSetFirstMove(false) // Skip first move logic
+        game.debugSetStatus(GameStatus.RUNNING)
 
         // Mark first mine
         game.toggleMark(Coordinate(0, 0))
