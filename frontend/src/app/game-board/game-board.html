@@ -24,16 +24,13 @@
         </button>
       </div>
 
-
       @if (errorMessage()) {
         <div class="error-msg">{{ errorMessage() }}</div>
       }
     </div>
   } @else if (gameState(); as game) {
     <mat-card class="game-area">
-
       <div class="game-header-bar">
-
         <!-- Stats -->
         <div class="stats-group">
           <div class="stat-item" title="Time">
@@ -59,20 +56,33 @@
 
         <!-- Actions -->
         <div class="actions-group">
-          <button (click)="openHighScores()" mat-stroked-button class="header-action-btn"
-                  matTooltip="View high scores for all difficulties">
+          <button
+            (click)="openHighScores()"
+            mat-stroked-button
+            class="header-action-btn"
+            matTooltip="View high scores for all difficulties"
+          >
             <mat-icon svgIcon="leaderboard"></mat-icon>
             <span class="btn-label">Rankings</span>
           </button>
 
-          <button (click)="onPlayAgain()" mat-flat-button color="primary" class="header-action-btn"
-                  matTooltip="Restart game with the same difficulty">
+          <button
+            (click)="onPlayAgain()"
+            mat-flat-button
+            color="primary"
+            class="header-action-btn"
+            matTooltip="Restart game with the same difficulty"
+          >
             <mat-icon svgIcon="refresh"></mat-icon>
             <span class="btn-label">Restart</span>
           </button>
 
-          <button (click)="onChangeDifficulty()" mat-flat-button class="header-action-btn"
-                  matTooltip="Exit to main menu to change difficulty">
+          <button
+            (click)="onChangeDifficulty()"
+            mat-flat-button
+            class="header-action-btn"
+            matTooltip="Exit to main menu to change difficulty"
+          >
             <mat-icon svgIcon="change"></mat-icon>
             <span class="btn-label">Change Difficulty</span>
           </button>
@@ -86,14 +96,20 @@
       >
         @for (row of game.grid; track $index) {
           @for (cell of row; track cell.x + '-' + cell.y) {
-            <div class="cell" [ngClass]="getCellClass(cell)"
-                 (click)="onLeftClick(cell)" (contextmenu)="onRightClick($event, cell)">
+            <div
+              class="cell"
+              [ngClass]="getCellClass(cell)"
+              (click)="onLeftClick(cell)"
+              (contextmenu)="onRightClick($event, cell)"
+            >
               @if (isFlagged(cell)) {
                 <mat-icon class="cell-icon flag" svgIcon="flag"></mat-icon>
               } @else if (showMineIcon(cell)) {
                 <mat-icon class="cell-icon mine" svgIcon="mine"></mat-icon>
               } @else if (showNumber(cell)) {
-                <span class="adj-count" [attr.data-count]="cell.adjacentMines">{{ cell.adjacentMines }}</span>
+                <span class="adj-count" [attr.data-count]="cell.adjacentMines">{{
+                  cell.adjacentMines
+                }}</span>
               }
             </div>
           }

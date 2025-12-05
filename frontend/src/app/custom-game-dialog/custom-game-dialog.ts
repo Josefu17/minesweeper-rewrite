@@ -10,7 +10,7 @@ import { MatIconModule } from '@angular/material/icon'
 import { toSignal } from '@angular/core/rxjs-interop'
 import { map, startWith } from 'rxjs/operators'
 import { NewGameRequest } from '../models/api.types'
-import {MatDivider} from '@angular/material/list';
+import { MatDivider } from '@angular/material/list'
 
 @Component({
   selector: 'app-custom-game-dialog',
@@ -40,7 +40,10 @@ export class CustomGameDialog {
 
   form = this.fb.nonNullable.group({
     rows: [20, [Validators.required, Validators.min(this.MIN_DIM), Validators.max(this.MAX_DIM)]],
-    columns: [20, [Validators.required, Validators.min(this.MIN_DIM), Validators.max(this.MAX_DIM)]],
+    columns: [
+      20,
+      [Validators.required, Validators.min(this.MIN_DIM), Validators.max(this.MAX_DIM)],
+    ],
     mines: [50, [Validators.required, Validators.min(this.MIN_MINES)]],
     enableLives: [false],
   })

@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
+import { Component } from '@angular/core'
+import { MatDialogModule } from '@angular/material/dialog'
+import { MatButtonModule } from '@angular/material/button'
 
 @Component({
   selector: 'app-confirmation-dialog',
@@ -15,6 +15,6 @@ import { MatButtonModule } from '@angular/material/button';
       <button mat-button mat-dialog-close>Cancel</button>
       <button mat-flat-button color="warn" [mat-dialog-close]="true">Confirm</button>
     </mat-dialog-actions>
-  `
+  `,
 })
 export class ConfirmationDialog {}

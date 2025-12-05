@@ -1,4 +1,4 @@
-import {Cell, Difficulty, GameStatus} from './game.types'
+import { Cell, Difficulty, GameStatus } from './game.types'
 
 export interface NewGameRequest {
   difficulty: Difficulty
@@ -32,8 +32,8 @@ export interface GameState {
 }
 
 export interface Score {
-  playerName: string;
-  timeSeconds: number;
-  playedAt: string;
-  difficulty: Difficulty;
+  playerName: string
+  timeSeconds: number
+  playedAt: string
+  difficulty: Difficulty
 }

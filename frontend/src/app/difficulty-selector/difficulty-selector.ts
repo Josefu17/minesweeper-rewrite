@@ -1,11 +1,11 @@
-import {Component, EventEmitter, inject, Output} from '@angular/core'
-import {CommonModule} from '@angular/common'
-import {MatCardModule} from '@angular/material/card'
-import {MatRippleModule} from '@angular/material/core'
-import {MatIconModule} from '@angular/material/icon'
-import {MatDialog} from '@angular/material/dialog'
-import {NewGameRequest} from '../models/api.types'
-import {CustomGameDialog} from '../custom-game-dialog/custom-game-dialog'
+import { Component, EventEmitter, inject, Output } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { MatCardModule } from '@angular/material/card'
+import { MatRippleModule } from '@angular/material/core'
+import { MatIconModule } from '@angular/material/icon'
+import { MatDialog } from '@angular/material/dialog'
+import { NewGameRequest } from '../models/api.types'
+import { CustomGameDialog } from '../custom-game-dialog/custom-game-dialog'
 
 @Component({
   selector: 'app-difficulty-selector',

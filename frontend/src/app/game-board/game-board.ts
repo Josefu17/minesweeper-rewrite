@@ -1,21 +1,28 @@
-import {ChangeDetectionStrategy, Component, computed, inject, OnDestroy, signal} from '@angular/core'
-import {CommonModule} from '@angular/common'
-import {filter, Observable} from 'rxjs'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  OnDestroy,
+  signal,
+} from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { filter, Observable } from 'rxjs'
 
-import {MatButtonModule} from '@angular/material/button'
-import {MatIconModule} from '@angular/material/icon'
-import {MatCardModule} from '@angular/material/card'
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner'
-import {MatDialog} from '@angular/material/dialog'
+import { MatButtonModule } from '@angular/material/button'
+import { MatIconModule } from '@angular/material/icon'
+import { MatCardModule } from '@angular/material/card'
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
+import { MatDialog } from '@angular/material/dialog'
 
-import {GameService} from '../services/game.service'
-import {GameState, NewGameRequest} from '../models/api.types'
-import {Cell} from '../models/game.types'
-import {DifficultySelector} from '../difficulty-selector/difficulty-selector'
-import {WinDialog, WinDialogData} from '../win-dialog/win-dialog'
-import {HighScoreDialog} from '../high-score-display/high-score-display';
-import {ConfirmationDialog} from '../confirmation-dialog/confirmation-dialog';
-import {MatTooltip} from '@angular/material/tooltip';
+import { GameService } from '../services/game.service'
+import { GameState, NewGameRequest } from '../models/api.types'
+import { Cell } from '../models/game.types'
+import { DifficultySelector } from '../difficulty-selector/difficulty-selector'
+import { WinDialog, WinDialogData } from '../win-dialog/win-dialog'
+import { HighScoreDialog } from '../high-score-display/high-score-display'
+import { ConfirmationDialog } from '../confirmation-dialog/confirmation-dialog'
+import { MatTooltip } from '@angular/material/tooltip'
 
 @Component({
   selector: 'app-game-board',
@@ -54,8 +61,8 @@ export class GameBoard implements OnDestroy {
     const totalSeconds = this.timer()
     const minutes = Math.floor(totalSeconds / 60)
     const seconds = totalSeconds % 60
-    const minutesDisplay = minutes.toString().padStart(2, '0');
-    const secondsDisplay = seconds.toString().padStart(2, '0');
+    const minutesDisplay = minutes.toString().padStart(2, '0')
+    const secondsDisplay = seconds.toString().padStart(2, '0')
 
     return `${minutesDisplay}:${secondsDisplay}`
   })
@@ -104,9 +111,10 @@ export class GameBoard implements OnDestroy {
 
     // If game is actively running, ask for confirmation
     if (state && state.status == 'RUNNING') {
-      this.dialog.open(ConfirmationDialog, {width: '300px'})
+      this.dialog
+        .open(ConfirmationDialog, { width: '300px' })
         .afterClosed()
-        .pipe(filter(result => !!result))
+        .pipe(filter((result) => !!result))
         .subscribe(() => action())
     } else {
       // Game Over or Not Started -> No confirmation needed
@@ -118,7 +126,7 @@ export class GameBoard implements OnDestroy {
   private startTimer() {
     if (this.timerInterval) return
     this.timerInterval = setInterval(() => {
-      this.timer.update(t => t + 1)
+      this.timer.update((t) => t + 1)
     }, 1000)
   }
 
@@ -147,9 +155,9 @@ export class GameBoard implements OnDestroy {
     this.startTimer()
 
     if (this.isRevealed(cell)) {
-      this.handleAction(this.gameService.autoExpand(currentState.id, {x: cell.x, y: cell.y}))
+      this.handleAction(this.gameService.autoExpand(currentState.id, { x: cell.x, y: cell.y }))
     } else {
-      this.handleAction(this.gameService.reveal(currentState.id, {x: cell.x, y: cell.y}))
+      this.handleAction(this.gameService.reveal(currentState.id, { x: cell.x, y: cell.y }))
     }
   }
 
@@ -163,7 +171,7 @@ export class GameBoard implements OnDestroy {
     if (this.isRevealed(cell)) return
 
     this.startTimer()
-    this.handleAction(this.gameService.toggleMark(currentState.id, {x: cell.x, y: cell.y}))
+    this.handleAction(this.gameService.toggleMark(currentState.id, { x: cell.x, y: cell.y }))
   }
 
   private handleAction(obs: Observable<GameState>): void {
@@ -183,15 +191,15 @@ export class GameBoard implements OnDestroy {
   }
 
   private handleWin(state: GameState) {
-    this.gameService.getHighScores(state.difficulty).subscribe(scores => {
+    this.gameService.getHighScores(state.difficulty).subscribe((scores) => {
       const ref = this.dialog.open<WinDialog, WinDialogData>(WinDialog, {
         width: '500px',
         data: {
           timeSeconds: this.timer(),
           difficulty: state.difficulty,
-          existingScores: scores
+          existingScores: scores,
         },
-        disableClose: true
+        disableClose: true,
       })
 
       ref.afterClosed().subscribe((playerName) => {
@@ -201,13 +209,11 @@ export class GameBoard implements OnDestroy {
               console.log('Score saved!')
               this.openHighScores()
             },
-            error: (e) => console.error('Failed to save score', e)
+            error: (e) => console.error('Failed to save score', e),
           })
         }
       })
     })
-
-
   }
 
   openHighScores() {
@@ -217,9 +223,9 @@ export class GameBoard implements OnDestroy {
       width: '500px',
       autoFocus: false,
       data: {
-        difficulty: currentDiff
-      }
-    });
+        difficulty: currentDiff,
+      },
+    })
   }
 
   // --- Helpers ---

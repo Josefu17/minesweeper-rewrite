@@ -39,7 +39,9 @@
       transform: scale(1.8);
       color: #9c27b0; // Fallback purple
 
-      transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55), filter 0.3s ease;
+      transition:
+        transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55),
+        filter 0.3s ease;
 
       // Rainbow Gradient Logic
       &:hover {
@@ -55,8 +57,12 @@
 
 // Rainbow Animation
 @keyframes rainbow-shift {
-  0% { filter: hue-rotate(0deg); }
-  100% { filter: hue-rotate(360deg); }
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
 }
 
 .selection-area {
@@ -178,7 +184,9 @@
     padding: 0 !important;
     min-width: 40px !important;
 
-    mat-icon { margin-right: 0 !important; }
+    mat-icon {
+      margin-right: 0 !important;
+    }
   }
 }
 

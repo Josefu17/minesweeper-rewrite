@@ -1,23 +1,22 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { WinDialog } from './win-dialog';
+import { WinDialog } from './win-dialog'
 
 describe('WinDialog', () => {
-  let component: WinDialog;
-  let fixture: ComponentFixture<WinDialog>;
+  let component: WinDialog
+  let fixture: ComponentFixture<WinDialog>
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [WinDialog]
-    })
-    .compileComponents();
+      imports: [WinDialog],
+    }).compileComponents()
 
-    fixture = TestBed.createComponent(WinDialog);
-    component = fixture.componentInstance;
-    await fixture.whenStable();
-  });
+    fixture = TestBed.createComponent(WinDialog)
+    component = fixture.componentInstance
+    await fixture.whenStable()
+  })
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

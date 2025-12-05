@@ -9,22 +9,6 @@
     "test": "ng test",
     "format": "prettier --write \"src/**/*.{html,ts,js,scss,json}\""
   },
-  "prettier": {
-    "printWidth": 100,
-    "singleQuote": true,
-    "semi": false,
-    "tabWidth": 2,
-    "useTabs": false,
-    "trailingComma": "es5",
-    "overrides": [
-      {
-        "files": "*.html",
-        "options": {
-          "parser": "angular"
-        }
-      }
-    ]
-  },
   "private": true,
   "packageManager": "npm@11.0.0",
   "dependencies": {
