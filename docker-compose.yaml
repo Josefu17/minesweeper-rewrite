@@ -3,9 +3,14 @@ services:
     build: ./backend
     container_name: minesweeper-backend
     ports:
-      - "8080:8080"
+      - "${SERVER_PORT:-8080}:8080"
     environment:
       - SERVER_PORT=8080
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/${POSTGRES_DB:-minesweeper}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER:-postgres}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD:-minesweeper}
+    depends_on:
+      - db
     networks:
       - minesweeper-net
 
@@ -19,6 +24,23 @@ services:
     networks:
       - minesweeper-net
 
+  db:
+    image: postgres:16-alpine
+    container_name: minesweeper-db
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-minesweeper}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-minesweeper}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - minesweeper-net
+
 networks:
   minesweeper-net:
     driver: bridge
+
+volumes:
+  postgres_data:

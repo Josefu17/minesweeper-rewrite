@@ -29,7 +29,17 @@ dependencies {
 
     // Database
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    runtimeOnly("com.h2database:h2")
+    // Postgres Driver
+    runtimeOnly("org.postgresql:postgresql")
+
+    // in-memory db
+//    runtimeOnly("com.h2database:h2")
+
+    // Flyway for Migrations
+    implementation("org.flywaydb:flyway-core")
+    implementation("org.flywaydb:flyway-database-postgresql")
+
+    implementation("org.springframework.boot:spring-boot-flyway")
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 
