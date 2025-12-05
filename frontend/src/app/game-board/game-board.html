@@ -8,6 +8,10 @@
 
       @if (gameState()) {
         <div class="header-actions">
+          <button (click)="openHighScores()" mat-icon-button color="primary" title="High Scores">
+            <mat-icon svgIcon="leaderboard"></mat-icon>
+          </button>
+
           <button (click)="resetGame()" mat-stroked-button color="warn">New Game</button>
         </div>
       }

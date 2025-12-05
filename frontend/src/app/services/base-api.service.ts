@@ -1,9 +1,9 @@
-import { HttpClient } from '@angular/common/http'
-import { inject, Injectable } from '@angular/core'
-import { Observable } from 'rxjs'
-import { environment } from '../../environments/environment'
+import {HttpClient} from '@angular/common/http'
+import {inject, Injectable} from '@angular/core'
+import {Observable} from 'rxjs'
+import {environment} from '../../environments/environment'
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export abstract class BaseApiService {
   protected http = inject(HttpClient)
   protected baseUrl = environment.apiUrl
@@ -12,7 +12,7 @@ export abstract class BaseApiService {
     return this.http.post<R>(`${this.baseUrl}${endpoint}`, body)
   }
 
-  protected get<R>(endpoint: string): Observable<R> {
-    return this.http.get<R>(`${this.baseUrl}${endpoint}`)
+  protected get<R>(endpoint: string, options: any = {}): Observable<R> {
+    return this.http.get<R>(`${this.baseUrl}${endpoint}`, options) as Observable<R>
   }
 }

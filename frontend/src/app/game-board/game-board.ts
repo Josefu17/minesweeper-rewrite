@@ -13,6 +13,7 @@ import {GameState, NewGameRequest} from '../models/api.types'
 import {Cell} from '../models/game.types'
 import {DifficultySelector} from '../difficulty-selector/difficulty-selector'
 import {WinDialog} from '../win-dialog/win-dialog'
+import {HighScoreDialog} from '../high-score-display/high-score-display';
 
 @Component({
   selector: 'app-game-board',
@@ -156,6 +157,14 @@ export class GameBoard implements OnDestroy {
         })
       }
     })
+  }
+
+  openHighScores(): void {
+    this.dialog.open(HighScoreDialog, {
+      width: '500px',
+      autoFocus: false,
+      // TODO pass current difficulty setting, yb
+    });
   }
 
   // --- Helpers ---

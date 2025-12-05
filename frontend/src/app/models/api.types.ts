@@ -29,3 +29,10 @@ export interface GameState {
   marksLeft: number
   grid: Cell[][]
 }
+
+export interface Score {
+  playerName: string;
+  timeSeconds: number;
+  playedAt: string;
+  difficulty: Difficulty;
+}
