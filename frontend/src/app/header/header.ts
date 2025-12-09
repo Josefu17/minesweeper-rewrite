@@ -102,7 +102,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core'
     `,
   ],
 })
-export class HeaderComponent {
+export class Header {
   private translate = inject(TranslateService)
 
   switchLang(lang: string) {

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog'
 import { WinDialog, WinDialogData } from './win-dialog'
+import { COMMON_TEST_IMPORTS, COMMON_TEST_PROVIDERS } from '../testing/test-utils'
 
 describe('WinDialog', () => {
   let component: WinDialog
@@ -14,7 +15,7 @@ describe('WinDialog', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [WinDialog],
+      imports: [WinDialog, ...COMMON_TEST_IMPORTS],
       providers: [
         {
           provide: MatDialogRef,
@@ -26,6 +27,7 @@ describe('WinDialog', () => {
           provide: MAT_DIALOG_DATA,
           useValue: mockDialogData,
         },
+        ...COMMON_TEST_PROVIDERS,
       ],
     }).compileComponents()
 

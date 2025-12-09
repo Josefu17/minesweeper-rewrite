@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog'
 import { of } from 'rxjs'
 import { GameService } from '../services/game.service'
 import { HighScoreDialog } from './high-score-dialog'
+import { COMMON_TEST_IMPORTS } from '../testing/test-utils'
 
 describe('HighScoreDialog', () => {
   let component: HighScoreDialog
@@ -19,7 +20,7 @@ describe('HighScoreDialog', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HighScoreDialog],
+      imports: [HighScoreDialog, ...COMMON_TEST_IMPORTS],
       // Providers for Data and Service
       providers: [
         {

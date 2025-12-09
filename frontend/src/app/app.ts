@@ -1,11 +1,11 @@
 import { Component } from '@angular/core'
 import { GameBoard } from './game-board/game-board'
-import { HeaderComponent } from './header/header'
+import { Header } from './header/header'
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [GameBoard, HeaderComponent],
+  imports: [GameBoard, Header],
   template: `
     <div class="app-layout">
       <app-header></app-header>
