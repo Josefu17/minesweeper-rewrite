@@ -19,7 +19,7 @@ describe('WinDialog', () => {
         {
           provide: MatDialogRef,
           useValue: {
-            close: (_: any) => {},
+            close: (_: unknown) => {},
           },
         },
         {

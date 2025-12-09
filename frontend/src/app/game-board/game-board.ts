@@ -56,7 +56,7 @@ export class GameBoard implements OnDestroy {
 
   // Timer State
   timer = signal<number>(0)
-  private timerInterval: any = null
+  private timerInterval: ReturnType<typeof setInterval> | null = null
 
   // Computed: Formats timer (seconds) into mm:ss
   formattedTime = computed(() => {

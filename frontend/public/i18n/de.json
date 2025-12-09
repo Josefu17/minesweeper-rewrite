@@ -42,5 +42,30 @@
     "ENABLE_LIVES": "Zweite Chance (1 Leben) aktivieren",
     "START": "Spiel starten",
     "CANCEL": "Abbrechen"
+  },
+  "CONFIRMATION": {
+    "TITLE": "Spiel neu starten?",
+    "MESSAGE": "Der aktuelle Fortschritt geht verloren. Sicher?",
+    "CONFIRM": "Bestätigen",
+    "CANCEL": "Abbrechen"
+  },
+  "HIGH_SCORE": {
+    "TITLE": "Ruhmeshalle",
+    "EMPTY": "Noch keine Einträge. Sei der Erste!",
+    "COLS": {
+      "RANK": "#",
+      "PLAYER": "Spieler",
+      "TIME": "Zeit",
+      "DATE": "Datum"
+    },
+    "CLOSE": "Schließen"
+  },
+  "WIN": {
+    "TITLE": "Gewonnen!",
+    "SUMMARY": "Du hast das Feld in <strong>{{time}}</strong> geräumt!",
+    "ENTER_NAME": "Dein Name",
+    "PLACEHOLDER": "Anonym",
+    "SUBMIT": "Absenden",
+    "SKIP": "Überspringen"
   }
 }

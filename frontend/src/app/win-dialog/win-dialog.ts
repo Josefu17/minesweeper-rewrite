@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatInputModule } from '@angular/material/input'
 import { MatIconModule } from '@angular/material/icon'
 import { Score } from '../models/api.types'
+import { TranslateModule } from '@ngx-translate/core'
 
 export interface WinDialogData {
   timeSeconds: number
@@ -24,19 +25,17 @@ export interface WinDialogData {
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
+    TranslateModule,
   ],
   template: `
     <h2 mat-dialog-title class="win-title">
       <mat-icon class="trophy-icon" svgIcon="trophy"></mat-icon>
-      Victory!
+      {{ 'WIN.TITLE' | translate }}
     </h2>
 
     <mat-dialog-content>
       <div class="summary">
-        <p>
-          You cleared the field in <strong>{{ formatTime(data.timeSeconds) }}</strong
-          >!
-        </p>
+        <p [innerHTML]="'WIN.SUMMARY' | translate: { time: formatTime(data.timeSeconds) }"></p>
       </div>
 
       <div class="leaderboard-context">
@@ -54,11 +53,11 @@ export interface WinDialogData {
               <!-- Own Score -->
               <div class="current-input-container">
                 <mat-form-field appearance="outline" class="name-input">
-                  <mat-label>Enter Your Name</mat-label>
+                  <mat-label>{{ 'WIN.ENTER_NAME' | translate }}</mat-label>
                   <input
                     matInput
                     [formControl]="nameControl"
-                    placeholder="Anonymous"
+                    [placeholder]="'WIN.PLACEHOLDER' | translate"
                     maxlength="32"
                     (keydown.enter)="submit()"
                   />
@@ -72,9 +71,9 @@ export interface WinDialogData {
     </mat-dialog-content>
 
     <mat-dialog-actions align="end">
-      <button mat-button mat-dialog-close>Skip</button>
+      <button mat-button mat-dialog-close>{{ 'WIN.SKIP' | translate }}</button>
       <button mat-flat-button color="primary" [disabled]="nameControl.invalid" (click)="submit()">
-        Submit Score
+        {{ 'WIN.SUBMIT' | translate }}
       </button>
     </mat-dialog-actions>
   `,

@@ -42,5 +42,30 @@
     "ENABLE_LIVES": "Enable Second Chance (1 Life)",
     "START": "Start Game",
     "CANCEL": "Cancel"
+  },
+  "CONFIRMATION": {
+    "TITLE": "Restart Game?",
+    "MESSAGE": "Current progress will be lost. Are you sure?",
+    "CONFIRM": "Confirm",
+    "CANCEL": "Cancel"
+  },
+  "HIGH_SCORE": {
+    "TITLE": "Hall of Fame",
+    "EMPTY": "No scores yet. Be the first!",
+    "COLS": {
+      "RANK": "#",
+      "PLAYER": "Player",
+      "TIME": "Time",
+      "DATE": "Date"
+    },
+    "CLOSE": "Close"
+  },
+  "WIN": {
+    "TITLE": "Victory!",
+    "SUMMARY": "You cleared the field in <strong>{{time}}</strong>!",
+    "ENTER_NAME": "Enter Your Name",
+    "PLACEHOLDER": "Anonymous",
+    "SUBMIT": "Submit Score",
+    "SKIP": "Skip"
   }
 }

@@ -84,7 +84,7 @@
       >
         @for (row of game.grid; track $index) {
           @for (cell of row; track cell.x + '-' + cell.y) {
-            <div
+            <button
               class="cell"
               [ngClass]="getCellClass(cell)"
               (click)="onLeftClick(cell)"
@@ -96,10 +96,10 @@
                 <mat-icon class="cell-icon mine" svgIcon="mine"></mat-icon>
               } @else if (showNumber(cell)) {
                 <span class="adj-count" [attr.data-count]="cell.adjacentMines">{{
-                    cell.adjacentMines
-                  }}</span>
+                  cell.adjacentMines
+                }}</span>
               }
-            </div>
+            </button>
           }
         }
       </div>

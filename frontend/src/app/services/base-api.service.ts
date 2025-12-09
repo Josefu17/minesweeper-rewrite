@@ -12,7 +12,7 @@ export abstract class BaseApiService {
     return this.http.post<R>(`${this.baseUrl}${endpoint}`, body)
   }
 
-  protected get<R>(endpoint: string, options: any = {}): Observable<R> {
-    return this.http.get<R>(`${this.baseUrl}${endpoint}`, options) as Observable<R>
+  protected get<R>(endpoint: string, options: Record<string, unknown> = {}): Observable<R> {
+    return this.http.get<R>(`${this.baseUrl}${endpoint}`, options)
   }
 }

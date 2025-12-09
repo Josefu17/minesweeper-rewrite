@@ -9,6 +9,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { GameService } from '../services/game.service'
 import { Difficulty } from '../models/game.types'
 import { Score } from '../models/api.types'
+import { TranslateModule } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-high-score-dialog',
@@ -21,18 +22,19 @@ import { Score } from '../models/api.types'
     MatTableModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    TranslateModule,
   ],
   template: `
-    <h2 mat-dialog-title>Hall of Fame</h2>
+    <h2 mat-dialog-title>{{ 'HIGH_SCORE.TITLE' | translate }}</h2>
 
     <mat-dialog-content>
       <mat-tab-group
         [selectedIndex]="selectedTabIndex()"
         (selectedIndexChange)="onTabChange($event)"
       >
-        <mat-tab label="Easy"></mat-tab>
-        <mat-tab label="Medium"></mat-tab>
-        <mat-tab label="Hard"></mat-tab>
+        <mat-tab [label]="'DIFFICULTY.EASY' | translate"></mat-tab>
+        <mat-tab [label]="'DIFFICULTY.MEDIUM' | translate"></mat-tab>
+        <mat-tab [label]="'DIFFICULTY.HARD' | translate"></mat-tab>
       </mat-tab-group>
 
       <div class="table-container">
@@ -41,12 +43,12 @@ import { Score } from '../models/api.types'
             <mat-spinner diameter="40"></mat-spinner>
           </div>
         } @else if (currentScores().length === 0) {
-          <div class="empty-state">No scores yet. Be the first!</div>
+          <div class="empty-state">{{ 'HIGH_SCORE.EMPTY' | translate }}</div>
         } @else {
           <table mat-table [dataSource]="currentScores()" class="score-table">
             <ng-container matColumnDef="rank">
               <th mat-header-cell *matHeaderCellDef>#</th>
-              <td mat-cell *matCellDef="let element; let i = index">
+              <td mat-cell *matCellDef="let i = index">
                 <span
                   class="rank-badge"
                   [class.rank-1]="i === 0"
@@ -59,31 +61,31 @@ import { Score } from '../models/api.types'
             </ng-container>
 
             <ng-container matColumnDef="name">
-              <th mat-header-cell *matHeaderCellDef>Player</th>
+              <th mat-header-cell *matHeaderCellDef>{{ 'HIGH_SCORE.COLS.PLAYER' | translate }}</th>
               <td mat-cell *matCellDef="let element">{{ element.playerName }}</td>
             </ng-container>
 
             <ng-container matColumnDef="time">
-              <th mat-header-cell *matHeaderCellDef>Time</th>
+              <th mat-header-cell *matHeaderCellDef>{{ 'HIGH_SCORE.COLS.TIME' | translate }}</th>
               <td mat-cell *matCellDef="let element">{{ formatTime(element.timeSeconds) }}</td>
             </ng-container>
 
             <ng-container matColumnDef="date">
-              <th mat-header-cell *matHeaderCellDef>Date</th>
+              <th mat-header-cell *matHeaderCellDef>{{ 'HIGH_SCORE.COLS.DATE' | translate }}</th>
               <td mat-cell *matCellDef="let element" class="date-cell">
                 {{ element.playedAt | date: 'shortDate' }}
               </td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            <tr mat-row *matRowDef="let _row; columns: displayedColumns"></tr>
           </table>
         }
       </div>
     </mat-dialog-content>
 
     <mat-dialog-actions align="end">
-      <button mat-button mat-dialog-close>Close</button>
+      <button mat-button mat-dialog-close>{{ 'HIGH_SCORE.CLOSE' | translate }}</button>
     </mat-dialog-actions>
   `,
 
