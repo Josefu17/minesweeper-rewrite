@@ -20,7 +20,7 @@
   justify-content: center;
   border-radius: 16px;
 
-  background: var(--mat-sys-surface-container-low);
+  background: var(--mat-sys-surface-container);
   border: 1px solid var(--mat-sys-outline-variant);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 
@@ -51,6 +51,7 @@
       font-size: 2.2rem;
       margin-bottom: 8px;
       font-weight: 500;
+
       color: var(--mat-sys-on-surface);
     }
 
@@ -78,7 +79,8 @@
       // DEFAULT STATE
       transform: rotate(-15deg) scale(1);
       color: var(--theme-color);
-      opacity: 0.12;
+
+      opacity: 0.15;
 
       // SMOOTH PHYSICS
       transition:

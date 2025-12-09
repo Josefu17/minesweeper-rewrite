@@ -60,6 +60,9 @@
   padding: 0 8px;
   box-sizing: border-box;
 
+  background: var(--mat-sys-surface-container-low);
+  border-radius: 8px;
+
   .stats-group {
     display: flex;
     gap: 1.5rem;

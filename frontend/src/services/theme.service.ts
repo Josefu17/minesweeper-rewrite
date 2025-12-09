@@ -10,10 +10,12 @@ export class ThemeService {
     effect(() => {
       const isDark = this.darkMode()
 
+      const root = document.documentElement
+
       if (isDark) {
-        document.body.classList.add('dark-theme')
+        root.classList.add('dark-theme')
       } else {
-        document.body.classList.remove('dark-theme')
+        root.classList.remove('dark-theme')
       }
 
       localStorage.setItem('darkMode', JSON.stringify(isDark))

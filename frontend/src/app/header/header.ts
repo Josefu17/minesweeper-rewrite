@@ -21,7 +21,7 @@ import { ThemeService } from '../../services/theme.service'
 
       <div class="actions">
         <button mat-icon-button (click)="themeService.toggle()" class="theme-btn">
-          <mat-icon>{{ themeService.darkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+          <mat-icon svgIcon="{{ themeService.darkMode() ? 'light_mode' : 'dark_mode' }}"></mat-icon>
         </button>
 
         <button mat-icon-button [matMenuTriggerFor]="langMenu" aria-label="Switch Language">
@@ -49,7 +49,7 @@ import { ThemeService } from '../../services/theme.service'
         padding: 0 16px;
 
         /* Adaptive Background & Border */
-        background: var(--mat-sys-surface-container);
+        background: var(--mat-sys-surface-container-high);
         border-bottom: 1px solid var(--mat-sys-outline-variant);
 
         position: sticky;
@@ -68,7 +68,6 @@ import { ThemeService } from '../../services/theme.service'
 
         /* Adaptive Text Color */
         color: var(--mat-sys-on-surface);
-        user-select: none;
 
         h1 {
           margin: 0;
@@ -103,7 +102,7 @@ import { ThemeService } from '../../services/theme.service'
         gap: 8px;
 
         mat-icon {
-          color: var(--mat-sys-on-surface-variant);
+          color: var(--mat-sys-on-surface);
         }
 
         /* Hover state for buttons */

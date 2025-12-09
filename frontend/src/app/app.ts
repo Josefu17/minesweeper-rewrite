@@ -27,7 +27,9 @@ import { Header } from './header/header'
         height: 100%;
         display: flex;
         flex-direction: column;
-        background-color: transparent;
+
+        background-color: var(--mat-sys-background);
+        color: var(--mat-sys-on-background);
       }
 
       .content {
@@ -36,6 +38,8 @@ import { Header } from './header/header'
         display: flex;
         justify-content: center;
         padding: 24px;
+
+        background-color: var(--mat-sys-surface);
       }
 
       app-game-board {
