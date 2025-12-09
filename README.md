@@ -1,63 +1,109 @@
 # Minesweeper Web
 
-A full-stack implementation of Minesweeper featuring "First-Click Safety," chording mechanics, and a persistent leaderboard.
+A full-stack Minesweeper implementation featuring "First-Click Safety," chording, and a persistent leaderboard.
 
-This project is a complete rewrite of a terminal-based Java version I created during my studies in 2023. I revisited the core logic in 2025 to apply clean architecture principles (DDD) and wrapped it in a modern Web UI.
+This project is a rewrite of a terminal-based Java version I created in 2023. 
 
-![Game Screenshot](docs/screenshot_gameplay.png)
-*(Placeholder: Add a screenshot of your game board here)*
+I revisited the core logic in 2025 to clean up the architecture (DDD) and port it to a full-stack web application.
+
+![Game Screenshot](screenshots/main.png)
 
 ## Project Overview
 
-The goal was to move away from the command line and create a responsive, robust web application. The backend enforces the game rules, ensuring the client cannot "cheat" by inspecting the state, while the frontend leverages modern reactive patterns for a smooth user experience.
+This project moves the original terminal-based game to a web environment.
 
-### Features
-* **First-Click Safety:** The minefield is generated *after* the first interaction, guaranteeing you never lose on turn one.
-* **Smart Auto-Expand (Chording):** If you've flagged the correct number of mines around a cell, clicking the number reveals all safe neighbors automatically.
-* **Second Chance:** Medium and Custom difficulties allow for a "Lives" system, forgiving one mistake.
-* **Custom Difficulty:** Players can configure grid dimensions (up to 30x30) and mine density.
-* **Leaderboard:** Top scores are tracked per difficulty in a PostgreSQL database.
+To maintain a clean architecture, the core game logic resides entirely on the backend, while the frontend focuses solely on rendering the grid state and handling user input.
+
+### Key Features
+
+* **First-Click Safety:** The map is generated *after* your first click, so you never blow up on turn one.
+* **Chording:** If you flag the correct number of mines around a cell, clicking the number reveals the neighbors.
+* **Second Chance:** Medium and Custom modes give you a "life" system to forgive one mistake.
+* **Custom Difficulty:** Configure grid size (up to 30x30) and density.
+* **Leaderboard:** Tracks top scores per difficulty in Postgres.
 
 ## Architecture & Tech Stack
 
 ### Backend (Kotlin)
-* **Spring Boot 3:** Handles the REST API and dependency injection.
-* **Hexagonal Architecture:** The core domain logic (`MinesweeperGame`, `World`, `Block`) is pure Kotlin and completely isolated from the framework and database code.
-* **PostgreSQL:** Stores the high scores.
+
+* **Spring Boot 4:** For the REST API and dependency injection.
+* **Hexagonal Architecture:** The domain logic (`MinesweeperGame`, `World`, `Block`) is pure Kotlin, isolated from the framework and DB.
+* **PostgreSQL:** Stores high scores.
+* **Flyway:** Handles database migrations automatically on application startup.
 
 ### Frontend (Angular)
-* **Angular 21:** Utilizing the latest features including **Standalone Components** and **Signals** for state management.
-* **Angular Material:** Provides the UI components and theming.
-* **SCSS:** Custom styling for the game grid and responsive layouts.
 
-### Infrastructure
-The app runs via Docker Compose, orchestrating three services:
-1.  **Frontend:** Nginx serving static assets and proxying API calls.
-2.  **Backend:** The Spring Boot application.
-3.  **Database:** Postgres 16 Alpine.
+* **Angular 21:** Uses **Standalone Components** and **Signals** for state management.
+* **Angular Material:** UI components and theming.
+* **SCSS:** Custom styling for the grid.
 
-## How to Run
+## How to Run (Docker)
 
-You don't need to install Java or Node.js locally. If you have Docker installed, just run:
+The easiest way to run the app is with Docker Compose. You don't need Java or Node installed locally.
 
-```bash
-docker compose up -d
-````
+1. Create a `.env` file in the root directory (optional, see `.env.template` for defaults).
+2. Run:
+   ```bash
+      docker compose up -d
+   ````
 
-The game will be available at `http://localhost`.
+3. Open `http://localhost`.
+4. **Enjoy!**
 
-## Future Improvements
+## How to Run (Local Development)
 
-While the core game is complete, here are a few things I'm considering for the future:
+If you wish to run the backend and frontend services individually without Docker Compose (e.g., for debugging), please refer to
+the [Local Development Guide](docs/local_setup.md).
 
-* **Internationalization:** Adding German/English language toggles.
-* **Dark Mode:** Full theme switching support.
+## Future Ideas
 
-## Credits & Attribution
+* **Internationalization:** German/English toggle.
+* **Dark Mode:** Full theme switching.
 
-* **Icons:** UI icons provided by [Google Material Icons](https://fonts.google.com/icons).
-* **Game Logo:** Game controller icon sourced from [PNGEgg](https://www.pngegg.com/en/png-idbew).
+## Credits
+
+* **Icons:** [Google Material Icons](https://fonts.google.com/icons).
+* **Game Logo:** [PNGEgg](https://www.pngegg.com/en/png-idbew).
 
 -----
 
 *Created by Joseph (yours truly) – Nov 2025*
+
+-----
+
+## Gallery
+
+<details>
+  <summary>Click to view more screenshots</summary>
+
+### Main Menu
+![Main Menu](screenshots/00_main_menu.png)
+
+### Leaderboard
+![Leaderboard](screenshots/01_hof_existing.png)
+
+### Leaderboard (empty)
+![Leaderboard](screenshots/02_hof_empty.png)
+
+### Start
+![Start](screenshots/03_initial.png)
+
+### Mid-Game Snippet
+![Midgame](screenshots/04_snippet.png)
+
+### Exploded (not lost due to extra life)
+![Exploded](screenshots/05_exploded.png)
+
+### Exploded (lost)
+![Lost](screenshots/06_lost.png)
+
+### Victory / Submit
+![Submit](screenshots/07_victory.png)
+
+### Custom Diff
+![Custom](screenshots/08_custom.png)
+
+### Restart Confirm
+![Restart](screenshots/09_confirm.png)
+
+</details>

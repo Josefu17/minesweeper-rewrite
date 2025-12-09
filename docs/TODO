@@ -1,0 +1,18 @@
+- add a sunglasses emoji on win (also possibly show an emoji during running state as well (neutral), and one in lose (X_X)
+- pay tribute in the readme to the mines game on ubuntu for inspiration
+- add a created by Josefu hint in the game somewhere
+
+Nice-to-have:
+- add german  and english language support
+- dark vs light mode?
+
+DONE:
+- add proper readme
+  * game icon link: https://www.pngegg.com/en/png-idbew
+  * mention the usage of material icons
+- go over remaining todos in code
+- leaderboard (not registered users, simply save a name and the duration)
+- improve post game handling (use pop up or dialog or sth)
+- define db and add migration setup using flyway
+- local persistence (currently in-memory map)
+- Timer
