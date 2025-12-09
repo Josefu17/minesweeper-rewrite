@@ -1,36 +1,66 @@
 @use '@angular/material' as mat;
 
-// 1. Define the theme
-html {
-  @include mat.theme(
-    (
-      color: (
-        primary: mat.$azure-palette,
-        tertiary: mat.$blue-palette,
-      ),
-      typography: Roboto,
-      density: 0,
-    )
-  );
+$light-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    typography: (
+      plain-family: Roboto,
+    ),
+    density: (
+      scale: 0,
+    ),
+  )
+);
 
-  // Ensure the app takes up full height
+$dark-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: dark,
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    typography: (
+      plain-family: Roboto,
+    ),
+    density: (
+      scale: 0,
+    ),
+  )
+);
+
+html {
+  @include mat.all-component-themes($light-theme);
   height: 100%;
 }
 
-// 2. Apply the theme variables to the body
+body.dark-theme {
+  @include mat.all-component-colors($dark-theme);
+}
+
 body {
-  // Color Scheme
-  color-scheme: light;
   background-color: var(--mat-sys-surface);
   color: var(--mat-sys-on-surface);
 
-  // Typography
   font: var(--mat-sys-body-medium);
-  // (This replaces the 'font-family: Roboto' line you had at the bottom)
 
-  // Layout
   margin: 0;
   height: 100%;
+
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
-/* Global styles go below here */
+/* --- Global Custom Helpers --- */
+// While we migrate, we can define a helper for standard borders
+:root {
+  --border-color: #e0e0e0; // Default Light
+}
+
+body.dark-theme {
+  --border-color: #444746; // Dark Mode equivalent
+}

@@ -3,6 +3,7 @@
   flex-direction: column;
   align-items: center;
   gap: 2rem;
+  width: 100%;
 }
 
 .selection-area {
@@ -33,7 +34,7 @@
   }
 }
 
-// Game Area & Board
+// Game Frame
 .game-area {
   min-width: 75%;
   max-width: 100%;
@@ -41,8 +42,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #333;
-  color: white;
+
+  background: var(--mat-sys-surface-container-high);
+  color: var(--mat-sys-on-surface);
+
+  /* border to separate it from the main background */
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .game-header-bar {
@@ -63,7 +70,8 @@
       gap: 8px;
       font-size: 1.2rem;
       font-weight: 500;
-      color: #fff;
+
+      color: var(--mat-sys-on-surface);
 
       mat-icon {
         color: #ffab40;
@@ -92,11 +100,11 @@
     }
 
     button.mat-mdc-outlined-button {
-      color: #fff;
-      border-color: rgba(255, 255, 255, 0.3);
+      color: var(--mat-sys-on-surface);
+      border-color: var(--mat-sys-outline);
 
       &:hover {
-        background: rgba(255, 255, 255, 0.1);
+        background: var(--mat-sys-surface-variant);
         border-color: #ffab40;
 
         mat-icon {
@@ -104,58 +112,15 @@
         }
       }
     }
-
-    .icon-only-btn {
-      color: rgba(255, 255, 255, 0.7);
-
-      &:hover {
-        color: #ffab40;
-        background: rgba(255, 255, 255, 0.1);
-      }
-    }
-  }
-}
-
-@media (max-width: 750px) {
-  .btn-label {
-    display: none;
-  }
-  .header-action-btn {
-    padding: 0 !important;
-    min-width: 40px !important;
-
-    mat-icon {
-      margin-right: 0 !important;
-    }
   }
 }
 
 .board {
   display: grid;
-  background-color: #808080;
-  border: 4px solid #808080;
+  background-color: #808080; // always grey
+  border: 4px solid #808080; // always grey
   user-select: none;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-}
-
-.loading-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 3rem;
-  color: #666;
-  font-weight: 500;
-}
-
-.error-msg {
-  color: #f44336;
-  margin-top: 1rem;
-  text-align: center;
-  font-weight: 500;
-  background: #ffebee;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
 }
 
 .cell {
@@ -171,6 +136,9 @@
   font-weight: 900;
   cursor: pointer;
   box-sizing: border-box;
+
+  // Cells are always silver. Text inside them must ALWAYS be black (or colored numbers).
+  color: black;
 
   .cell-icon {
     width: 20px;
@@ -219,7 +187,7 @@
 
   // The Passive Revealed Mine (Gray)
   &.cell-mine-revealed {
-    background-color: #bdbdbd; // Standard revealed background
+    background-color: #bdbdbd;
     border: 1px solid #999;
     cursor: default;
 
@@ -264,6 +232,41 @@
 
     &[data-count='8'] {
       color: #9e9e9e;
+    }
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 3rem;
+  font-weight: 500;
+
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.error-msg {
+  color: #f44336;
+  margin-top: 1rem;
+  text-align: center;
+  font-weight: 500;
+  background: #ffebee;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+}
+
+@media (max-width: 750px) {
+  .btn-label {
+    display: none;
+  }
+  .header-action-btn {
+    padding: 0 !important;
+    min-width: 40px !important;
+
+    mat-icon {
+      margin-right: 0 !important;
     }
   }
 }

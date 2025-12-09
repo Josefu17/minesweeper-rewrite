@@ -9,7 +9,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatIconModule } from '@angular/material/icon'
 import { toSignal } from '@angular/core/rxjs-interop'
 import { map, startWith } from 'rxjs/operators'
-import { NewGameRequest } from '../models/api.types'
+import { NewGameRequest } from '../../models/api.types'
 import { MatDivider } from '@angular/material/list'
 import { TranslateModule } from '@ngx-translate/core'
 

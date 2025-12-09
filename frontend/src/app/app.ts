@@ -27,7 +27,7 @@ import { Header } from './header/header'
         height: 100%;
         display: flex;
         flex-direction: column;
-        background-color: #f0f2f5;
+        background-color: transparent;
       }
 
       .content {

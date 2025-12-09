@@ -18,10 +18,12 @@ export class IconRegistryService {
     const icons: IconConfig[] = [
       { iconName: 'add' },
       { iconName: 'close' },
+      { iconName: 'dark_mode' },
       { iconName: 'flag' },
       { iconName: 'flag_2' },
       { iconName: 'info' },
       { iconName: 'leaderboard' },
+      { iconName: 'light_mode' },
       { iconName: 'refresh' },
       { iconName: 'remove' },
       { iconName: 'timer' },

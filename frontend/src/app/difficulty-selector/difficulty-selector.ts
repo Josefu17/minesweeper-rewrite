@@ -4,7 +4,7 @@ import { MatCardModule } from '@angular/material/card'
 import { MatRippleModule } from '@angular/material/core'
 import { MatIconModule } from '@angular/material/icon'
 import { MatDialog } from '@angular/material/dialog'
-import { NewGameRequest } from '../models/api.types'
+import { NewGameRequest } from '../../models/api.types'
 import { CustomGameDialog } from '../custom-game-dialog/custom-game-dialog'
 import { TranslateModule } from '@ngx-translate/core'
 

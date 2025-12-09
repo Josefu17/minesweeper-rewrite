@@ -5,7 +5,7 @@ import {
   provideBrowserGlobalErrorListeners,
 } from '@angular/core'
 import { provideHttpClient } from '@angular/common/http'
-import { IconRegistryService } from './services/icon-registry.service'
+import { IconRegistryService } from '../services/icon-registry.service'
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader'
 import { provideTranslateService } from '@ngx-translate/core'
 

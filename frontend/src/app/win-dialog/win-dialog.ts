@@ -6,7 +6,7 @@ import { MatButtonModule } from '@angular/material/button'
 import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatInputModule } from '@angular/material/input'
 import { MatIconModule } from '@angular/material/icon'
-import { Score } from '../models/api.types'
+import { Score } from '../../models/api.types'
 import { TranslateModule } from '@ngx-translate/core'
 
 export interface WinDialogData {
@@ -94,10 +94,13 @@ export interface WinDialogData {
         text-align: center;
         margin-bottom: 1rem;
         font-size: 1.1rem;
+
+        color: var(--mat-sys-on-surface);
       }
 
       .leaderboard-context {
-        background: #f5f5f5;
+        background: var(--mat-sys-surface-variant);
+
         border-radius: 8px;
         padding: 1rem;
         max-height: 300px;
@@ -108,26 +111,28 @@ export interface WinDialogData {
         display: flex;
         align-items: center;
         padding: 8px 0;
-        border-bottom: 1px solid #e0e0e0;
+
+        border-bottom: 1px solid var(--mat-sys-outline-variant);
 
         &:last-child {
           border-bottom: none;
         }
 
         &.current-run {
-          background: #fff8e1;
+          background: rgba(255, 179, 0, 0.15);
+
           margin: 4px -8px;
           padding: 8px 8px;
           border-radius: 4px;
           border: 1px solid #ffb300;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
       }
 
       .rank-num {
         width: 40px;
         font-weight: bold;
-        color: #666;
+
+        color: var(--mat-sys-on-surface-variant);
       }
 
       .player-info {
@@ -135,6 +140,8 @@ export interface WinDialogData {
         display: flex;
         justify-content: space-between;
         font-size: 0.95rem;
+
+        color: var(--mat-sys-on-surface);
       }
 
       .current-input-container {

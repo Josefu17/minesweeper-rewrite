@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { COMMON_TEST_IMPORTS, COMMON_TEST_PROVIDERS } from '../testing/test-utils'
 import { of } from 'rxjs'
 import { MatDialog } from '@angular/material/dialog'
-import { GameService } from '../services/game.service'
+import { GameService } from '../../services/game.service'
 
 describe('GameBoard', () => {
   let component: GameBoard

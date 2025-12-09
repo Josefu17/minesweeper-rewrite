@@ -6,9 +6,9 @@ import { MatTabsModule } from '@angular/material/tabs'
 import { MatTableModule } from '@angular/material/table'
 import { MatIconModule } from '@angular/material/icon'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
-import { GameService } from '../services/game.service'
-import { Difficulty } from '../models/game.types'
-import { Score } from '../models/api.types'
+import { GameService } from '../../services/game.service'
+import { Difficulty } from '../../models/game.types'
+import { Score } from '../../models/api.types'
 import { TranslateModule } from '@ngx-translate/core'
 
 @Component({
@@ -126,7 +126,7 @@ import { TranslateModule } from '@ngx-translate/core'
         width: 24px;
         height: 24px;
         border-radius: 50%;
-        background: #eee;
+        background: none;
         font-size: 0.8rem;
         font-weight: bold;
         color: #666;
