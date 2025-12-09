@@ -8,53 +8,6 @@
   min-height: 100vh;
 }
 
-// Header Card
-.header-card {
-  width: 100%;
-  overflow: visible;
-
-  mat-card-header {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 2rem 1rem;
-
-    ::ng-deep .mat-mdc-card-header-text {
-      margin: 0;
-      width: auto;
-    }
-  }
-
-  mat-card-title {
-    display: flex;
-    align-items: center;
-    font-size: 2.5rem;
-    margin-bottom: 0;
-    color: #333;
-    user-select: none;
-
-    .title-icon {
-      margin-right: 16px;
-      transform: scale(1.8);
-      color: #9c27b0; // Fallback purple
-
-      transition:
-        transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55),
-        filter 0.3s ease;
-
-      // Rainbow Gradient Logic
-      &:hover {
-        transform: scale(2.2) rotate(15deg);
-        filter: drop-shadow(0 0 8px rgba(156, 39, 176, 0.6));
-
-        // Simple Rainbow Animation via hue-rotate
-        animation: rainbow-shift 2s linear infinite;
-      }
-    }
-  }
-}
-
 // Rainbow Animation
 @keyframes rainbow-shift {
   0% {

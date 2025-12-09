@@ -1,0 +1,24 @@
+{
+  "APP": {
+    "TITLE": "Minesweeper"
+  },
+  "GAME": {
+    "LOADING": "Generating world...",
+    "STATS": {
+      "TIME": "Time",
+      "LIVES": "Lives",
+      "MINES": "Mines",
+      "FLAGS": "Flags"
+    }
+  },
+  "MENU": {
+    "HALL_OF_FAME": "Hall of Fame",
+    "RANKINGS": "Rankings",
+    "RESTART": "Restart",
+    "CHANGE_DIFFICULTY": "Change Difficulty"
+  },
+  "ERRORS": {
+    "CREATE_FAILED": "Failed to create game",
+    "ACTION_FAILED": "Action failed"
+  }
+}
