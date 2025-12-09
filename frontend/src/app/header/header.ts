@@ -17,6 +17,7 @@ import { ThemeService } from '../../services/theme.service'
       <div class="branding">
         <mat-icon svgIcon="controller" class="logo"></mat-icon>
         <h1>{{ 'APP.TITLE' | translate }}</h1>
+        <span class="signature">by Joseph</span>
       </div>
 
       <div class="actions">
@@ -75,6 +76,15 @@ import { ThemeService } from '../../services/theme.service'
           font-size: 2rem;
           font-weight: 500;
           white-space: nowrap;
+        }
+
+        .signature {
+          font-size: 0.85rem;
+          font-weight: 400;
+          opacity: 0.6;
+          align-self: flex-end;
+          margin-bottom: 6px;
+          font-style: italic;
         }
 
         .logo {
