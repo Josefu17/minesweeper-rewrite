@@ -68,6 +68,7 @@ import { ThemeService } from '../../services/theme.service'
 
         /* Adaptive Text Color */
         color: var(--mat-sys-on-surface);
+        user-select: none;
 
         h1 {
           margin: 0;
@@ -83,16 +84,13 @@ import { ThemeService } from '../../services/theme.service'
 
           color: var(--mat-sys-primary);
 
-          transition:
-            transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55),
-            filter 0.3s ease;
+          transition: transform 0.4s ease;
         }
 
         /* The Hover Effect */
         &:hover .logo {
           transform: scale(1.8) rotate(15deg);
-          filter: drop-shadow(0 0 8px var(--mat-sys-primary));
-          animation: rainbow-shift 2s linear infinite;
+          animation: logo-spin-rainbow 4s linear infinite;
         }
       }
 
@@ -103,20 +101,27 @@ import { ThemeService } from '../../services/theme.service'
 
         mat-icon {
           color: var(--mat-sys-on-surface);
+          transition: color 0.2s ease;
         }
 
-        /* Hover state for buttons */
         button:hover mat-icon {
           color: var(--mat-sys-primary);
         }
       }
 
-      @keyframes rainbow-shift {
+      :host-context(html.dark-theme) .theme-btn:hover mat-icon {
+        color: #ffd740 !important; /* Material Amber Accent */
+        filter: drop-shadow(0 0 8px rgba(255, 215, 64, 0.4)); /* Sun Glow */
+      }
+
+      @keyframes logo-spin-rainbow {
         0% {
-          filter: hue-rotate(0deg);
+          transform: scale(1.8) rotate(0deg);
+          filter: drop-shadow(0 0 8px var(--mat-sys-primary)) hue-rotate(0deg);
         }
         100% {
-          filter: hue-rotate(360deg);
+          transform: scale(1.8) rotate(360deg);
+          filter: drop-shadow(0 0 8px var(--mat-sys-primary)) hue-rotate(360deg);
         }
       }
     `,
