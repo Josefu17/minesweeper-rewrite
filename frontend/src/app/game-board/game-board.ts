@@ -18,11 +18,12 @@ import { MatDialog } from '@angular/material/dialog'
 import { GameService } from '../services/game.service'
 import { GameState, NewGameRequest } from '../models/api.types'
 import { Cell } from '../models/game.types'
-import { DifficultySelector } from '../difficulty-selector/difficulty-selector'
 import { WinDialog, WinDialogData } from '../win-dialog/win-dialog'
 import { ConfirmationDialog } from '../confirmation-dialog/confirmation-dialog'
 import { MatTooltip } from '@angular/material/tooltip'
 import { HighScoreDialog } from '../high-score-dialog/high-score-dialog'
+import { TranslateModule } from '@ngx-translate/core'
+import { DifficultySelector } from '../difficulty-selector/difficulty-selector'
 
 @Component({
   selector: 'app-game-board',
@@ -33,8 +34,9 @@ import { HighScoreDialog } from '../high-score-dialog/high-score-dialog'
     MatIconModule,
     MatCardModule,
     MatProgressSpinnerModule,
-    DifficultySelector,
     MatTooltip,
+    TranslateModule,
+    DifficultySelector,
   ],
   templateUrl: './game-board.html',
   styleUrls: ['./game-board.scss'],
@@ -85,7 +87,7 @@ export class GameBoard implements OnDestroy {
       },
       error: (err) => {
         console.error(err)
-        this.errorMessage.set('Failed to create game')
+        this.errorMessage.set('ERRORS.CREATE_FAILED')
         this.loading.set(false)
       },
     })
@@ -186,7 +188,7 @@ export class GameBoard implements OnDestroy {
           this.stopTimer()
         }
       },
-      error: () => this.errorMessage.set('Action failed'),
+      error: () => this.errorMessage.set('ERRORS.ACTION_FAILED'),
     })
   }
 

@@ -5,30 +5,22 @@
     <!-- Row Config -->
     <div class="control-row">
       <div class="label-group">
-        <span class="label">Rows</span>
-        <span class="sub-label">Min: 5, Max: 30</span>
+        <span class="label">{{ 'CUSTOM_GAME.ROWS' | translate }}</span>
+        <span class="sub-label">
+          {{ 'CUSTOM_GAME.DIM_LIMITS' | translate: {min: MIN_DIM, max: MAX_DIM} }}
+        </span>
       </div>
 
       <div class="stepper-group">
-        <button
-          mat-icon-button
-          type="button"
-          (click)="updateValue('rows', -1)"
-          [disabled]="form.controls.rows.value <= MIN_DIM"
-        >
+        <button mat-icon-button type="button" (click)="updateValue('rows', -1)"
+                [disabled]="form.controls.rows.value <= MIN_DIM">
           <mat-icon svgIcon="remove"></mat-icon>
         </button>
-
         <mat-form-field appearance="outline" subscriptSizing="dynamic" class="stepper-input">
           <input matInput type="number" formControlName="rows" [min]="MIN_DIM" [max]="MAX_DIM"/>
         </mat-form-field>
-
-        <button
-          mat-icon-button
-          type="button"
-          (click)="updateValue('rows', 1)"
-          [disabled]="form.controls.rows.value >= MAX_DIM"
-        >
+        <button mat-icon-button type="button" (click)="updateValue('rows', 1)"
+                [disabled]="form.controls.rows.value >= MAX_DIM">
           <mat-icon svgIcon="add"></mat-icon>
         </button>
       </div>
@@ -37,30 +29,22 @@
     <!-- Column Config -->
     <div class="control-row">
       <div class="label-group">
-        <span class="label">Columns</span>
-        <span class="sub-label">Min: 5, Max: 30</span>
+        <span class="label">{{ 'CUSTOM_GAME.COLS' | translate }}</span>
+        <span class="sub-label">
+           {{ 'CUSTOM_GAME.DIM_LIMITS' | translate: {min: MIN_DIM, max: MAX_DIM} }}
+        </span>
       </div>
 
       <div class="stepper-group">
-        <button
-          mat-icon-button
-          type="button"
-          (click)="updateValue('columns', -1)"
-          [disabled]="form.controls.columns.value <= MIN_DIM"
-        >
+        <button mat-icon-button type="button" (click)="updateValue('columns', -1)"
+                [disabled]="form.controls.columns.value <= MIN_DIM">
           <mat-icon svgIcon="remove"></mat-icon>
         </button>
-
         <mat-form-field appearance="outline" subscriptSizing="dynamic" class="stepper-input">
           <input matInput type="number" formControlName="columns" [min]="MIN_DIM" [max]="MAX_DIM"/>
         </mat-form-field>
-
-        <button
-          mat-icon-button
-          type="button"
-          (click)="updateValue('columns', 1)"
-          [disabled]="form.controls.columns.value >= MAX_DIM"
-        >
+        <button mat-icon-button type="button" (click)="updateValue('columns', 1)"
+                [disabled]="form.controls.columns.value >= MAX_DIM">
           <mat-icon svgIcon="add"></mat-icon>
         </button>
       </div>
@@ -71,36 +55,22 @@
     <!-- Mines Config -->
     <div class="control-row">
       <div class="label-group">
-        <span class="label">Mines</span>
-        <span class="sub-label">Max allowed: {{ maxMines() }}</span>
+        <span class="label">{{ 'CUSTOM_GAME.MINES' | translate }}</span>
+        <span class="sub-label">
+          {{ 'CUSTOM_GAME.MAX_ALLOWED' | translate: {max: maxMines()} }}
+        </span>
       </div>
 
       <div class="stepper-group">
-        <button
-          mat-icon-button
-          type="button"
-          (click)="updateValue('mines', -1)"
-          [disabled]="form.controls.mines.value <= MIN_MINES"
-        >
+        <button mat-icon-button type="button" (click)="updateValue('mines', -1)"
+                [disabled]="form.controls.mines.value <= MIN_MINES">
           <mat-icon svgIcon="remove"></mat-icon>
         </button>
-
         <mat-form-field appearance="outline" subscriptSizing="dynamic" class="stepper-input">
-          <input
-            matInput
-            type="number"
-            formControlName="mines"
-            [min]="MIN_MINES"
-            [max]="maxMines()"
-          />
+          <input matInput type="number" formControlName="mines" [min]="MIN_MINES" [max]="maxMines()"/>
         </mat-form-field>
-
-        <button
-          mat-icon-button
-          type="button"
-          (click)="updateValue('mines', 1)"
-          [disabled]="form.controls.mines.value >= maxMines()"
-        >
+        <button mat-icon-button type="button" (click)="updateValue('mines', 1)"
+                [disabled]="form.controls.mines.value >= maxMines()">
           <mat-icon svgIcon="add"></mat-icon>
         </button>
       </div>
@@ -108,20 +78,20 @@
 
     <!-- Validation Error Message for Mines -->
     @if (form.controls.mines.hasError('max')) {
-      <div class="error-msg">Too many mines for this grid size!</div>
+      <div class="error-msg">{{ 'ERRORS.TOO_MANY_MINES' | translate }}</div>
     }
 
     <div class="row-checkbox">
       <mat-checkbox formControlName="enableLives" color="primary">
-        Enable Second Chance (1 Life)
+        {{ 'CUSTOM_GAME.ENABLE_LIVES' | translate }}
       </mat-checkbox>
     </div>
   </form>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button mat-dialog-close>{{ 'CUSTOM_GAME.CANCEL' | translate }}</button>
   <button mat-flat-button color="primary" [disabled]="form.invalid" (click)="submit()">
-    Start Game
+    {{ 'CUSTOM_GAME.START' | translate }}
   </button>
 </mat-dialog-actions>

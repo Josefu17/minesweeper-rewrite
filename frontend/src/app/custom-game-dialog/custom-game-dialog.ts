@@ -11,6 +11,7 @@ import { toSignal } from '@angular/core/rxjs-interop'
 import { map, startWith } from 'rxjs/operators'
 import { NewGameRequest } from '../models/api.types'
 import { MatDivider } from '@angular/material/list'
+import { TranslateModule } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-custom-game-dialog',
@@ -25,6 +26,7 @@ import { MatDivider } from '@angular/material/list'
     MatCheckboxModule,
     MatIconModule,
     MatDivider,
+    TranslateModule,
   ],
   templateUrl: './custom-game-dialog.html',
   styleUrls: ['./custom-game-dialog.scss'],

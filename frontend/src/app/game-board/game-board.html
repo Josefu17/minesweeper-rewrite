@@ -2,7 +2,7 @@
   @if (loading()) {
     <div class="loading-container">
       <mat-spinner diameter="50"></mat-spinner>
-      <p>Generating world...</p>
+      <p>{{ 'GAME.LOADING' | translate }}</p>
     </div>
   } @else if (!gameState()) {
     <div class="selection-area">
@@ -11,50 +11,47 @@
       <div class="start-screen-actions">
         <button (click)="openHighScores()" mat-stroked-button class="start-leaderboard-btn">
           <mat-icon svgIcon="leaderboard"></mat-icon>
-          Hall of Fame
+          {{ 'MENU.HALL_OF_FAME' | translate }}
         </button>
       </div>
 
       @if (errorMessage()) {
-        <div class="error-msg">{{ errorMessage() }}</div>
+        <div class="error-msg">{{ errorMessage()! | translate }}</div>
       }
     </div>
   } @else if (gameState(); as game) {
     <mat-card class="game-area">
       <div class="game-header-bar">
-        <!-- Stats -->
         <div class="stats-group">
-          <div class="stat-item" title="Time">
+          <div class="stat-item" [title]="'GAME.STATS.TIME' | translate">
             <mat-icon svgIcon="timer"></mat-icon>
             {{ formattedTime() }}
           </div>
-          <div class="stat-item" title="Lives">
+          <div class="stat-item" [title]="'GAME.STATS.LIVES' | translate">
             <mat-icon svgIcon="lives"></mat-icon>
             {{ game.livesLeft }}
           </div>
-          <div class="stat-item" title="Mines">
+          <div class="stat-item" [title]="'GAME.STATS.MINES' | translate">
             <mat-icon svgIcon="bomb"></mat-icon>
             {{ game.mineCount }}
           </div>
-          <div class="stat-item" title="Flags">
+          <div class="stat-item" [title]="'GAME.STATS.FLAGS' | translate">
             <mat-icon svgIcon="flag"></mat-icon>
             {{ game.marksLeft }}
           </div>
         </div>
 
-        <!-- Spacer -->
         <div class="spacer"></div>
 
-        <!-- Actions -->
         <div class="actions-group">
           <button
             (click)="openHighScores()"
             mat-stroked-button
             class="header-action-btn"
-            matTooltip="View high scores for all difficulties"
+            [matTooltip]="'MENU.RANKINGS' | translate"
           >
             <mat-icon svgIcon="leaderboard"></mat-icon>
-            <span class="btn-label">Rankings</span>
+            <span class="btn-label">{{ 'MENU.RANKINGS' | translate }}</span>
           </button>
 
           <button
@@ -62,20 +59,20 @@
             mat-flat-button
             color="primary"
             class="header-action-btn"
-            matTooltip="Restart game with the same difficulty"
+            [matTooltip]="'MENU.RESTART' | translate"
           >
             <mat-icon svgIcon="refresh"></mat-icon>
-            <span class="btn-label">Restart</span>
+            <span class="btn-label">{{ 'MENU.RESTART' | translate }}</span>
           </button>
 
           <button
             (click)="onChangeDifficulty()"
             mat-flat-button
             class="header-action-btn"
-            matTooltip="Exit to main menu to change difficulty"
+            [matTooltip]="'MENU.CHANGE_DIFFICULTY' | translate"
           >
             <mat-icon svgIcon="change"></mat-icon>
-            <span class="btn-label">Change Difficulty</span>
+            <span class="btn-label">{{ 'MENU.CHANGE_DIFFICULTY' | translate }}</span>
           </button>
         </div>
       </div>
@@ -99,8 +96,8 @@
                 <mat-icon class="cell-icon mine" svgIcon="mine"></mat-icon>
               } @else if (showNumber(cell)) {
                 <span class="adj-count" [attr.data-count]="cell.adjacentMines">{{
-                  cell.adjacentMines
-                }}</span>
+                    cell.adjacentMines
+                  }}</span>
               }
             </div>
           }

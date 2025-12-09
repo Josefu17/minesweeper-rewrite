@@ -1,9 +1,10 @@
 <div class="diff-grid">
   <mat-card class="diff-card easy" matRipple (click)="selectStandard('EASY')">
     <mat-card-header>
-      <mat-card-title>Easy</mat-card-title>
-      <mat-card-subtitle>9x9 • 10 Mines</mat-card-subtitle>
+      <mat-card-title>{{ 'DIFFICULTY.EASY' | translate }}</mat-card-title>
+      <mat-card-subtitle>{{ 'DIFFICULTY.EASY_DESC' | translate }}</mat-card-subtitle>
     </mat-card-header>
+
     <div class="card-icon">
       <mat-icon svgIcon="diff-easy"></mat-icon>
     </div>
@@ -11,8 +12,8 @@
 
   <mat-card class="diff-card medium" matRipple (click)="selectStandard('MEDIUM')">
     <mat-card-header>
-      <mat-card-title>Medium</mat-card-title>
-      <mat-card-subtitle>16x16 • 40 Mines</mat-card-subtitle>
+      <mat-card-title>{{ 'DIFFICULTY.MEDIUM' | translate }}</mat-card-title>
+      <mat-card-subtitle>{{ 'DIFFICULTY.MEDIUM_DESC' | translate }}</mat-card-subtitle>
     </mat-card-header>
 
     <div class="card-icon">
@@ -22,9 +23,10 @@
 
   <mat-card class="diff-card hard" matRipple (click)="selectStandard('HARD')">
     <mat-card-header>
-      <mat-card-title>Hard</mat-card-title>
-      <mat-card-subtitle>30x16 • 99 Mines</mat-card-subtitle>
+      <mat-card-title>{{ 'DIFFICULTY.HARD' | translate }}</mat-card-title>
+      <mat-card-subtitle>{{ 'DIFFICULTY.HARD_DESC' | translate }}</mat-card-subtitle>
     </mat-card-header>
+
     <div class="card-icon">
       <mat-icon svgIcon="diff-hard"></mat-icon>
     </div>
@@ -32,9 +34,10 @@
 
   <mat-card class="diff-card custom" matRipple (click)="openCustom()">
     <mat-card-header>
-      <mat-card-title>Custom</mat-card-title>
-      <mat-card-subtitle>Configure Grid</mat-card-subtitle>
+      <mat-card-title>{{ 'DIFFICULTY.CUSTOM' | translate }}</mat-card-title>
+      <mat-card-subtitle>{{ 'DIFFICULTY.CUSTOM_DESC' | translate }}</mat-card-subtitle>
     </mat-card-header>
+
     <div class="card-icon">
       <mat-icon svgIcon="diff-custom"></mat-icon>
     </div>

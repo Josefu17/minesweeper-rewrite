@@ -18,7 +18,6 @@ import { HeaderComponent } from './header/header'
   styles: [
     `
       :host {
-        /* Ensure the host takes full height */
         display: block;
         height: 100vh;
         overflow: hidden;
@@ -28,15 +27,20 @@ import { HeaderComponent } from './header/header'
         height: 100%;
         display: flex;
         flex-direction: column;
-        background-color: #fafafa; /* Light grey bg for contrast */
+        background-color: #f0f2f5;
       }
 
       .content {
         flex: 1;
-        overflow-y: auto; /* The board scrolls, header stays put */
+        overflow-y: auto;
         display: flex;
         justify-content: center;
         padding: 24px;
+      }
+
+      app-game-board {
+        width: 100%;
+        max-width: 1200px;
       }
     `,
   ],

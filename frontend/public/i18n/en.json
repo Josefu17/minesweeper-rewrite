@@ -19,6 +19,28 @@
   },
   "ERRORS": {
     "CREATE_FAILED": "Failed to create game",
-    "ACTION_FAILED": "Action failed"
+    "ACTION_FAILED": "Action failed",
+    "TOO_MANY_MINES": "Too many mines for this grid size!"
+  },
+  "DIFFICULTY": {
+    "EASY": "Easy",
+    "EASY_DESC": "9x9 • 10 Mines",
+    "MEDIUM": "Medium",
+    "MEDIUM_DESC": "16x16 • 40 Mines",
+    "HARD": "Hard",
+    "HARD_DESC": "30x16 • 99 Mines",
+    "CUSTOM": "Custom",
+    "CUSTOM_DESC": "Configure Grid"
+  },
+  "CUSTOM_GAME": {
+    "TITLE": "Custom Game Setup",
+    "ROWS": "Rows",
+    "COLS": "Columns",
+    "MINES": "Mines",
+    "DIM_LIMITS": "Min: {{min}}, Max: {{max}}",
+    "MAX_ALLOWED": "Max allowed: {{max}}",
+    "ENABLE_LIVES": "Enable Second Chance (1 Life)",
+    "START": "Start Game",
+    "CANCEL": "Cancel"
   }
 }

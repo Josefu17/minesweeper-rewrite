@@ -6,11 +6,12 @@ import { MatIconModule } from '@angular/material/icon'
 import { MatDialog } from '@angular/material/dialog'
 import { NewGameRequest } from '../models/api.types'
 import { CustomGameDialog } from '../custom-game-dialog/custom-game-dialog'
+import { TranslateModule } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-difficulty-selector',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatRippleModule, MatIconModule],
+  imports: [CommonModule, MatCardModule, MatRippleModule, MatIconModule, TranslateModule],
   templateUrl: './difficulty-selector.html',
   styleUrls: ['./difficulty-selector.scss'],
 })

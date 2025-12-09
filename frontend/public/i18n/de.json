@@ -19,6 +19,28 @@
   },
   "ERRORS": {
     "CREATE_FAILED": "Spiel konnte nicht erstellt werden",
-    "ACTION_FAILED": "Aktion fehlgeschlagen"
+    "ACTION_FAILED": "Aktion fehlgeschlagen",
+    "TOO_MANY_MINES": "Zu viele Minen für diese Rastergröße!"
+  },
+  "DIFFICULTY": {
+    "EASY": "Einfach",
+    "EASY_DESC": "9x9 • 10 Minen",
+    "MEDIUM": "Mittel",
+    "MEDIUM_DESC": "16x16 • 40 Minen",
+    "HARD": "Schwer",
+    "HARD_DESC": "30x16 • 99 Minen",
+    "CUSTOM": "Benutzerdefiniert",
+    "CUSTOM_DESC": "Raster konfigurieren"
+  },
+  "CUSTOM_GAME": {
+    "TITLE": "Benutzerdefiniertes Spiel",
+    "ROWS": "Zeilen",
+    "COLS": "Spalten",
+    "MINES": "Minen",
+    "DIM_LIMITS": "Min: {{min}}, Max: {{max}}",
+    "MAX_ALLOWED": "Max erlaubt: {{max}}",
+    "ENABLE_LIVES": "Zweite Chance (1 Leben) aktivieren",
+    "START": "Spiel starten",
+    "CANCEL": "Abbrechen"
   }
 }
