@@ -20,9 +20,9 @@ import { GameState, NewGameRequest } from '../models/api.types'
 import { Cell } from '../models/game.types'
 import { DifficultySelector } from '../difficulty-selector/difficulty-selector'
 import { WinDialog, WinDialogData } from '../win-dialog/win-dialog'
-import { HighScoreDialog } from '../high-score-display/high-score-display'
 import { ConfirmationDialog } from '../confirmation-dialog/confirmation-dialog'
 import { MatTooltip } from '@angular/material/tooltip'
+import { HighScoreDialog } from '../high-score-dialog/high-score-dialog'
 
 @Component({
   selector: 'app-game-board',

@@ -16,7 +16,6 @@ export interface WinDialogData {
 
 @Component({
   selector: 'app-win-dialog',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
