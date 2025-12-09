@@ -43,6 +43,18 @@
 
         <div class="spacer"></div>
 
+        <button
+          class="status-face-btn"
+          (click)="onPlayAgain()"
+          [matTooltip]="
+            (game.status === 'WON' || game.status === 'LOST' ? 'MENU.RESTART' : '') | translate
+          "
+        >
+          {{ faceEmoji() }}
+        </button>
+
+        <div class="spacer"></div>
+
         <div class="actions-group">
           <button
             (click)="openHighScores()"

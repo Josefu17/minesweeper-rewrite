@@ -1,12 +1,12 @@
-- add a sunglasses emoji on win (also possibly show an emoji during running state as well (neutral), and one in lose (X_X)
-- pay tribute in the readme to the mines game on ubuntu for inspiration
-- add a created by Josefu hint in the game somewhere
+I'll consider this completed for now :slight_smile:
 
-Nice-to-have:
-- add german  and english language support
-- dark vs light mode?
 
 DONE:
+- add german  and english language support
+- dark vs light mode?
+- pay tribute in the readme to the mines game on ubuntu for inspiration
+- add a created by Josefu hint in the game somewhere
+- add a sunglasses emoji on win (also possibly show an emoji during running state as well (neutral), and one in lose (X_X)
 - add proper readme
   * game icon link: https://www.pngegg.com/en/png-idbew
   * mention the usage of material icons

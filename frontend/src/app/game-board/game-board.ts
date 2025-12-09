@@ -230,6 +230,20 @@ export class GameBoard implements OnDestroy {
     })
   }
 
+  faceEmoji = computed(() => {
+    const status = this.gameState()?.status
+    switch (status) {
+      case 'WON':
+        return '😎'
+      case 'LOST':
+        return '😵'
+      case 'RUNNING':
+      case 'READY':
+      default:
+        return '🙂'
+    }
+  })
+
   // --- Helpers ---
   getCellClass(cell: Cell): string {
     if (this.isRevealed(cell)) return 'cell-revealed'
