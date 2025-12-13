@@ -12,7 +12,7 @@ I revisited the core logic in 2025 to clean up the architecture (DDD) and port i
 
 This project moves the original terminal-based game to a web environment.
 
-To maintain a clean architecture, the core game logic resides entirely on the backend, while the frontend focuses solely on rendering the grid state and handling user input.
+To maintain a clean architecture (~~and because I am more comfortable with Kotlin for complicated logic~~), the core game logic resides entirely on the backend, while the frontend focuses solely on rendering the grid state and handling user input.
 
 ### Key Features
 
@@ -43,7 +43,7 @@ To maintain a clean architecture, the core game logic resides entirely on the ba
 
 The easiest way to run the app is with Docker Compose. You don't need Java or Node installed locally.
 
-1. Create a `.env` file in the root directory (optional, see `.env.template` for defaults).
+1. (Optional) Create a `.env` file in the root directory (see `.env.template` for defaults).
 2. Run:
    ```bash
       docker compose up -d
@@ -79,7 +79,7 @@ A huge thanks to the GNOME team for their clean, functional design.
 ### Main Menu
 ![Main Menu](screenshots/main_menu.png)
 
-### Dark Mode Menu
+### Dark Mode Menu (+ German Support)
 ![Dark Mode Menu](screenshots/dark_mode_menu.png)
 
 ### Leaderboard
@@ -105,9 +105,6 @@ A huge thanks to the GNOME team for their clean, functional design.
 
 ### Custom Diff
 ![Custom](screenshots/custom.png)
-
-### German Support
-![Custom](screenshots/german.png)
 
 ### Dark Mode Gameplay
 ![Dark Mode](screenshots/dark_mode_gameplay.png)
